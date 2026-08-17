@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "supplier-sustainability-solution-client-side-solution",
+    "id": "1c8b9c84-0c9f-4a74-8665-c51ad013b629",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.20.0"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "supplier-sustainability-solution description"
+      },
+      "longDescription": {
+        "default": "supplier-sustainability-solution description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "supplier-sustainability-solution Feature",
+        "description": "The feature that activates elements of the supplier-sustainability-solution solution.",
+        "id": "c147f3ac-75df-4463-b2af-e1e834c58fac",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/supplier-sustainability-solution.sppkg"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": false,
+    "nodeVersion": "18.20.8",
+    "sdksVersions": {
+      "@microsoft/microsoft-graph-client": "3.0.2",
+      "@microsoft/teams-js": "2.24.0"
+    },
+    "version": "1.20.0",
+    "libraryName": "supplier-sustainability-solution",
+    "libraryId": "1c8b9c84-0c9f-4a74-8665-c51ad013b629",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "supplier-sustainability-solution",
+    "solutionShortDescription": "supplier-sustainability-solution description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}

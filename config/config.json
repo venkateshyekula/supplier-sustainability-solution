@@ -1,0 +1,36 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "kpi-metric-cards-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/kpiMetricCards/KpiMetricCardsWebPart.js",
+          "manifest": "./src/webparts/kpiMetricCards/KpiMetricCardsWebPart.manifest.json"
+        }
+      ]
+    },
+    "esg-feedback-widget-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/esgFeedbackWidget/EsgFeedbackWidgetWebPart.js",
+          "manifest": "./src/webparts/esgFeedbackWidget/EsgFeedbackWidgetWebPart.manifest.json"
+        }
+      ]
+    },
+    "supplier-esg-search-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/supplierEsgSearch/SupplierEsgSearchWebPart.js",
+          "manifest": "./src/webparts/supplierEsgSearch/SupplierEsgSearchWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "KpiMetricCardsWebPartStrings": "lib/webparts/kpiMetricCards/loc/{locale}.js",
+    "EsgFeedbackWidgetWebPartStrings": "lib/webparts/esgFeedbackWidget/loc/{locale}.js",
+    "SupplierEsgSearchWebPartStrings": "lib/webparts/supplierEsgSearch/loc/{locale}.js"
+  }
+}

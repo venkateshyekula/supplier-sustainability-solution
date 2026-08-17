@@ -1,0 +1,325 @@
+@import '~@fluentui/react/dist/sass/References.scss';
+
+.supplierEsgSearch {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 20px;
+  color: #242424;
+  background: #ffffff;
+  font-family: $ms-font-family-fallbacks;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 18px;
+}
+
+.title {
+  margin: 0;
+  color: #242424;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 30px;
+}
+
+.subtitle {
+  margin: 4px 0 0;
+  color: #616161;
+  font-size: 13px;
+  line-height: 20px;
+}
+
+.filterCard {
+  box-sizing: border-box;
+  width: 100%;
+  margin-bottom: 20px;
+  padding: 16px;
+  border: 1px solid #e1dfdd;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.filterGrid {
+  display: grid;
+  grid-template-columns:
+    minmax(240px, 2fr)
+    minmax(110px, 0.8fr)
+    minmax(160px, 1.1fr)
+    minmax(88px, 0.6fr)
+    minmax(88px, 0.6fr)
+    minmax(135px, 0.9fr)
+    minmax(135px, 0.9fr)
+    minmax(188px, max-content);
+  gap: 10px;
+  align-items: end;
+  width: 100%;
+}
+
+.searchField,
+.tierField,
+.qualificationField,
+.minField,
+.maxField,
+.dateField {
+  box-sizing: border-box;
+  min-width: 0;
+  width: 100%;
+}
+
+.searchField > div,
+.tierField > div,
+.qualificationField > div,
+.minField > div,
+.maxField > div,
+.dateField > div {
+  width: 100%;
+}
+
+.filterActions {
+  display: flex;
+  align-self: end;
+  align-items: flex-end;
+  justify-content: flex-end;
+  gap: 6px;
+  min-width: 188px;
+  min-height: 32px;
+  padding-bottom: 1px;
+  white-space: nowrap;
+
+  button {
+    min-width: 88px;
+    min-height: 32px;
+    white-space: nowrap;
+  }
+}
+
+.summaryBar {
+  display: flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 0 4px 10px;
+}
+
+.sectionTitle {
+  display: inline-block;
+  margin: 0 10px 0 0;
+  color: #242424;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.resultCount {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 12px;
+  color: #424242;
+  background: #f3f2f1;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.tableContainer {
+  overflow-x: auto;
+  border: 1px solid #edebe9;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.supplierLink {
+  color: #005a9e;
+  font-weight: 600;
+  text-decoration: none;
+
+  &:hover,
+  &:focus {
+    color: #004578;
+    text-decoration: underline;
+  }
+}
+
+.secondaryText {
+  overflow: hidden;
+  margin-top: 2px;
+  color: #797775;
+  font-size: 11px;
+  line-height: 16px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.percentage {
+  color: #323130;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.badge {
+  display: inline-flex;
+  box-sizing: border-box;
+  min-height: 22px;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 9px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 16px;
+  white-space: nowrap;
+}
+
+.tier1 { color: #004578; background: #deecf9; }
+.tier2 { color: #8a6d00; background: #fff4ce; }
+.tier3 { color: #a4262c; background: #fde7e9; }
+.successBadge { color: #107c10; background: #dff6dd; }
+.warningBadge { color: #835c00; background: #fff4ce; }
+.dangerBadge { color: #a4262c; background: #fde7e9; }
+
+.riskText {
+  display: inline-flex;
+  align-items: center;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.riskDot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 7px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+}
+
+.lowRisk { background: #107c10; }
+.mediumRisk { background: #ffaa44; }
+.highRisk { background: #d13438; }
+
+.emptyState {
+  padding: 46px 20px;
+  text-align: center;
+
+  h3 {
+    margin: 12px 0 4px;
+    color: #323130;
+    font-size: 17px;
+    font-weight: 600;
+  }
+
+  p {
+    max-width: 520px;
+    margin: 0 auto 16px;
+    color: #605e5c;
+    font-size: 13px;
+    line-height: 20px;
+  }
+}
+
+.emptyIcon {
+  display: inline-block;
+  color: #605e5c;
+  font-size: 28px;
+  line-height: 36px;
+}
+
+.ruleNote {
+  margin-top: 14px;
+  padding: 10px 12px;
+  border-left: 3px solid #0078d4;
+  border-radius: 2px;
+  color: #424242;
+  background: #f3f9fd;
+  font-size: 12px;
+  line-height: 18px;
+}
+
+@media screen and (max-width: 1700px) {
+  .filterGrid {
+    grid-template-columns:
+      minmax(210px, 1.7fr)
+      minmax(100px, 0.75fr)
+      minmax(140px, 1fr)
+      minmax(80px, 0.55fr)
+      minmax(80px, 0.55fr)
+      minmax(122px, 0.8fr)
+      minmax(122px, 0.8fr)
+      minmax(174px, max-content);
+    gap: 8px;
+  }
+
+  .filterActions {
+    min-width: 174px;
+
+    button {
+      min-width: 81px;
+    }
+  }
+}
+
+@media screen and (max-width: 1400px) {
+  .filterGrid {
+    grid-template-columns:
+      minmax(230px, 2fr)
+      minmax(120px, 1fr)
+      minmax(175px, 1.3fr)
+      minmax(100px, 0.75fr);
+    gap: 12px;
+  }
+
+  .filterActions {
+    min-width: 0;
+    justify-content: flex-start;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .supplierEsgSearch { padding: 14px; }
+
+  .filterGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .searchField { grid-column: 1 / -1; }
+
+  .filterActions {
+    width: 100%;
+    min-width: 0;
+    justify-content: flex-start;
+
+    button { min-width: 100px; }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .supplierEsgSearch { padding: 12px; }
+
+  .header {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .filterCard { padding: 12px; }
+  .filterGrid { grid-template-columns: 1fr; }
+  .searchField { grid-column: auto; }
+
+  .filterActions {
+    width: 100%;
+    justify-content: stretch;
+
+    button {
+      flex: 1;
+      min-width: 0;
+    }
+  }
+
+  .summaryBar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
