@@ -10,7 +10,8 @@
     "build": "gulp bundle",
     "clean": "gulp clean",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
   "dependencies": {
     "@fluentui/react": "^8.125.7",
@@ -23,7 +24,6 @@
     "@pnp/sp": "^4.20.0",
     "react": "17.0.1",
     "react-dom": "17.0.1",
-    "recharts": "^3.10.1",
     "tslib": "2.3.1"
   },
   "devDependencies": {

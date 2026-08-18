@@ -1,341 +1,767 @@
-import * as React from "react";
-import { useEffect, useState } from "react";
-import {
-  Cell as RechartsCell,
-  Pie as RechartsPie,
-  PieChart as RechartsPieChart,
-  ResponsiveContainer as RechartsResponsiveContainer,
-} from "recharts";
+import * as React from 'react';
+import { useEffect, useState } from 'react';
 
-import { getSP } from "../../../pnpConfig";
-import { IEsgFeedbackWidgetProps } from "./IEsgFeedbackWidgetProps";
+import {
+  DefaultButton,
+  IButtonStyles,
+  Icon,
+  MessageBar,
+  MessageBarType,
+  Spinner,
+  SpinnerSize
+} from '@fluentui/react';
+
+import { getSP } from '../../../pnpConfig';
+import { IEsgFeedbackWidgetProps } from './IEsgFeedbackWidgetProps';
+
+type SupplierTier = 'Tier 1' | 'Tier 2' | 'Tier 3';
+type QualificationStatus =
+  | 'Qualified'
+  | 'Conditionally Qualified'
+  | 'Not Qualified';
+type RiskRating = 'Low Risk' | 'Medium Risk' | 'High Risk';
+type Recommendation =
+  | 'Approve'
+  | 'Corrective Action'
+  | 'Requires Review';
+
+interface ITierConfiguration {
+  tier: SupplierTier;
+  listTitle: string;
+  supplierNameInternalName: string;
+  emailInternalName: string;
+  contactNameInternalName: string;
+  environmentalCountInternalName: string;
+  socialCountInternalName: string;
+  governanceCountInternalName: string;
+  overallPercentageInternalName: string;
+  maximumWeightedScore: number;
+}
+
+interface ISharePointUserValue {
+  Title?: string;
+  EMail?: string;
+}
+
+interface IRawSubmission {
+  Id?: number;
+  Created?: string;
+  Modified?: string;
+  Author?: ISharePointUserValue;
+  Editor?: ISharePointUserValue;
+  [key: string]: unknown;
+}
 
 interface ICategoryScore {
   name: string;
   value: number;
+  iconName: string;
   color: string;
 }
 
-interface ITierItem {
-  Id?: number;
-  Author?: {
-    EMail?: string;
-  };
-  Supplier_x0020_Name?: string;
-  OverallQuestionsPercentage?: number | string;
-  EnvironmentalQuestionsCount?: number | string;
-  EnvQuestionsCount?: number | string;
-  SocialQuestionsCount?: number | string;
-  GovernanceQuestionsCount?: number | string;
-}
-
-interface IEsgCachePayload {
+interface ILatestSubmission {
+  id: number;
+  tier: SupplierTier;
+  listTitle: string;
   supplierName: string;
+  supplierEmail: string;
+  contactName: string;
+  sharePointWeightedScore: number;
+  maximumWeightedScore: number;
   overallScore: number;
-  scores: ICategoryScore[];
+  categoryScores: ICategoryScore[];
+  qualification: QualificationStatus;
+  riskRating: RiskRating;
+  recommendation: Recommendation;
+  lastUpdatedBy: string;
+  lastUpdated: string;
+  assessmentNote: string;
+  created: string;
+  itemUrl: string;
 }
 
-interface IResponsiveContainerProps {
-  width?: string | number;
-  height?: string | number;
-  children?: React.ReactNode;
+interface ITierFetchResult {
+  configuration: ITierConfiguration;
+  item?: IRawSubmission;
 }
 
-interface IPieChartProps {
-  children?: React.ReactNode;
-}
+const QUALIFIED_MINIMUM = 70;
+const CONDITIONAL_MINIMUM = 60;
 
-interface IPieProps {
-  data: ICategoryScore[];
-  cx?: string | number;
-  cy?: string | number;
-  innerRadius?: number | string;
-  outerRadius?: number | string;
-  paddingAngle?: number;
-  dataKey: keyof ICategoryScore;
-  children?: React.ReactNode;
-}
-
-interface ICellProps {
-  fill?: string;
-}
-
-const ResponsiveContainer =
-  RechartsResponsiveContainer as unknown as React.ComponentType<IResponsiveContainerProps>;
-
-const PieChart =
-  RechartsPieChart as unknown as React.ComponentType<IPieChartProps>;
-
-const Pie =
-  RechartsPie as unknown as React.ComponentType<IPieProps>;
-
-const Cell =
-  RechartsCell as unknown as React.ComponentType<ICellProps>;
-
-const EMPTY_CATEGORY_COUNTS: ICategoryScore[] = [
+const DEFAULT_TIER_CONFIGURATIONS: readonly ITierConfiguration[] = [
   {
-    name: "Environmental",
-    value: 0,
-    color: "#0088fe",
+    tier: 'Tier 1',
+    listTitle: 'CASSTECH_SSQ',
+    supplierNameInternalName: 'Supplier_x0020_Name',
+    emailInternalName: 'field_3',
+    contactNameInternalName: 'field_4',
+    environmentalCountInternalName:
+      'EnvironmentalQuestionsCount',
+    socialCountInternalName: 'SocialQuestionsCount',
+    governanceCountInternalName: 'GovernanceQuestionsCount',
+    overallPercentageInternalName:
+      'OverallQuestionsPercentage',
+    maximumWeightedScore: 10
   },
   {
-    name: "Social",
-    value: 0,
-    color: "#00c49f",
+    tier: 'Tier 2',
+    listTitle: 'Tier 2 ESG Procurement Questionnaire',
+    supplierNameInternalName: 'Supplier_x0020_Name',
+    emailInternalName: 'Email',
+    contactNameInternalName: 'Name',
+    environmentalCountInternalName: 'EnvQuestionsCount',
+    socialCountInternalName: 'SocialQuestionsCount',
+    governanceCountInternalName: 'GovernanceQuestionsCount',
+    overallPercentageInternalName:
+      'OverallQuestionsPercentage',
+    maximumWeightedScore: 5
   },
   {
-    name: "Governance",
-    value: 0,
-    color: "#ffbb28",
-  },
+    tier: 'Tier 3',
+    listTitle:
+      'Supplier Sustainability Questionnaires Tier 3',
+    supplierNameInternalName: 'Supplier_x0020_Name',
+    emailInternalName: 'Email',
+    contactNameInternalName: 'Name',
+    environmentalCountInternalName: 'EnvQuestionsCount',
+    socialCountInternalName: 'SocialQuestionsCount',
+    governanceCountInternalName: 'GovernanceQuestionsCount',
+    overallPercentageInternalName:
+      'OverallQuestionsPercentage',
+    maximumWeightedScore: 2
+  }
 ];
 
-const CACHE_KEY = "SSQ_ESG_FEEDBACK_DATA_V5";
-const CACHE_TIME_KEY = "SSQ_ESG_FEEDBACK_TIMESTAMP_V5";
-const TTL_MS = 10 * 60 * 1000;
-
-const getValidCount = (value: unknown): number => {
-  if (value === null || value === undefined || value === "") {
+const parseNumber = (value: unknown): number => {
+  if (value === null || value === undefined || value === '') {
     return 0;
   }
 
-  const num = typeof value === "number" ? value : Number(value);
+  const normalizedValue: unknown =
+    typeof value === 'string'
+      ? value.replace('%', '').replace(',', '.').trim()
+      : value;
 
-  if (isNaN(num) || !isFinite(num) || num < 0) {
+  const numericValue: number =
+    typeof normalizedValue === 'number'
+      ? normalizedValue
+      : Number(normalizedValue);
+
+  if (
+    isNaN(numericValue) ||
+    !isFinite(numericValue) ||
+    numericValue < 0
+  ) {
     return 0;
   }
 
-  return Math.round(num);
+  return numericValue;
 };
 
-const normalizePercentage = (value: unknown): number => {
-  if (value === null || value === undefined || value === "") {
-    return 0;
+const getTextValue = (value: unknown): string => {
+  if (typeof value === 'string') {
+    return value.trim();
   }
 
-  let val = value;
-  if (typeof val === "string") {
-    val = val.replace("%", "").trim();
+  if (typeof value === 'number') {
+    return value.toString();
   }
 
-  const num = typeof val === "number" ? val : Number(val);
-
-  if (isNaN(num) || !isFinite(num) || num < 0) {
-    return 0;
-  }
-
-  const percentage = num <= 1 ? Math.round(num * 100) : Math.round(num);
-
-  return Math.min(100, percentage);
+  return '';
 };
 
-const isCategoryScore = (value: unknown): value is ICategoryScore => {
-  if (typeof value !== "object" || value === undefined) {
-    return false;
+const roundToTwoDecimals = (value: number): number => {
+  return Math.round(value * 100) / 100;
+};
+
+const calculateRelativeScore = (
+  sharePointWeightedScore: number,
+  maximumWeightedScore: number
+): number => {
+  if (
+    !isFinite(maximumWeightedScore) ||
+    maximumWeightedScore <= 0
+  ) {
+    return 0;
   }
 
-  const candidate = value as Partial<ICategoryScore>;
+  const relativeScore: number =
+    (sharePointWeightedScore / maximumWeightedScore) * 100;
 
-  return (
-    typeof candidate.name === "string" &&
-    typeof candidate.value === "number" &&
-    typeof candidate.color === "string"
+  return roundToTwoDecimals(
+    Math.min(Math.max(relativeScore, 0), 100)
   );
 };
 
-const isEsgCachePayload = (value: unknown): value is IEsgCachePayload => {
-  if (typeof value !== "object" || value === undefined) {
-    return false;
+const evaluateQualification = (
+  score: number
+): {
+  qualification: QualificationStatus;
+  riskRating: RiskRating;
+  recommendation: Recommendation;
+} => {
+  if (score >= QUALIFIED_MINIMUM) {
+    return {
+      qualification: 'Qualified',
+      riskRating: 'Low Risk',
+      recommendation: 'Approve'
+    };
   }
 
-  const candidate = value as Partial<IEsgCachePayload>;
+  if (score >= CONDITIONAL_MINIMUM) {
+    return {
+      qualification: 'Conditionally Qualified',
+      riskRating: 'Medium Risk',
+      recommendation: 'Corrective Action'
+    };
+  }
 
-  return (
-    typeof candidate.supplierName === "string" &&
-    typeof candidate.overallScore === "number" &&
-    Array.isArray(candidate.scores) &&
-    candidate.scores.every((score: unknown): boolean => isCategoryScore(score))
-  );
+  return {
+    qualification: 'Not Qualified',
+    riskRating: 'High Risk',
+    recommendation: 'Requires Review'
+  };
 };
 
-const readCachedPayload = (): IEsgCachePayload | undefined => {
-  try {
-    const cachedData = window.sessionStorage.getItem(CACHE_KEY);
-    const cachedTimestamp = window.sessionStorage.getItem(CACHE_TIME_KEY);
+const generateAssessmentNote = (
+  qualification: QualificationStatus,
+  tier: SupplierTier,
+  weightedScore: number,
+  maximumWeightedScore: number,
+  relativeScore: number
+): string => {
+  const scoreText: string =
+    `${roundToTwoDecimals(weightedScore)} of ` +
+    `${maximumWeightedScore} (${roundToTwoDecimals(relativeScore)}%)`;
 
-    if (!cachedData || !cachedTimestamp) {
-      return undefined;
-    }
+  switch (qualification) {
+    case 'Qualified':
+      return (
+        `System-generated assessment for ${tier}: ` +
+        `the SharePoint weighted score is ${scoreText} and ` +
+        'meets the configured qualification threshold.'
+      );
 
-    const timestamp = Number(cachedTimestamp);
+    case 'Conditionally Qualified':
+      return (
+        `System-generated assessment for ${tier}: ` +
+        `the SharePoint weighted score is ${scoreText} and ` +
+        'meets the conditional threshold. Corrective action is recommended.'
+      );
 
-    if (isNaN(timestamp) || !isFinite(timestamp)) {
-      window.sessionStorage.removeItem(CACHE_KEY);
-      window.sessionStorage.removeItem(CACHE_TIME_KEY);
-      return undefined;
-    }
-
-    const cacheAge = Date.now() - timestamp;
-
-    if (cacheAge < 0 || cacheAge >= TTL_MS) {
-      window.sessionStorage.removeItem(CACHE_KEY);
-      window.sessionStorage.removeItem(CACHE_TIME_KEY);
-      return undefined;
-    }
-
-    const parsedData: unknown = JSON.parse(cachedData);
-
-    if (!isEsgCachePayload(parsedData)) {
-      window.sessionStorage.removeItem(CACHE_KEY);
-      window.sessionStorage.removeItem(CACHE_TIME_KEY);
-      return undefined;
-    }
-
-    return parsedData;
-  } catch (error: unknown) {
-    console.warn("Unable to read ESG feedback cache:", error);
-    window.sessionStorage.removeItem(CACHE_KEY);
-    window.sessionStorage.removeItem(CACHE_TIME_KEY);
-    return undefined;
+    default:
+      return (
+        `System-generated assessment for ${tier}: ` +
+        `the SharePoint weighted score is ${scoreText} and ` +
+        'is below the conditional threshold. Additional review is required.'
+      );
   }
 };
 
-const writeCachedPayload = (payload: IEsgCachePayload): void => {
-  try {
-    window.sessionStorage.setItem(CACHE_KEY, JSON.stringify(payload));
-    window.sessionStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
-  } catch (error: unknown) {
-    console.warn("Unable to save ESG feedback cache:", error);
+const formatDate = (
+  value: string,
+  localeName: string
+): string => {
+  if (!value) {
+    return 'Not available';
+  }
+
+  const date: Date = new Date(value);
+
+  if (isNaN(date.getTime())) {
+    return 'Not available';
+  }
+
+  return date.toLocaleDateString(localeName || 'en-GB', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric'
+  });
+};
+
+const getBadgeColors = (
+  value: QualificationStatus | RiskRating | Recommendation
+): { background: string; color: string } => {
+  switch (value) {
+    case 'Qualified':
+    case 'Low Risk':
+    case 'Approve':
+      return {
+        background: '#dff6dd',
+        color: '#107c10'
+      };
+
+    case 'Conditionally Qualified':
+    case 'Medium Risk':
+    case 'Corrective Action':
+      return {
+        background: '#fff4ce',
+        color: '#835c00'
+      };
+
+    default:
+      return {
+        background: '#fde7e9',
+        color: '#a4262c'
+      };
+  }
+};
+
+const getCategoryScores = (
+  item: IRawSubmission,
+  configuration: ITierConfiguration
+): ICategoryScore[] => {
+  return [
+    {
+      name: 'Environmental',
+      value: parseNumber(
+        item[configuration.environmentalCountInternalName]
+      ),
+      iconName: 'Leaf',
+      color: '#107c10'
+    },
+    {
+      name: 'Social',
+      value: parseNumber(
+        item[configuration.socialCountInternalName]
+      ),
+      iconName: 'People',
+      color: '#5c2d91'
+    },
+    {
+      name: 'Governance',
+      value: parseNumber(
+        item[configuration.governanceCountInternalName]
+      ),
+      iconName: 'Bank',
+      color: '#0078d4'
+    }
+  ];
+};
+
+const widgetStyle: React.CSSProperties = {
+  boxSizing: 'border-box',
+  width: '100%',
+  maxWidth: 430,
+  padding: 18,
+  color: '#242424',
+  background: '#ffffff',
+  border: '1px solid #e1dfdd',
+  borderRadius: 10,
+  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
+  fontFamily: 'Segoe UI, sans-serif'
+};
+
+const headerStyle: React.CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  gap: 12,
+  marginBottom: 14
+};
+
+const titleStyle: React.CSSProperties = {
+  margin: 0,
+  fontSize: 16,
+  fontWeight: 700,
+  lineHeight: '22px'
+};
+
+const viewAllButtonStyle: React.CSSProperties = {
+  padding: 0,
+  color: '#005a9e',
+  background: 'transparent',
+  border: 0,
+  cursor: 'pointer',
+  fontSize: 12,
+  fontWeight: 600
+};
+
+const supplierRowStyle: React.CSSProperties = {
+  display: 'flex',
+  alignItems: 'flex-start',
+  justifyContent: 'space-between',
+  gap: 8,
+  marginBottom: 16
+};
+
+const supplierNameStyle: React.CSSProperties = {
+  display: 'block',
+  overflow: 'hidden',
+  fontSize: 13,
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap'
+};
+
+const secondaryTextStyle: React.CSSProperties = {
+  overflow: 'hidden',
+  marginTop: 3,
+  color: '#605e5c',
+  fontSize: 11,
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap'
+};
+
+const tierBadgeStyle: React.CSSProperties = {
+  flex: '0 0 auto',
+  padding: '2px 8px',
+  color: '#835c00',
+  background: '#fff4ce',
+  borderRadius: 10,
+  fontSize: 10,
+  fontWeight: 600
+};
+
+const scoreLayoutStyle: React.CSSProperties = {
+  display: 'grid',
+  gridTemplateColumns: '116px minmax(0, 1fr)',
+  gap: 16,
+  alignItems: 'center',
+  marginBottom: 16
+};
+
+const scoreRingStyle: React.CSSProperties = {
+  position: 'relative',
+  width: 108,
+  height: 108,
+  borderRadius: '50%'
+};
+
+const scoreRingInnerStyle: React.CSSProperties = {
+  position: 'absolute',
+  inset: 9,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  flexDirection: 'column',
+  background: '#ffffff',
+  borderRadius: '50%'
+};
+
+const scoreValueStyle: React.CSSProperties = {
+  fontSize: 25,
+  lineHeight: 1,
+  color: '#201f1e'
+};
+
+const scoreCaptionStyle: React.CSSProperties = {
+  marginTop: 5,
+  color: '#605e5c',
+  fontSize: 9,
+  fontWeight: 600
+};
+
+const weightedScoreCaptionStyle: React.CSSProperties = {
+  marginTop: 3,
+  color: '#797775',
+  fontSize: 9,
+  fontWeight: 600
+};
+
+const categoryCardStyle: React.CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  gap: 8,
+  marginBottom: 8,
+  padding: '9px 10px',
+  background: '#faf9f8',
+  border: '1px solid #edebe9',
+  borderRadius: 6
+};
+
+const categoryNameStyle: React.CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: 7,
+  fontSize: 11
+};
+
+const categoryScoreStyle: React.CSSProperties = {
+  fontSize: 11
+};
+
+const detailsSectionStyle: React.CSSProperties = {
+  paddingTop: 14,
+  borderTop: '1px solid #edebe9'
+};
+
+const detailRowStyle: React.CSSProperties = {
+  display: 'grid',
+  gridTemplateColumns: '105px minmax(0, 1fr)',
+  alignItems: 'center',
+  gap: 10,
+  minHeight: 28
+};
+
+const detailLabelStyle: React.CSSProperties = {
+  color: '#605e5c',
+  fontSize: 11
+};
+
+const detailValueStyle: React.CSSProperties = {
+  color: '#323130',
+  fontSize: 11,
+  fontWeight: 500
+};
+
+const badgeStyle: React.CSSProperties = {
+  justifySelf: 'start',
+  padding: '2px 8px',
+  borderRadius: 10,
+  fontSize: 10,
+  fontWeight: 600
+};
+
+const noteRowStyle: React.CSSProperties = {
+  display: 'grid',
+  gridTemplateColumns: '105px minmax(0, 1fr)',
+  gap: 10,
+  marginTop: 8
+};
+
+const noteTextStyle: React.CSSProperties = {
+  color: '#323130',
+  fontSize: 11,
+  lineHeight: '16px'
+};
+
+const emptyStateStyle: React.CSSProperties = {
+  padding: '24px 12px',
+  color: '#605e5c',
+  textAlign: 'center',
+  fontSize: 12
+};
+
+const assessmentButtonStyles: IButtonStyles = {
+  root: {
+    marginTop: 16,
+    minHeight: 34,
+    color: '#005a9e',
+    background: '#ffffff',
+    borderColor: '#d2d0ce',
+    borderRadius: 5
+  },
+  label: {
+    fontSize: 12,
+    fontWeight: 600
+  },
+  icon: {
+    color: '#005a9e'
   }
 };
 
 export function EsgFeedbackWidget(
-  props: IEsgFeedbackWidgetProps,
+  props: IEsgFeedbackWidgetProps
 ): React.ReactElement {
-  const [scores, setScores] = useState<ICategoryScore[]>(EMPTY_CATEGORY_COUNTS);
-  const [overallScore, setOverallScore] = useState<number>(0);
-  const [supplierName, setSupplierName] = useState<string>("");
+  const [latestSubmission, setLatestSubmission] =
+    useState<ILatestSubmission | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(true);
-  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>('');
+
+  /*
+   * List titles come from the web-part properties. The defaults support
+   * pre-production when an existing web-part instance has no saved values.
+   */
+  const tierConfigurations: readonly ITierConfiguration[] = [
+    {
+      ...DEFAULT_TIER_CONFIGURATIONS[0],
+      listTitle:
+        props.tier1ListTitle ||
+        DEFAULT_TIER_CONFIGURATIONS[0].listTitle
+    },
+    {
+      ...DEFAULT_TIER_CONFIGURATIONS[1],
+      listTitle:
+        props.tier2ListTitle ||
+        DEFAULT_TIER_CONFIGURATIONS[1].listTitle
+    },
+    {
+      ...DEFAULT_TIER_CONFIGURATIONS[2],
+      listTitle:
+        props.tier3ListTitle ||
+        DEFAULT_TIER_CONFIGURATIONS[2].listTitle
+    }
+  ];
 
   useEffect((): (() => void) => {
-    let isMounted = true;
+    let isMounted: boolean = true;
 
-    const fetchLatestScores = async (): Promise<void> => {
-      if (!isMounted) {
-        return;
-      }
+    const fetchLatestItemForTier = async (
+      configuration: ITierConfiguration
+    ): Promise<ITierFetchResult> => {
+      const sp = getSP(props.context);
 
+      /*
+       * Dynamic field selection allows each tier to provide its own
+       * internal names while the mapping code stays common.
+       */
+      const selectFields: string[] = [
+        'Id',
+        'Created',
+        'Modified',
+        'Author/Title',
+        'Author/EMail',
+        'Editor/Title',
+        'Editor/EMail',
+        configuration.supplierNameInternalName,
+        configuration.emailInternalName,
+        configuration.contactNameInternalName,
+        configuration.environmentalCountInternalName,
+        configuration.socialCountInternalName,
+        configuration.governanceCountInternalName,
+        configuration.overallPercentageInternalName
+      ];
+
+      const items: IRawSubmission[] = await sp.web.lists
+        .getByTitle(configuration.listTitle)
+        .items.select(...selectFields)
+        .expand('Author', 'Editor')
+        .orderBy('Created', false)
+        .top(1)();
+
+      return {
+        configuration,
+        item: items[0]
+      };
+    };
+
+    const loadLatestFeedback = async (): Promise<void> => {
       setLoading(true);
-      setErrorMessage("");
-
-      const cachedPayload = readCachedPayload();
-
-      if (cachedPayload) {
-        setSupplierName(cachedPayload.supplierName);
-        setOverallScore(cachedPayload.overallScore);
-        setScores(cachedPayload.scores);
-        setLoading(false);
-        console.info("[ESG Feedback] Data loaded from sessionStorage.");
-        return;
-      }
+      setErrorMessage('');
 
       try {
-        const sp = getSP(props.context);
-
         /*
-         * CASSTECH_SSQ Internal Columns:
-         * EnvironmentalQuestionsCount, SocialQuestionsCount, GovernanceQuestionsCount,
-         * ESGinformationCount, OverallQuestionsCount, OverallQuestionsPercentage
+         * Retrieve the newest item from each tier in parallel.
+         * Each request returns at most one item.
          */
-        const items: ITierItem[] = await sp.web.lists
-          .getByTitle("CASSTECH_SSQ")
-          .items.select(
-            "Id",
-            "Author/EMail",
-            "Supplier_x0020_Name",
-            "OverallQuestionsPercentage",
-            "EnvironmentalQuestionsCount",
-            "SocialQuestionsCount",
-            "GovernanceQuestionsCount",
-          )
-          .expand("Author")
-          .orderBy("Created", false)
-          .top(1)();
+        const tierResults: ITierFetchResult[] =
+          await Promise.all(
+            tierConfigurations.map(
+              (
+                configuration: ITierConfiguration
+              ): Promise<ITierFetchResult> => {
+                return fetchLatestItemForTier(configuration);
+              }
+            )
+          );
 
         if (!isMounted) {
           return;
         }
 
-        const latestItem: ITierItem | undefined = items[0];
+        /*
+         * Remove tiers without submissions, then compare Created dates.
+         * The first entry after sorting is the latest across all tiers.
+         */
+        const availableResults: ITierFetchResult[] =
+          tierResults
+            .filter(
+              (result: ITierFetchResult): boolean => {
+                return Boolean(result.item);
+              }
+            )
+            .sort(
+              (
+                first: ITierFetchResult,
+                second: ITierFetchResult
+              ): number => {
+                const firstTime: number = first.item?.Created
+                  ? new Date(first.item.Created).getTime()
+                  : 0;
+                const secondTime: number = second.item?.Created
+                  ? new Date(second.item.Created).getTime()
+                  : 0;
 
-        if (!latestItem) {
-          const emptyPayload: IEsgCachePayload = {
-            supplierName: "No submissions found",
-            overallScore: 0,
-            scores: EMPTY_CATEGORY_COUNTS,
-          };
+                return secondTime - firstTime;
+              }
+            );
 
-          setSupplierName(emptyPayload.supplierName);
-          setOverallScore(emptyPayload.overallScore);
-          setScores(emptyPayload.scores);
-          writeCachedPayload(emptyPayload);
+        const latestResult: ITierFetchResult | undefined =
+          availableResults[0];
+
+        if (!latestResult || !latestResult.item) {
+          setLatestSubmission(undefined);
           return;
         }
 
-        const supplier =
-          latestItem.Supplier_x0020_Name?.trim() ||
-          latestItem.Author?.EMail?.trim() ||
-          "Latest supplier";
-
-        const percentage = normalizePercentage(
-          latestItem.OverallQuestionsPercentage,
+        const item: IRawSubmission = latestResult.item;
+        const configuration: ITierConfiguration =
+          latestResult.configuration;
+        const weightedScore: number = parseNumber(
+          item[configuration.overallPercentageInternalName]
         );
+        const overallScore: number = calculateRelativeScore(
+          weightedScore,
+          configuration.maximumWeightedScore
+        );
+        const evaluation = evaluateQualification(overallScore);
+        const siteUrl: string =
+          props.context.pageContext.web.absoluteUrl.replace(/\/$/, '');
+        const itemId: number =
+          typeof item.Id === 'number' ? item.Id : 0;
+        const created: string =
+          typeof item.Created === 'string' ? item.Created : '';
+        const modified: string =
+          typeof item.Modified === 'string' ? item.Modified : '';
 
-        const envCountValue =
-          latestItem.EnvironmentalQuestionsCount ??
-          latestItem.EnvQuestionsCount;
-
-        const categoryCounts: ICategoryScore[] = [
-          {
-            name: "Environmental",
-            value: getValidCount(envCountValue),
-            color: "#0088fe",
-          },
-          {
-            name: "Social",
-            value: getValidCount(latestItem.SocialQuestionsCount),
-            color: "#00c49f",
-          },
-          {
-            name: "Governance",
-            value: getValidCount(latestItem.GovernanceQuestionsCount),
-            color: "#ffbb28",
-          },
-        ];
-
-        const payload: IEsgCachePayload = {
-          supplierName: supplier,
-          overallScore: percentage,
-          scores: categoryCounts,
-        };
-
-        setSupplierName(payload.supplierName);
-        setOverallScore(payload.overallScore);
-        setScores(payload.scores);
-        writeCachedPayload(payload);
-
-        console.info("[ESG Feedback] Latest item retrieved:", latestItem);
-        console.info("[ESG Feedback] Calculated payload:", payload);
+        setLatestSubmission({
+          id: itemId,
+          tier: configuration.tier,
+          listTitle: configuration.listTitle,
+          supplierName:
+            getTextValue(
+              item[configuration.supplierNameInternalName]
+            ) ||
+            item.Author?.Title?.trim() ||
+            'Supplier name unavailable',
+          supplierEmail:
+            getTextValue(item[configuration.emailInternalName]) ||
+            item.Author?.EMail?.trim() ||
+            '',
+          contactName:
+            getTextValue(
+              item[configuration.contactNameInternalName]
+            ) ||
+            item.Author?.Title?.trim() ||
+            '',
+          sharePointWeightedScore: weightedScore,
+          maximumWeightedScore:
+            configuration.maximumWeightedScore,
+          overallScore,
+          categoryScores: getCategoryScores(item, configuration),
+          qualification: evaluation.qualification,
+          riskRating: evaluation.riskRating,
+          recommendation: evaluation.recommendation,
+          lastUpdatedBy:
+            item.Editor?.Title?.trim() ||
+            item.Editor?.EMail?.trim() ||
+            'Not available',
+          lastUpdated: formatDate(
+            modified,
+            props.context.pageContext.cultureInfo
+              .currentUICultureName
+          ),
+          assessmentNote: generateAssessmentNote(
+            evaluation.qualification,
+            configuration.tier,
+            weightedScore,
+            configuration.maximumWeightedScore,
+            overallScore
+          ),
+          created,
+          itemUrl:
+            `${siteUrl}/Lists/` +
+            `${encodeURIComponent(configuration.listTitle)}` +
+            `/DispForm.aspx?ID=${itemId.toString()}`
+        });
       } catch (error: unknown) {
-        console.error("Error fetching ESG feedback:", error);
+        console.error('Error loading latest ESG feedback:', error);
 
         if (isMounted) {
-          setSupplierName("Unable to load supplier");
-          setOverallScore(0);
-          setScores(EMPTY_CATEGORY_COUNTS);
+          setLatestSubmission(undefined);
           setErrorMessage(
-            "ESG feedback could not be loaded from SharePoint. Open browser console to review details.",
+            'The latest ESG feedback could not be loaded from SharePoint.'
           );
         }
       } finally {
@@ -345,198 +771,275 @@ export function EsgFeedbackWidget(
       }
     };
 
-    fetchLatestScores().catch((error: unknown): void => {
-      console.error("Unhandled ESG feedback error:", error);
-
-      if (isMounted) {
-        setLoading(false);
-        setErrorMessage(
-          "An unexpected error occurred while loading ESG feedback.",
+    loadLatestFeedback().catch(
+      (error: unknown): void => {
+        console.error(
+          'Unhandled ESG feedback loading error:',
+          error
         );
+
+        if (isMounted) {
+          setLatestSubmission(undefined);
+          setErrorMessage(
+            'An unexpected error occurred while loading ESG feedback.'
+          );
+          setLoading(false);
+        }
       }
-    });
+    );
 
     return (): void => {
       isMounted = false;
     };
-  }, [props.context]);
+  }, [
+    props.context,
+    props.tier1ListTitle,
+    props.tier2ListTitle,
+    props.tier3ListTitle
+  ]);
 
-  const widgetStyle: React.CSSProperties = {
-    width: "100%",
-    padding: "16px",
-    fontFamily: '"Segoe UI", sans-serif',
-    color: "#323130",
-    backgroundColor: "#ffffff",
-    border: "1px solid #e1dfdd",
-    borderRadius: "8px",
-    boxSizing: "border-box",
-    boxShadow: "0 1.6px 3.6px rgba(0, 0, 0, 0.11)",
+  const openAssessment = (): void => {
+    if (!latestSubmission) {
+      return;
+    }
+
+    window.open(
+      latestSubmission.itemUrl,
+      '_blank',
+      'noopener,noreferrer'
+    );
   };
 
-  const warningStyle: React.CSSProperties = {
-    marginBottom: "12px",
-    padding: "8px 10px",
-    fontSize: "12px",
-    lineHeight: 1.4,
-    color: "#8a6d1d",
-    backgroundColor: "#fff4ce",
-    border: "1px solid #fce100",
-    borderRadius: "4px",
+  const openAllAssessments = (): void => {
+    if (!latestSubmission) {
+      return;
+    }
+
+    const siteUrl: string =
+      props.context.pageContext.web.absoluteUrl.replace(/\/$/, '');
+
+    window.open(
+      `${siteUrl}/Lists/${encodeURIComponent(
+        latestSubmission.listTitle
+      )}/AllItems.aspx`,
+      '_blank',
+      'noopener,noreferrer'
+    );
   };
 
   if (loading) {
     return (
-      <div
-        role="status"
-        aria-live="polite"
-        style={{
-          padding: "12px",
-          fontFamily: '"Segoe UI", sans-serif',
-          color: "#605e5c",
-        }}
-      >
-        Loading ESG feedback...
+      <div role="status" aria-live="polite" style={{ padding: 16 }}>
+        <Spinner
+          size={SpinnerSize.small}
+          label="Loading latest ESG feedback"
+        />
       </div>
     );
   }
 
+  const qualificationColors = latestSubmission
+    ? getBadgeColors(latestSubmission.qualification)
+    : getBadgeColors('Not Qualified');
+  const riskColors = latestSubmission
+    ? getBadgeColors(latestSubmission.riskRating)
+    : getBadgeColors('High Risk');
+  const recommendationColors = latestSubmission
+    ? getBadgeColors(latestSubmission.recommendation)
+    : getBadgeColors('Requires Review');
+
   return (
     <section aria-label="Latest ESG feedback" style={widgetStyle}>
-      <h3
-        style={{
-          margin: "0 0 4px",
-          fontSize: "16px",
-          color: "#323130",
-        }}
-      >
-        Latest ESG Feedback
-      </h3>
+      <div style={headerStyle}>
+        <h3 style={titleStyle}>Latest ESG Feedback</h3>
 
-      <div
-        title={supplierName}
-        style={{
-          marginBottom: "12px",
-          overflowWrap: "anywhere",
-          fontSize: "13px",
-          fontWeight: 600,
-          color: "#605e5c",
-        }}
-      >
-        {supplierName}
+        <button
+          type="button"
+          onClick={openAllAssessments}
+          disabled={!latestSubmission}
+          style={{
+            ...viewAllButtonStyle,
+            cursor: latestSubmission ? 'pointer' : 'default',
+            opacity: latestSubmission ? 1 : 0.5
+          }}
+        >
+          View all&nbsp;
+          <Icon iconName="OpenInNewWindow" />
+        </button>
       </div>
 
       {errorMessage && (
-        <div role="alert" aria-live="assertive" style={warningStyle}>
+        <MessageBar messageBarType={MessageBarType.error}>
           {errorMessage}
-        </div>
+        </MessageBar>
       )}
 
-      <div
-        style={{
-          position: "relative",
-          height: "180px",
-        }}
-      >
-        <ResponsiveContainer width="100%" height="100%">
-          <PieChart>
-            <Pie
-              data={scores}
-              cx="50%"
-              cy="50%"
-              innerRadius={55}
-              outerRadius={75}
-              paddingAngle={4}
-              dataKey="value"
-            >
-              {scores.map(
-                (score: ICategoryScore, index: number): React.ReactElement => (
-                  <Cell key={`${score.name}-${index}`} fill={score.color} />
-                ),
-              )}
-            </Pie>
-          </PieChart>
-        </ResponsiveContainer>
-
-        <div
-          style={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            textAlign: "center",
-            pointerEvents: "none",
-            transform: "translate(-50%, -50%)",
-          }}
-        >
-          <span
-            style={{
-              display: "block",
-              fontSize: "26px",
-              lineHeight: 1.1,
-              fontWeight: 700,
-              color: "#201f1e",
-            }}
-          >
-            {overallScore}%
-          </span>
-
-          <div
-            style={{
-              marginTop: "2px",
-              fontSize: "10px",
-              color: "#605e5c",
-            }}
-          >
-            Overall Score
-          </div>
+      {!latestSubmission ? (
+        <div style={emptyStateStyle}>
+          No ESG questionnaire submissions were found.
         </div>
-      </div>
+      ) : (
+        <>
+          <div style={supplierRowStyle}>
+            <div style={{ minWidth: 0 }}>
+              <strong
+                title={latestSubmission.supplierEmail}
+                style={supplierNameStyle}
+              >
+                {latestSubmission.supplierName}
+              </strong>
+              {latestSubmission.contactName && (
+                <div style={secondaryTextStyle}>
+                  {latestSubmission.contactName}
+                </div>
+              )}
+            </div>
 
-      <div
-        style={{
-          marginTop: "12px",
-          paddingTop: "10px",
-          borderTop: "1px solid #f3f2f1",
-        }}
-      >
-        {scores.map(
-          (score: ICategoryScore): React.ReactElement => (
+            <span style={tierBadgeStyle}>
+              {latestSubmission.tier}
+            </span>
+          </div>
+
+          <div style={scoreLayoutStyle}>
             <div
-              key={score.name}
               style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                padding: "4px 0",
-                fontSize: "13px",
+                ...scoreRingStyle,
+                background:
+                  `conic-gradient(#107c41 0 ` +
+                  `${latestSubmission.overallScore}%, ` +
+                  `#edebe9 ${latestSubmission.overallScore}% 100%)`
               }}
             >
-              <span
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                }}
-              >
-                <span
-                  aria-hidden="true"
-                  style={{
-                    display: "inline-block",
-                    width: "10px",
-                    height: "10px",
-                    flexShrink: 0,
-                    backgroundColor: score.color,
-                    borderRadius: "50%",
-                  }}
-                />
-                {score.name}
-              </span>
-
-              <span style={{ fontWeight: 600 }}>{score.value} questions</span>
+              <div style={scoreRingInnerStyle}>
+                <strong style={scoreValueStyle}>
+                  {latestSubmission.overallScore}%
+                </strong>
+                <span style={scoreCaptionStyle}>
+                  Overall ESG Score
+                </span>
+                <span style={weightedScoreCaptionStyle}>
+                  {roundToTwoDecimals(
+                    latestSubmission.sharePointWeightedScore
+                  )}{' '}
+                  / {latestSubmission.maximumWeightedScore}
+                </span>
+              </div>
             </div>
-          ),
-        )}
-      </div>
+
+            <div>
+              {latestSubmission.categoryScores.map(
+                (
+                  category: ICategoryScore
+                ): React.ReactElement => (
+                  <div key={category.name} style={categoryCardStyle}>
+                    <span style={categoryNameStyle}>
+                      <Icon
+                        iconName={category.iconName}
+                        styles={{
+                          root: {
+                            color: category.color,
+                            fontSize: 14
+                          }
+                        }}
+                      />
+                      {category.name}
+                    </span>
+
+                    <strong style={categoryScoreStyle}>
+                      {roundToTwoDecimals(category.value)}
+                    </strong>
+                  </div>
+                )
+              )}
+            </div>
+          </div>
+
+          <div style={detailsSectionStyle}>
+            <DetailBadgeRow
+              label="Qualification"
+              value={latestSubmission.qualification}
+              colors={qualificationColors}
+            />
+            <DetailBadgeRow
+              label="Risk Rating"
+              value={latestSubmission.riskRating}
+              colors={riskColors}
+            />
+            <DetailBadgeRow
+              label="Recommendation"
+              value={latestSubmission.recommendation}
+              colors={recommendationColors}
+            />
+            <DetailTextRow
+              label="Last Updated By"
+              value={latestSubmission.lastUpdatedBy}
+            />
+            <DetailTextRow
+              label="Last Updated"
+              value={latestSubmission.lastUpdated}
+            />
+
+            <div style={noteRowStyle}>
+              <span style={detailLabelStyle}>Assessment Note</span>
+              <span style={noteTextStyle}>
+                {latestSubmission.assessmentNote}
+              </span>
+            </div>
+          </div>
+
+          <DefaultButton
+            text="View Full Assessment"
+            iconProps={{ iconName: 'Forward' }}
+            onClick={openAssessment}
+            styles={assessmentButtonStyles}
+          />
+        </>
+      )}
     </section>
+  );
+}
+
+interface IDetailBadgeRowProps {
+  label: string;
+  value: string;
+  colors: {
+    background: string;
+    color: string;
+  };
+}
+
+function DetailBadgeRow(
+  props: IDetailBadgeRowProps
+): React.ReactElement {
+  return (
+    <div style={detailRowStyle}>
+      <span style={detailLabelStyle}>{props.label}</span>
+      <span
+        style={{
+          ...badgeStyle,
+          color: props.colors.color,
+          background: props.colors.background
+        }}
+      >
+        {props.value}
+      </span>
+    </div>
+  );
+}
+
+interface IDetailTextRowProps {
+  label: string;
+  value: string;
+}
+
+function DetailTextRow(
+  props: IDetailTextRowProps
+): React.ReactElement {
+  return (
+    <div style={detailRowStyle}>
+      <span style={detailLabelStyle}>{props.label}</span>
+      <span style={detailValueStyle}>{props.value}</span>
+    </div>
   );
 }
 

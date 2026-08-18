@@ -3,7 +3,7 @@
   "solution": {
     "name": "supplier-sustainability-solution-client-side-solution",
     "id": "1c8b9c84-0c9f-4a74-8665-c51ad013b629",
-    "version": "1.0.0.0",
+    "version": "1.0.0.2",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,

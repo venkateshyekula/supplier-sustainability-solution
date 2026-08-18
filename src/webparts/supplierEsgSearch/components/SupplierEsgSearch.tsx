@@ -1,7 +1,6 @@
 import * as React from 'react';
 
 import {
-  ActionButton,
   DatePicker,
   DefaultButton,
   DetailsListLayoutMode,
@@ -184,7 +183,7 @@ export default class SupplierEsgSearch
             </p>
           </div>
 
-          <ActionButton
+          <DefaultButton
             iconProps={{ iconName: 'Refresh' }}
             text="Refresh"
             disabled={this.state.isLoading}
