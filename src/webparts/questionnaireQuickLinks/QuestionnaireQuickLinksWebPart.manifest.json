@@ -1,0 +1,39 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+  "id": "274420fc-88e4-4826-8195-7adc60d6fb65",
+  "alias": "QuestionnaireQuickLinksWebPart",
+  "componentType": "WebPart",
+  "version": "*",
+  "manifestVersion": 2,
+  "requiresCustomScript": false,
+  "supportedHosts": [
+    "SharePointWebPart",
+    "TeamsPersonalApp",
+    "TeamsTab",
+    "SharePointFullPage"
+  ],
+  "supportsThemeVariants": true,
+  "preconfiguredEntries": [
+    {
+      "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+      "group": {
+        "default": "Advanced"
+      },
+      "title": {
+        "default": "Questionnaire Quick Links"
+      },
+      "description": {
+        "default": "Open completed supplier sustainability questionnaires and supporting documents for all three tiers."
+      },
+      "officeFabricIconFontName": "Link",
+      "properties": {
+        "tier1QuestionnaireListTitle": "CASSTECH_SSQ",
+        "tier2QuestionnaireListTitle": "Tier 2 ESG Procurement Questionnaire",
+        "tier3QuestionnaireListTitle": "Supplier Sustainability Questionnaires Tier 3",
+        "tier1DocumentLibraryTitle": "TestSupply",
+        "tier2DocumentLibraryTitle": "SSQ-Tier2 Attachments",
+        "tier3DocumentLibraryTitle": "SSQ-Tier3 Attachments"
+      }
+    }
+  ]
+}

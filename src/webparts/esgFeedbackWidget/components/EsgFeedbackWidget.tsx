@@ -342,7 +342,10 @@ const getCategoryScores = (
 const widgetStyle: React.CSSProperties = {
   boxSizing: 'border-box',
   width: '100%',
-  maxWidth: 430,
+  maxWidth: '100%',
+  height: 'auto',
+  minHeight: 'auto',
+  margin: 0,
   padding: 18,
   color: '#242424',
   background: '#ffffff',
@@ -351,6 +354,20 @@ const widgetStyle: React.CSSProperties = {
   boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
   fontFamily: 'Segoe UI, sans-serif'
 };
+
+/*const widgetStyle: React.CSSProperties = {
+  width: '100%',
+  maxWidth: '100%',
+  minHeight: '100%',
+  height: '100%',
+  boxSizing: 'border-box',
+  padding: 18,
+  background: '#ffffff',
+  border: '1px solid #e1dfdd',
+  borderRadius: 10,
+  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
+  fontFamily: 'Segoe UI, sans-serif'
+};*/
 
 const headerStyle: React.CSSProperties = {
   display: 'flex',

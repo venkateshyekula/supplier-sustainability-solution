@@ -3,6 +3,7 @@ import { spfi, SPFx, SPFI } from "@pnp/sp";
 import "@pnp/sp/webs";
 import "@pnp/sp/lists";
 import "@pnp/sp/items";
+import '@pnp/sp/folders';
 
 let _sp: SPFI | undefined = undefined;
 

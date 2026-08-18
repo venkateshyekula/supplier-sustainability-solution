@@ -1,0 +1,323 @@
+@import '~@fluentui/react/dist/sass/References.scss';
+
+.questionnaireQuickLinks {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  padding: 22px;
+  overflow: hidden;
+  color: #242424;
+  background: #ffffff;
+  border: 1px solid #edebe9;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+  font-family: $ms-font-family-fallbacks;
+}
+
+/*
+ * Both sections use the complete available width. This gives Completed
+ * Questionnaires the same three-card horizontal layout as Supporting
+ * Documents and avoids narrow cards and clipped text in SharePoint.
+ */
+.contentGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 24px;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.section {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  overflow: visible;
+}
+
+.sectionTitle {
+  margin: 0 0 16px;
+  color: #242424;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 25px;
+}
+
+/* Horizontal separator because the two groups are stacked. */
+.divider {
+  width: 100%;
+  height: 1px;
+  min-height: 1px;
+  background: #e1dfdd;
+}
+
+/* Identical three-column card grid for both sections. */
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 176px;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 20px 42px 18px 20px;
+  overflow: hidden;
+  color: #242424;
+  background: #ffffff;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  appearance: none;
+  transition:
+    border-color 140ms ease,
+    box-shadow 140ms ease,
+    transform 140ms ease,
+    background-color 140ms ease;
+
+  &:hover:not(:disabled) {
+    border-color: #c8c6c4;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
+  }
+
+  &:focus {
+    outline: 2px solid #605e5c;
+    outline-offset: 2px;
+  }
+
+  &:focus-visible {
+    border-color: #605e5c;
+    outline: 2px solid #605e5c;
+    outline-offset: 2px;
+  }
+
+  &:active:not(:disabled) {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    cursor: default;
+    opacity: 0.68;
+  }
+}
+
+.blueCard {
+  background: linear-gradient(135deg, #f2f7fd 0%, #fbfdff 100%);
+  border-color: #deebf7;
+
+  &:hover:not(:disabled) {
+    background: linear-gradient(135deg, #eaf3fc 0%, #f8fbff 100%);
+    border-color: #b4d6f2;
+  }
+}
+
+.goldCard {
+  background: linear-gradient(135deg, #fff9ed 0%, #fffdf8 100%);
+  border-color: #f3e5c3;
+
+  &:hover:not(:disabled) {
+    background: linear-gradient(135deg, #fff4da 0%, #fffaf1 100%);
+    border-color: #dfc276;
+  }
+}
+
+.redCard {
+  background: linear-gradient(135deg, #fff2f4 0%, #fffafb 100%);
+  border-color: #f3dadd;
+
+  &:hover:not(:disabled) {
+    background: linear-gradient(135deg, #fde9ec 0%, #fff7f8 100%);
+    border-color: #e8aeb5;
+  }
+}
+
+.icon {
+  display: inline-flex;
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+  font-size: 32px;
+  line-height: 40px;
+}
+
+.blueIcon {
+  color: #0f6cbd;
+}
+
+.goldIcon {
+  color: #9a6700;
+}
+
+.redIcon {
+  color: #c50f1f;
+}
+
+.cardTitle {
+  display: block;
+  width: 100%;
+  min-height: 24px;
+  margin: 0 0 8px;
+  overflow: visible;
+  color: #242424;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 23px;
+  word-break: normal;
+  overflow-wrap: normal;
+  white-space: normal;
+}
+
+.cardDescription {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding-right: 8px;
+  color: #424242;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 19px;
+  word-break: normal;
+  overflow-wrap: break-word;
+}
+
+.arrow {
+  position: absolute;
+  right: 16px;
+  bottom: 15px;
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+  align-items: center;
+  justify-content: center;
+  color: #242424;
+  font-size: 21px;
+  font-weight: 600;
+  line-height: 20px;
+  transition: transform 140ms ease;
+}
+
+.card:hover:not(:disabled) .arrow {
+  transform: translateX(2px);
+}
+
+.status {
+  display: block;
+  width: 100%;
+  margin-top: auto;
+  padding-top: 8px;
+  color: #a4262c;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 15px;
+}
+
+.loading,
+.errorMessage {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  line-height: 18px;
+}
+
+.loading {
+  color: #605e5c;
+  background: #faf9f8;
+  border: 1px solid #edebe9;
+}
+
+.errorMessage {
+  margin-bottom: 14px;
+  color: #a4262c;
+  background: #fde7e9;
+  border: 1px solid #f1bbbc;
+}
+
+/* Two cards per row on medium SharePoint columns. */
+@media screen and (max-width: 820px) {
+  .questionnaireQuickLinks {
+    padding: 18px;
+  }
+
+  .contentGrid {
+    gap: 20px;
+  }
+
+  .cardGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 13px;
+  }
+
+  .card {
+    min-height: 168px;
+    padding: 18px 40px 17px 18px;
+  }
+}
+
+/* One card per row on mobile. */
+@media screen and (max-width: 520px) {
+  .questionnaireQuickLinks {
+    padding: 14px;
+    border-radius: 8px;
+  }
+
+  .sectionTitle {
+    margin-bottom: 12px;
+    font-size: 16px;
+    line-height: 23px;
+  }
+
+  .cardGrid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .card {
+    min-height: 150px;
+    padding: 16px 42px 15px 16px;
+  }
+
+  .icon {
+    width: 34px;
+    height: 34px;
+    flex-basis: 34px;
+    margin-bottom: 10px;
+    font-size: 27px;
+    line-height: 34px;
+  }
+
+  .cardTitle {
+    font-size: 16px;
+    line-height: 22px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .arrow {
+    transition: none;
+  }
+
+  .card:hover:not(:disabled),
+  .card:hover:not(:disabled) .arrow {
+    transform: none;
+  }
+}

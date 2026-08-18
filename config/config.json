@@ -25,12 +25,21 @@
           "manifest": "./src/webparts/supplierEsgSearch/SupplierEsgSearchWebPart.manifest.json"
         }
       ]
+    },
+    "questionnaire-quick-links-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/questionnaireQuickLinks/QuestionnaireQuickLinksWebPart.js",
+          "manifest": "./src/webparts/questionnaireQuickLinks/QuestionnaireQuickLinksWebPart.manifest.json"
+        }
+      ]
     }
   },
   "externals": {},
   "localizedResources": {
     "KpiMetricCardsWebPartStrings": "lib/webparts/kpiMetricCards/loc/{locale}.js",
     "EsgFeedbackWidgetWebPartStrings": "lib/webparts/esgFeedbackWidget/loc/{locale}.js",
-    "SupplierEsgSearchWebPartStrings": "lib/webparts/supplierEsgSearch/loc/{locale}.js"
+    "SupplierEsgSearchWebPartStrings": "lib/webparts/supplierEsgSearch/loc/{locale}.js",
+    "QuestionnaireQuickLinksWebPartStrings": "lib/webparts/questionnaireQuickLinks/loc/{locale}.js"
   }
 }
