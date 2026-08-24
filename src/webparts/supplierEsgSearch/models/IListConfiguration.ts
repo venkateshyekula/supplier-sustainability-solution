@@ -14,5 +14,6 @@ export interface IListConfiguration {
   contactNameInternalName: string;
   overallPercentageInternalName: string;
 
-  maximumWeightedScore: number;
+  qualifiedWeightedMinimum: number;
+  conditionalWeightedMinimum: number;
 }

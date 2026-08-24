@@ -2,8 +2,11 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 
 import { Icon } from '@fluentui/react';
+import {
+  SPHttpClient,
+  SPHttpClientResponse
+} from '@microsoft/sp-http';
 
-import { getSP } from '../../../pnpConfig';
 import { IQuestionnaireQuickLinksProps } from './IQuestionnaireQuickLinksProps';
 import styles from './QuestionnaireQuickLinks.module.scss';
 
@@ -27,7 +30,7 @@ interface IResolvedLink extends ILinkConfiguration {
   errorMessage?: string;
 }
 
-interface ISharePointListMetadata {
+interface ISharePointMetadataResponse {
   Title?: string;
   BaseTemplate?: number;
   RootFolder?: {
@@ -35,10 +38,33 @@ interface ISharePointListMetadata {
   };
 }
 
+const PREPROD_DEFAULTS = {
+  tier1QuestionnaireListTitle: 'CASSTECH_SSQ',
+  tier2QuestionnaireListTitle:
+    'Tier 2 ESG Procurement Questionnaire',
+  tier3QuestionnaireListTitle:
+    'Supplier Sustainability Questionnaires Tier 3',
+  tier1DocumentLibraryTitle: 'TestSupply',
+  tier2DocumentLibraryTitle: 'SSQ-Tier2 Attachments',
+  tier3DocumentLibraryTitle: 'SSQ-Tier3 Attachments'
+};
+
+const getConfiguredTitle = (
+  value: string,
+  fallback: string
+): string => {
+  const trimmedValue: string = value ? value.trim() : '';
+  return trimmedValue || fallback;
+};
+
 const joinClasses = (...classNames: string[]): string => {
   return classNames
     .filter((className: string): boolean => Boolean(className))
     .join(' ');
+};
+
+const escapeODataString = (value: string): string => {
+  return value.replace(/'/g, "''");
 };
 
 const getConfigurations = (
@@ -51,7 +77,10 @@ const getConfigurations = (
       kind: 'questionnaire',
       title: 'Tier 1 Responses',
       description: 'View all completed Tier 1 questionnaires',
-      sourceTitle: props.tier1QuestionnaireListTitle,
+      sourceTitle: getConfiguredTitle(
+        props.tier1QuestionnaireListTitle,
+        PREPROD_DEFAULTS.tier1QuestionnaireListTitle
+      ),
       iconName: 'OpenFolderHorizontal',
       cardClassName: styles.blueCard,
       iconClassName: styles.blueIcon
@@ -62,7 +91,10 @@ const getConfigurations = (
       kind: 'questionnaire',
       title: 'Tier 2 Responses',
       description: 'View all completed Tier 2 questionnaires',
-      sourceTitle: props.tier2QuestionnaireListTitle,
+      sourceTitle: getConfiguredTitle(
+        props.tier2QuestionnaireListTitle,
+        PREPROD_DEFAULTS.tier2QuestionnaireListTitle
+      ),
       iconName: 'OpenFolderHorizontal',
       cardClassName: styles.goldCard,
       iconClassName: styles.goldIcon
@@ -73,7 +105,10 @@ const getConfigurations = (
       kind: 'questionnaire',
       title: 'Tier 3 Responses',
       description: 'View all completed Tier 3 questionnaires',
-      sourceTitle: props.tier3QuestionnaireListTitle,
+      sourceTitle: getConfiguredTitle(
+        props.tier3QuestionnaireListTitle,
+        PREPROD_DEFAULTS.tier3QuestionnaireListTitle
+      ),
       iconName: 'OpenFolderHorizontal',
       cardClassName: styles.redCard,
       iconClassName: styles.redIcon
@@ -84,7 +119,10 @@ const getConfigurations = (
       kind: 'documents',
       title: 'Tier 1 Documents',
       description: 'View all supporting documents',
-      sourceTitle: props.tier1DocumentLibraryTitle,
+      sourceTitle: getConfiguredTitle(
+        props.tier1DocumentLibraryTitle,
+        PREPROD_DEFAULTS.tier1DocumentLibraryTitle
+      ),
       iconName: 'Attach',
       cardClassName: styles.blueCard,
       iconClassName: styles.blueIcon
@@ -95,7 +133,10 @@ const getConfigurations = (
       kind: 'documents',
       title: 'Tier 2 Documents',
       description: 'View all supporting documents',
-      sourceTitle: props.tier2DocumentLibraryTitle,
+      sourceTitle: getConfiguredTitle(
+        props.tier2DocumentLibraryTitle,
+        PREPROD_DEFAULTS.tier2DocumentLibraryTitle
+      ),
       iconName: 'Attach',
       cardClassName: styles.goldCard,
       iconClassName: styles.goldIcon
@@ -106,7 +147,10 @@ const getConfigurations = (
       kind: 'documents',
       title: 'Tier 3 Documents',
       description: 'View all supporting documents',
-      sourceTitle: props.tier3DocumentLibraryTitle,
+      sourceTitle: getConfiguredTitle(
+        props.tier3DocumentLibraryTitle,
+        PREPROD_DEFAULTS.tier3DocumentLibraryTitle
+      ),
       iconName: 'Attach',
       cardClassName: styles.redCard,
       iconClassName: styles.redIcon
@@ -118,8 +162,7 @@ const buildAllItemsUrl = (
   serverRelativeUrl: string,
   kind: LinkKind
 ): string => {
-  const normalizedUrl: string =
-    serverRelativeUrl.replace(/\/$/, '');
+  const normalizedUrl: string = serverRelativeUrl.replace(/\/$/, '');
 
   return kind === 'documents'
     ? `${normalizedUrl}/Forms/AllItems.aspx`
@@ -140,18 +183,38 @@ export function QuestionnaireQuickLinks(
       configuration: ILinkConfiguration
     ): Promise<IResolvedLink> => {
       try {
-        const sp = getSP(props.context);
+        const webUrl: string =
+          props.context.pageContext.web.absoluteUrl.replace(/\/$/, '');
+        const escapedTitle: string = escapeODataString(
+          configuration.sourceTitle
+        );
+        const endpoint: string =
+          `${webUrl}/_api/web/lists/getbytitle('${escapedTitle}')` +
+          '?$select=Title,BaseTemplate,RootFolder/ServerRelativeUrl' +
+          '&$expand=RootFolder';
 
-        const metadata: ISharePointListMetadata =
-          await sp.web.lists
-            .getByTitle(configuration.sourceTitle)
-            .select(
-              'Title',
-              'BaseTemplate',
-              'RootFolder/ServerRelativeUrl'
-            )
-            .expand('RootFolder')();
+        const response: SPHttpClientResponse =
+          await props.context.spHttpClient.get(
+            endpoint,
+            SPHttpClient.configurations.v1,
+            {
+              headers: {
+                Accept: 'application/json;odata.metadata=none'
+              }
+            }
+          );
 
+        if (!response.ok) {
+          const responseText: string = await response.text();
+
+          throw new Error(
+            `HTTP ${response.status} ${response.statusText}. ` +
+            responseText
+          );
+        }
+
+        const metadata: ISharePointMetadataResponse =
+          await response.json() as ISharePointMetadataResponse;
         const serverRelativeUrl: string =
           metadata.RootFolder?.ServerRelativeUrl || '';
 
@@ -170,21 +233,20 @@ export function QuestionnaireQuickLinks(
         };
       } catch (error: unknown) {
         const detail: string =
-          error instanceof Error
-            ? error.message
-            : String(error);
+          error instanceof Error ? error.message : String(error);
 
-        console.error(
-          `Unable to resolve SharePoint source ` +
-          `"${configuration.sourceTitle}".`,
-          error
-        );
+        console.error('[Questionnaire Quick Links]', {
+          webUrl: props.context.pageContext.web.absoluteUrl,
+          sourceTitle: configuration.sourceTitle,
+          kind: configuration.kind,
+          tier: configuration.tier,
+          error: detail
+        });
 
         return {
           ...configuration,
           errorMessage:
-            `Unable to open "${configuration.sourceTitle}". ` +
-            detail
+            `Unable to open "${configuration.sourceTitle}". ` + detail
         };
       }
     };
@@ -196,16 +258,21 @@ export function QuestionnaireQuickLinks(
       const configurations: readonly ILinkConfiguration[] =
         getConfigurations(props);
 
-      const resolvedLinks: IResolvedLink[] =
-        await Promise.all(
-          configurations.map(
-            (
-              configuration: ILinkConfiguration
-            ): Promise<IResolvedLink> => {
-              return resolveLink(configuration);
-            }
-          )
-        );
+      console.info('[Questionnaire Quick Links Configuration]', {
+        webUrl: props.context.pageContext.web.absoluteUrl,
+        sources: configurations.map(
+          (configuration: ILinkConfiguration): string =>
+            configuration.sourceTitle
+        )
+      });
+
+      const resolvedLinks: IResolvedLink[] = await Promise.all(
+        configurations.map(
+          (
+            configuration: ILinkConfiguration
+          ): Promise<IResolvedLink> => resolveLink(configuration)
+        )
+      );
 
       if (!isMounted) {
         return;
@@ -213,40 +280,38 @@ export function QuestionnaireQuickLinks(
 
       setLinks(resolvedLinks);
 
-      const failedCount: number = resolvedLinks.filter(
-        (link: IResolvedLink): boolean => {
-          return Boolean(link.errorMessage);
-        }
-      ).length;
+      const failedLinks: IResolvedLink[] = resolvedLinks.filter(
+        (link: IResolvedLink): boolean => Boolean(link.errorMessage)
+      );
 
-      if (failedCount > 0) {
+      if (failedLinks.length > 0) {
         setErrorMessage(
-          `${failedCount} SharePoint source` +
-          `${failedCount === 1 ? '' : 's'} could not be resolved. ` +
-          'Check the web-part list and library titles.'
+          `${failedLinks.length} SharePoint source` +
+          `${failedLinks.length === 1 ? '' : 's'} could not be resolved: ` +
+          failedLinks
+            .map((link: IResolvedLink): string => link.sourceTitle)
+            .join(', ') +
+          '. Check the dashboard property-pane titles and site location.'
         );
       }
 
       setLoading(false);
     };
 
-    loadLinks().catch(
-      (error: unknown): void => {
-        console.error(
-          'Unable to load questionnaire quick links.',
-          error
-        );
+    loadLinks().catch((error: unknown): void => {
+      console.error(
+        'Unable to load questionnaire quick links.',
+        error
+      );
 
-        if (isMounted) {
-          setLinks([]);
-          setLoading(false);
-          setErrorMessage(
-            'The questionnaire links could not be loaded ' +
-            'from SharePoint.'
-          );
-        }
+      if (isMounted) {
+        setLinks([]);
+        setLoading(false);
+        setErrorMessage(
+          'The questionnaire links could not be loaded from SharePoint.'
+        );
       }
-    );
+    });
 
     return (): void => {
       isMounted = false;
@@ -266,20 +331,12 @@ export function QuestionnaireQuickLinks(
       return;
     }
 
-    window.open(
-      link.url,
-      '_blank',
-      'noopener,noreferrer'
-    );
+    window.open(link.url, '_blank', 'noopener,noreferrer');
   };
 
-  const renderCards = (
-    kind: LinkKind
-  ): React.ReactElement => {
+  const renderCards = (kind: LinkKind): React.ReactElement => {
     const sectionLinks: IResolvedLink[] = links.filter(
-      (link: IResolvedLink): boolean => {
-        return link.kind === kind;
-      }
+      (link: IResolvedLink): boolean => link.kind === kind
     );
 
     return (
@@ -296,6 +353,7 @@ export function QuestionnaireQuickLinks(
               disabled={!link.url}
               onClick={(): void => openLink(link)}
               aria-label={`${link.title}. ${link.description}`}
+              title={link.errorMessage || link.sourceTitle}
             >
               <Icon
                 iconName={link.iconName}
@@ -306,24 +364,16 @@ export function QuestionnaireQuickLinks(
                 aria-hidden="true"
               />
 
-              <h3 className={styles.cardTitle}>
-                {link.title}
-              </h3>
-
+              <h3 className={styles.cardTitle}>{link.title}</h3>
               <p className={styles.cardDescription}>
                 {link.description}
               </p>
 
               {link.errorMessage && (
-                <span className={styles.status}>
-                  Source unavailable
-                </span>
+                <span className={styles.status}>Source unavailable</span>
               )}
 
-              <span
-                className={styles.arrow}
-                aria-hidden="true"
-              >
+              <span className={styles.arrow} aria-hidden="true">
                 ›
               </span>
             </button>
@@ -351,10 +401,7 @@ export function QuestionnaireQuickLinks(
       aria-label="Supplier sustainability questionnaire links"
     >
       {errorMessage && (
-        <div
-          className={styles.errorMessage}
-          role="alert"
-        >
+        <div className={styles.errorMessage} role="alert">
           {errorMessage}
         </div>
       )}
@@ -370,14 +417,10 @@ export function QuestionnaireQuickLinks(
           >
             Completed Questionnaires
           </h2>
-
           {renderCards('questionnaire')}
         </section>
 
-        <div
-          className={styles.divider}
-          aria-hidden="true"
-        />
+        <div className={styles.divider} aria-hidden="true" />
 
         <section
           className={styles.section}
@@ -389,7 +432,6 @@ export function QuestionnaireQuickLinks(
           >
             Supporting Documents
           </h2>
-
           {renderCards('documents')}
         </section>
       </div>

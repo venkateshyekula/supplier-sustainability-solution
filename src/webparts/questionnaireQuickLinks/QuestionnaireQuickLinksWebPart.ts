@@ -4,10 +4,10 @@ import * as ReactDom from 'react-dom';
 import { Version } from '@microsoft/sp-core-library';
 import {
   BaseClientSideWebPart,
-  IPropertyPaneConfiguration
 } from '@microsoft/sp-webpart-base';
 import {
-  PropertyPaneTextField
+  PropertyPaneTextField,
+  IPropertyPaneConfiguration
 } from '@microsoft/sp-property-pane';
 
 import QuestionnaireQuickLinks from './components/QuestionnaireQuickLinks';
@@ -33,17 +33,40 @@ export default class QuestionnaireQuickLinksWebPart
         {
           context: this.context,
           tier1QuestionnaireListTitle:
-            this.properties.tier1QuestionnaireListTitle,
+            this.properties
+              .tier1QuestionnaireListTitle
+              ?.trim() ||
+            'CASSTECH_SSQ',
+
           tier2QuestionnaireListTitle:
-            this.properties.tier2QuestionnaireListTitle,
+            this.properties
+              .tier2QuestionnaireListTitle
+              ?.trim() ||
+            'Tier 2 ESG Procurement Questionnaire',
+
           tier3QuestionnaireListTitle:
-            this.properties.tier3QuestionnaireListTitle,
+            this.properties
+              .tier3QuestionnaireListTitle
+              ?.trim() ||
+            'Supplier Sustainability Questionnaires Tier 3',
+
           tier1DocumentLibraryTitle:
-            this.properties.tier1DocumentLibraryTitle,
+            this.properties
+              .tier1DocumentLibraryTitle
+              ?.trim() ||
+            'TestSupply',
+
           tier2DocumentLibraryTitle:
-            this.properties.tier2DocumentLibraryTitle,
+            this.properties
+              .tier2DocumentLibraryTitle
+              ?.trim() ||
+            'SSQ-Tier2 Attachments',
+
           tier3DocumentLibraryTitle:
-            this.properties.tier3DocumentLibraryTitle
+            this.properties
+              .tier3DocumentLibraryTitle
+              ?.trim() ||
+            'SSQ-Tier3 Attachments'
         }
       );
 

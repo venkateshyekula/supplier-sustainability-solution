@@ -22,13 +22,12 @@
 
   "preconfiguredEntries": [
     {
-      "groupId": "5c03119e-3074-46fd-976b-c60198311f70", // Advanced
+      "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
       "group": { "default": "Advanced" },
       "title": { "default": "KpiMetricCards" },
       "description": { "default": "KpiMetricCards description" },
       "officeFabricIconFontName": "Page",
       "properties": {
-        "description": "KpiMetricCards",
         "tier1ListTitle": "CASSTECH_SSQ",
         "tier2ListTitle": "Tier 2 ESG Procurement Questionnaire",
         "tier3ListTitle": "Supplier Sustainability Questionnaires Tier 3"

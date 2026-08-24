@@ -1,0 +1,10 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/core-build/copy-static-assets.schema.json",
+  "includeExtensions": [
+    "woff",
+    "woff2",
+    "ttf",
+    "eot",
+    "otf"
+  ]
+}

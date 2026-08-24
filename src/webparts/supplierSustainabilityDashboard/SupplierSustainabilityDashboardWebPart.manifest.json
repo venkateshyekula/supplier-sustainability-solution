@@ -1,7 +1,7 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
-  "id": "3d3d52e0-e88f-4589-8c64-3ebc8fac4a92",
-  "alias": "SupplierEsgSearchWebPart",
+  "id": "fae5c101-05f9-4a07-aeeb-f02fd939ced4",
+  "alias": "SupplierSustainabilityDashboardWebPart",
   "componentType": "WebPart",
   "version": "*",
   "manifestVersion": 2,
@@ -20,12 +20,12 @@
         "default": "Advanced"
       },
       "title": {
-        "default": "Supplier ESG Search"
+        "default": "Supplier Sustainability Dashboard"
       },
       "description": {
-        "default": "Search and qualify supplier sustainability questionnaire submissions across all configured tiers."
+        "default": "Consolidated Supplier ESG dashboard with KPI metrics, quick links, latest feedback, and cross-tier search."
       },
-      "officeFabricIconFontName": "SearchData",
+      "officeFabricIconFontName": "ViewDashboard",
       "properties": {
         "tier1ListTitle": "CASSTECH_SSQ",
         "tier2ListTitle": "Tier 2 ESG Procurement Questionnaire",
@@ -33,12 +33,9 @@
         "tier1SupplierNameField": "Supplier_x0020_Name",
         "tier2SupplierNameField": "Supplier_x0020_Name",
         "tier3SupplierNameField": "Supplier_x0020_Name",
-        "tier1MaxPoints": 70,
-        "tier2MaxPoints": 52,
-        "tier3MaxPoints": 23,
-        "tier1WeightagePercentage": 10,
-        "tier2WeightagePercentage": 5,
-        "tier3WeightagePercentage": 2,
+        "tier1DocumentLibraryTitle": "TestSupply",
+        "tier2DocumentLibraryTitle": "SSQ-Tier2 Attachments",
+        "tier3DocumentLibraryTitle": "SSQ-Tier3 Attachments",
         "qualifiedMinimum": 70,
         "conditionalMinimum": 52
       }

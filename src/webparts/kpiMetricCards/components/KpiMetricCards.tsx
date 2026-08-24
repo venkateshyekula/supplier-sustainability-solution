@@ -1,10 +1,22 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import {
+  useEffect,
+  useState
+} from 'react';
 
-import { Icon } from '@fluentui/react';
+import {
+  Icon,
+  Spinner,
+  SpinnerSize
+} from '@fluentui/react';
 
-import { getSP } from '../../../pnpConfig';
-import { IKpiMetricCardsProps } from './IKpiMetricCardsProps';
+import {
+  getSP
+} from '../../../pnpConfig';
+
+import {
+  IKpiMetricCardsProps
+} from './IKpiMetricCardsProps';
 
 interface IKpiData {
   total: number;
@@ -14,15 +26,21 @@ interface IKpiData {
   highRisk: number;
 }
 
-interface IResponseItem {
+interface IRawSharePointItem {
   Id?: number;
-  normalizedScore?: number;
+  [key: string]: unknown;
+}
+
+interface IResponseItem {
+  id?: number;
+  sharePointScore?: unknown;
 }
 
 interface IListConfiguration {
   title: string;
   percentageInternalName: string;
-  maximumWeightedScore: number;
+  qualifiedMinimum: number;
+  conditionalMinimum: number;
 }
 
 interface IListFetchResult {
@@ -43,6 +61,11 @@ interface IKpiCardConfiguration {
   borderColor: string;
 }
 
+interface ICachedKpiData {
+  data: IKpiData;
+  cachedAt: number;
+}
+
 const EMPTY_KPI_DATA: IKpiData = {
   total: 0,
   pending: 0,
@@ -51,101 +74,214 @@ const EMPTY_KPI_DATA: IKpiData = {
   highRisk: 0
 };
 
+/**
+ * Exact SharePoint score thresholds.
+ *
+ * Tier 1:
+ * Qualified >= 10
+ * Conditional >= 9.99 and < 10
+ * High Risk < 9.99
+ *
+ * Tier 2:
+ * Qualified >= 5
+ * Conditional >= 4.99 and < 5
+ * High Risk < 4.99
+ *
+ * Tier 3:
+ * Qualified >= 2
+ * Conditional >= 1.99 and < 2
+ * High Risk < 1.99
+ */
 const DEFAULT_LIST_CONFIGURATIONS:
   readonly IListConfiguration[] = [
     {
-      title: 'CASSTECH_SSQ',
+      title:
+        'CASSTECH_SSQ',
+
       percentageInternalName:
         'OverallQuestionsPercentage',
-      maximumWeightedScore: 10
+
+      qualifiedMinimum:
+        10,
+
+      conditionalMinimum:
+        9.99
     },
     {
       title:
         'Tier 2 ESG Procurement Questionnaire',
+
       percentageInternalName:
         'OverallQuestionsPercentage',
-      maximumWeightedScore: 5
+
+      qualifiedMinimum:
+        5,
+
+      conditionalMinimum:
+        4.99
     },
     {
       title:
         'Supplier Sustainability Questionnaires Tier 3',
+
       percentageInternalName:
         'OverallQuestionsPercentage',
-      maximumWeightedScore: 2
+
+      qualifiedMinimum:
+        2,
+
+      conditionalMinimum:
+        1.99
     }
   ];
-
-/*
- * KPI bands applied to each tier's normalized completion ratio:
- * Approved: 80% and above
- * Pending: 50% to below 80%
- * Procurement action: 20% to below 50%
- * High risk: below 20%
- */
-const APPROVED_MINIMUM = 0.8;
-const PENDING_MINIMUM = 0.5;
-const ACTION_REQUIRED_MINIMUM = 0.2;
 
 const KPI_CARDS:
   readonly IKpiCardConfiguration[] = [
     {
-      key: 'total',
-      title: 'Total Submissions',
-      description: 'All time',
-      color: '#1665a8',
-      iconName: 'TextDocument',
-      iconBackgroundColor: '#e7f1fb',
-      cardBackgroundColor: '#f6faff',
-      borderColor: '#d9e9f8'
+      key:
+        'total',
+
+      title:
+        'Total Submissions',
+
+      description:
+        'All questionnaire tiers',
+
+      color:
+        '#1665a8',
+
+      iconName:
+        'TextDocument',
+
+      iconBackgroundColor:
+        '#e7f1fb',
+
+      cardBackgroundColor:
+        '#f6faff',
+
+      borderColor:
+        '#d9e9f8'
     },
     {
-      key: 'pending',
-      title: 'Pending ESG Review',
-      description: 'Awaiting review',
-      color: '#9a6700',
-      iconName: 'Clock',
-      iconBackgroundColor: '#fff1cc',
-      cardBackgroundColor: '#fffaf1',
-      borderColor: '#f7e6bd'
+      key:
+        'pending',
+
+      title:
+        'Pending ESG Review',
+
+      description:
+        'Score not yet available',
+
+      color:
+        '#9a6700',
+
+      iconName:
+        'Clock',
+
+      iconBackgroundColor:
+        '#fff1cc',
+
+      cardBackgroundColor:
+        '#fffaf1',
+
+      borderColor:
+        '#f7e6bd'
     },
     {
-      key: 'approved',
-      title: 'Approved by ESG',
-      description: 'Ready to onboard',
-      color: '#16833a',
-      iconName: 'Completed',
-      iconBackgroundColor: '#e0f4e5',
-      cardBackgroundColor: '#f5fbf6',
-      borderColor: '#d5ecd9'
+      key:
+        'approved',
+
+      title:
+        'Approved by ESG',
+
+      description:
+        'Qualified suppliers',
+
+      color:
+        '#16833a',
+
+      iconName:
+        'Completed',
+
+      iconBackgroundColor:
+        '#e0f4e5',
+
+      cardBackgroundColor:
+        '#f5fbf6',
+
+      borderColor:
+        '#d5ecd9'
     },
     {
-      key: 'actionRequired',
-      title: 'Requires Procurement Action',
-      description: 'Attention needed',
-      color: '#c4314b',
-      iconName: 'ErrorBadge',
-      iconBackgroundColor: '#fbe1e5',
-      cardBackgroundColor: '#fff6f7',
-      borderColor: '#f4d7dc'
+      key:
+        'actionRequired',
+
+      title:
+        'Requires Procurement Action',
+
+      description:
+        'Conditionally qualified',
+
+      color:
+        '#c4314b',
+
+      iconName:
+        'ErrorBadge',
+
+      iconBackgroundColor:
+        '#fbe1e5',
+
+      cardBackgroundColor:
+        '#fff6f7',
+
+      borderColor:
+        '#f4d7dc'
     },
     {
-      key: 'highRisk',
-      title: 'High Risk Suppliers',
-      description: 'Review required',
-      color: '#5c2d91',
-      iconName: 'ShieldAlert',
-      iconBackgroundColor: '#eee5f8',
-      cardBackgroundColor: '#faf7fd',
-      borderColor: '#e4d9f1'
+      key:
+        'highRisk',
+
+      title:
+        'High Risk Suppliers',
+
+      description:
+        'Not qualified',
+
+      color:
+        '#5c2d91',
+
+      iconName:
+        'ShieldAlert',
+
+      iconBackgroundColor:
+        '#eee5f8',
+
+      cardBackgroundColor:
+        '#faf7fd',
+
+      borderColor:
+        '#e4d9f1'
     }
   ];
 
-/* V8 invalidates values cached by earlier scoring logic. */
-const CACHE_KEY = 'SSQ_KPI_METRICS_DATA_V8';
-const CACHE_TIME_KEY = 'SSQ_KPI_METRICS_TIMESTAMP_V8';
-const TTL_MS = 10 * 60 * 1000;
+/*
+ * V9 prevents values generated by the previous normalized
+ * 80%, 50%, and 20% KPI logic from being reused.
+ */
+const CACHE_VERSION:
+  string = 'V9';
 
-const getErrorMessage = (error: unknown): string => {
+const CACHE_KEY_PREFIX:
+  string =
+    `SSQ_KPI_METRICS_DATA_${CACHE_VERSION}`;
+
+const CACHE_TTL_MS:
+  number =
+    10 * 60 * 1000;
+
+const getErrorMessage = (
+  error: unknown
+): string => {
   if (error instanceof Error) {
     return error.message;
   }
@@ -157,68 +293,43 @@ const createCacheKeySegment = (
   value: string
 ): string => {
   return value
-    .replace(/[^a-zA-Z0-9]/g, '_')
-    .substring(0, 180);
+    .replace(
+      /[^a-zA-Z0-9]/g,
+      '_'
+    )
+    .substring(
+      0,
+      180
+    );
 };
 
-/*
- * SharePoint already calculates the weighted value:
- * Tier 1 maximum = 10, Tier 2 maximum = 5, Tier 3 maximum = 2.
- * This function only converts that stored value into a 0-1 ratio for
- * consistent KPI classification. It does not replace the SharePoint value.
- */
-const normalizeWeightedScore = (
-  weightedScore: unknown,
-  maximumWeightedScore: number
-): number | undefined => {
-  if (
-    weightedScore === null ||
-    weightedScore === undefined ||
-    weightedScore === ''
-  ) {
-    return undefined;
-  }
+const createCacheKey = (
+  webUrl: string,
+  configurations:
+    readonly IListConfiguration[]
+): string => {
+  const configurationSegment:
+    string =
+      configurations
+        .map(
+          (
+            configuration:
+              IListConfiguration
+          ): string => {
+            return createCacheKeySegment(
+              configuration.title
+            );
+          }
+        )
+        .join(
+          '__'
+        );
 
-  if (
-    !isFinite(maximumWeightedScore) ||
-    maximumWeightedScore <= 0
-  ) {
-    return undefined;
-  }
-
-  let normalizedValue: unknown = weightedScore;
-
-  if (typeof normalizedValue === 'string') {
-    normalizedValue = normalizedValue
-      .replace('%', '')
-      .replace(',', '.')
-      .trim();
-  }
-
-  const numericScore: number =
-    typeof normalizedValue === 'number'
-      ? normalizedValue
-      : Number(normalizedValue);
-
-  if (
-    isNaN(numericScore) ||
-    !isFinite(numericScore) ||
-    numericScore < 0
-  ) {
-    return undefined;
-  }
-
-  const completionRatio: number =
-    numericScore / maximumWeightedScore;
-
-  if (
-    !isFinite(completionRatio) ||
-    completionRatio < 0
-  ) {
-    return undefined;
-  }
-
-  return Math.min(completionRatio, 1);
+  return (
+    `${CACHE_KEY_PREFIX}_` +
+    `${createCacheKeySegment(webUrl)}_` +
+    `${configurationSegment}`
+  );
 };
 
 const isKpiData = (
@@ -231,8 +342,9 @@ const isKpiData = (
     return false;
   }
 
-  const candidate: Partial<IKpiData> =
-    value as Partial<IKpiData>;
+  const candidate:
+    Partial<IKpiData> =
+      value as Partial<IKpiData>;
 
   return (
     typeof candidate.total === 'number' &&
@@ -243,514 +355,905 @@ const isKpiData = (
   );
 };
 
-const clearCachedKpi = (
-  cacheKey: string,
-  cacheTimeKey: string
-): void => {
-  window.sessionStorage.removeItem(cacheKey);
-  window.sessionStorage.removeItem(cacheTimeKey);
-};
-
 const readCachedKpi = (
-  cacheKey: string,
-  cacheTimeKey: string
+  cacheKey: string
 ): IKpiData | undefined => {
   try {
-    const cachedData: string | null =
-      window.sessionStorage.getItem(cacheKey);
+    const cachedJson:
+      string | null =
+        window.sessionStorage.getItem(
+          cacheKey
+        );
 
-    const cachedTimestamp: string | null =
-      window.sessionStorage.getItem(cacheTimeKey);
-
-    if (!cachedData || !cachedTimestamp) {
+    if (!cachedJson) {
       return undefined;
     }
 
-    const timestamp: number =
-      Number(cachedTimestamp);
-
-    if (!isFinite(timestamp)) {
-      clearCachedKpi(cacheKey, cacheTimeKey);
-      return undefined;
-    }
-
-    const cacheAge: number =
-      Date.now() - timestamp;
+    const cachedValue:
+      ICachedKpiData =
+        JSON.parse(
+          cachedJson
+        ) as ICachedKpiData;
 
     if (
-      cacheAge < 0 ||
-      cacheAge >= TTL_MS
+      !cachedValue ||
+      typeof cachedValue.cachedAt !== 'number' ||
+      !isKpiData(cachedValue.data)
     ) {
-      clearCachedKpi(cacheKey, cacheTimeKey);
+      window.sessionStorage.removeItem(
+        cacheKey
+      );
+
       return undefined;
     }
 
-    const parsedData: unknown =
-      JSON.parse(cachedData);
+    const cacheAge:
+      number =
+        Date.now() -
+        cachedValue.cachedAt;
 
-    if (!isKpiData(parsedData)) {
-      clearCachedKpi(cacheKey, cacheTimeKey);
+    if (
+      cacheAge > CACHE_TTL_MS
+    ) {
+      window.sessionStorage.removeItem(
+        cacheKey
+      );
+
       return undefined;
     }
 
-    return parsedData;
+    return cachedValue.data;
   } catch (error: unknown) {
     console.warn(
-      'Unable to read KPI metrics cache:',
+      '[Supplier ESG KPI] Unable to read cached KPI data.',
       error
     );
 
-    clearCachedKpi(cacheKey, cacheTimeKey);
     return undefined;
   }
 };
 
 const writeCachedKpi = (
-  data: IKpiData,
   cacheKey: string,
-  cacheTimeKey: string
+  data: IKpiData
 ): void => {
   try {
-    window.sessionStorage.setItem(
-      cacheKey,
-      JSON.stringify(data)
-    );
+    const cachedValue:
+      ICachedKpiData = {
+        data,
+        cachedAt:
+          Date.now()
+      };
 
     window.sessionStorage.setItem(
-      cacheTimeKey,
-      Date.now().toString()
+      cacheKey,
+      JSON.stringify(
+        cachedValue
+      )
     );
   } catch (error: unknown) {
     console.warn(
-      'Unable to save KPI metrics to sessionStorage:',
+      '[Supplier ESG KPI] Unable to cache KPI data.',
       error
     );
   }
 };
 
-const wrapperStyle: React.CSSProperties = {
-  width: '100%',
-  fontFamily: '"Segoe UI", sans-serif'
+/**
+ * Parses the exact numeric value returned by SharePoint.
+ *
+ * The method removes visual formatting such as "%" and
+ * decimal commas, but does not normalize, divide, multiply,
+ * or otherwise change the numeric scale.
+ *
+ * Examples:
+ * "10%"   -> 10
+ * "9.99%" -> 9.99
+ * "5%"    -> 5
+ * "4.99%" -> 4.99
+ * "2%"    -> 2
+ * "1.99%" -> 1.99
+ */
+const parseExactSharePointScore = (
+  value: unknown
+): number | undefined => {
+  if (
+    value === null ||
+    value === undefined ||
+    value === ''
+  ) {
+    return undefined;
+  }
+
+  if (
+    typeof value === 'number'
+  ) {
+    return (
+      isFinite(value) &&
+      value >= 0
+    )
+      ? value
+      : undefined;
+  }
+
+  if (
+    typeof value !== 'string'
+  ) {
+    return undefined;
+  }
+
+  const normalizedValue:
+    string =
+      value
+        .replace(
+          /%/g,
+          ''
+        )
+        .replace(
+          ',',
+          '.'
+        )
+        .trim();
+
+  if (
+    !normalizedValue
+  ) {
+    return undefined;
+  }
+
+  const parsedValue:
+    number =
+      parseFloat(
+        normalizedValue
+      );
+
+  if (
+    isNaN(parsedValue) ||
+    !isFinite(parsedValue) ||
+    parsedValue < 0
+  ) {
+    return undefined;
+  }
+
+  return parsedValue;
 };
 
-const containerStyle: React.CSSProperties = {
-  display: 'grid',
-  gridTemplateColumns:
-    'repeat(auto-fit, minmax(210px, 1fr))',
-  gap: '12px',
-  width: '100%',
-  boxSizing: 'border-box'
+const getListConfigurations = (
+  props: IKpiMetricCardsProps
+): readonly IListConfiguration[] => {
+  return [
+    {
+      ...DEFAULT_LIST_CONFIGURATIONS[0],
+
+      title:
+        props.tier1ListTitle?.trim() ||
+        DEFAULT_LIST_CONFIGURATIONS[0].title
+    },
+    {
+      ...DEFAULT_LIST_CONFIGURATIONS[1],
+
+      title:
+        props.tier2ListTitle?.trim() ||
+        DEFAULT_LIST_CONFIGURATIONS[1].title
+    },
+    {
+      ...DEFAULT_LIST_CONFIGURATIONS[2],
+
+      title:
+        props.tier3ListTitle?.trim() ||
+        DEFAULT_LIST_CONFIGURATIONS[2].title
+    }
+  ];
 };
 
-const cardStyle: React.CSSProperties = {
-  minHeight: '130px',
-  padding: '18px 16px',
-  display: 'flex',
-  alignItems: 'center',
-  gap: '14px',
-  borderRadius: '12px',
-  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
-  boxSizing: 'border-box'
+const fetchListItems = async (
+  props: IKpiMetricCardsProps,
+  configuration: IListConfiguration
+): Promise<IListFetchResult> => {
+  try {
+    const sp =
+      getSP(
+        props.context
+      );
+
+    const rawItems:
+      IRawSharePointItem[] =
+        await sp.web.lists
+          .getByTitle(
+            configuration.title
+          )
+          .items
+          .select(
+            'Id',
+            configuration
+              .percentageInternalName
+          )
+          .top(
+            5000
+          )() as IRawSharePointItem[];
+
+    const items:
+      IResponseItem[] =
+        rawItems.map(
+          (
+            item:
+              IRawSharePointItem
+          ): IResponseItem => {
+            return {
+              id:
+                typeof item.Id === 'number'
+                  ? item.Id
+                  : undefined,
+
+              sharePointScore:
+                item[
+                  configuration
+                    .percentageInternalName
+                ]
+            };
+          }
+        );
+
+    return {
+      listTitle:
+        configuration.title,
+
+      items,
+
+      succeeded:
+        true
+    };
+  } catch (error: unknown) {
+    const errorMessage:
+      string =
+        getErrorMessage(
+          error
+        );
+
+    console.error(
+      '[Supplier ESG KPI] Unable to retrieve list items.',
+      {
+        listTitle:
+          configuration.title,
+
+        error:
+          errorMessage
+      }
+    );
+
+    return {
+      listTitle:
+        configuration.title,
+
+      items:
+        [],
+
+      succeeded:
+        false,
+
+      errorMessage
+    };
+  }
 };
 
-const cardTextStyle: React.CSSProperties = {
-  minWidth: 0,
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '2px'
+const calculateKpiData = (
+  results:
+    readonly IListFetchResult[],
+
+  configurations:
+    readonly IListConfiguration[]
+): IKpiData => {
+  const calculatedData:
+    IKpiData = {
+      total:
+        0,
+
+      pending:
+        0,
+
+      approved:
+        0,
+
+      actionRequired:
+        0,
+
+      highRisk:
+        0
+    };
+
+  results.forEach(
+    (
+      result:
+        IListFetchResult,
+
+      index:
+        number
+    ): void => {
+      if (
+        !result.succeeded
+      ) {
+        return;
+      }
+
+      const configuration:
+        IListConfiguration =
+          configurations[index];
+
+      result.items.forEach(
+        (
+          item:
+            IResponseItem
+        ): void => {
+          calculatedData.total += 1;
+
+          const exactScore:
+            number | undefined =
+              parseExactSharePointScore(
+                item.sharePointScore
+              );
+
+          /*
+           * A submission with no valid SharePoint score is pending.
+           */
+          if (
+            exactScore === undefined
+          ) {
+            calculatedData.pending += 1;
+            return;
+          }
+
+          /*
+           * Exact SharePoint score meets the qualified threshold.
+           */
+          if (
+            exactScore >=
+            configuration.qualifiedMinimum
+          ) {
+            calculatedData.approved += 1;
+            return;
+          }
+
+          /*
+           * Exact SharePoint score meets the conditional threshold.
+           */
+          if (
+            exactScore >=
+            configuration.conditionalMinimum
+          ) {
+            calculatedData.actionRequired += 1;
+            return;
+          }
+
+          /*
+           * Exact SharePoint score is below the conditional threshold.
+           */
+          calculatedData.highRisk += 1;
+        }
+      );
+    }
+  );
+
+  const classifiedTotal:
+    number =
+      calculatedData.pending +
+      calculatedData.approved +
+      calculatedData.actionRequired +
+      calculatedData.highRisk;
+
+  console.info(
+    '[Supplier ESG KPI validation]',
+    {
+      total:
+        calculatedData.total,
+
+      classified:
+        classifiedTotal,
+
+      isBalanced:
+        calculatedData.total ===
+        classifiedTotal,
+
+      details:
+        calculatedData
+    }
+  );
+
+  return calculatedData;
 };
 
-const titleStyle: React.CSSProperties = {
-  fontSize: '14px',
-  lineHeight: 1.3,
-  fontWeight: 600,
-  color: '#201f1e'
-};
+const wrapperStyle:
+  React.CSSProperties = {
+    boxSizing:
+      'border-box',
 
-const descriptionStyle: React.CSSProperties = {
-  fontSize: '12px',
-  lineHeight: 1.3,
-  color: '#605e5c'
-};
+    width:
+      '100%',
 
-const warningStyle: React.CSSProperties = {
-  marginBottom: '14px',
-  padding: '10px 14px',
-  fontSize: '13px',
-  lineHeight: 1.45,
-  color: '#8a6d1d',
-  backgroundColor: '#fff4ce',
-  border: '1px solid #fce100',
-  borderRadius: '6px'
-};
+    minWidth:
+      0,
+
+    fontFamily:
+      '"Segoe UI", Arial, sans-serif'
+  };
+
+const containerStyle:
+  React.CSSProperties = {
+    display:
+      'grid',
+
+    gridTemplateColumns:
+      'repeat(auto-fit, minmax(250px, 1fr))',
+
+    gap:
+      '10px',
+
+    boxSizing:
+      'border-box',
+
+    width:
+      '100%',
+
+    minWidth:
+      0,  
+  };
+
+const cardStyle:
+  React.CSSProperties = {
+    display:
+      'flex',
+
+    boxSizing:
+      'border-box',
+
+    width:
+      '100%',
+
+    minWidth:
+      0,
+
+    minHeight:
+      '130px',
+
+    alignItems:
+      'center',
+
+    gap:
+      '14px',
+
+    padding:
+      '18px 16px',
+
+    borderStyle:
+      'solid',
+
+    borderWidth:
+      '1px',
+
+    borderRadius:
+      '10px',
+
+    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
+  };
+
+const iconContainerStyle:
+  React.CSSProperties = {
+    display:
+      'inline-flex',
+
+    width:
+      '52px',
+
+    height:
+      '52px',
+
+    flex:
+      '0 0 52px',
+
+    alignItems:
+      'center',
+
+    justifyContent:
+      'center',
+
+    borderRadius:
+      '50%'
+  };
+
+const valueStyle:
+  React.CSSProperties = {
+    minWidth:
+      '32px',
+
+    color:
+      '#201f1e',
+
+    fontSize:
+      '26px',
+
+    fontWeight:
+      600,
+
+    lineHeight:
+      1,
+
+    fontVariantNumeric:
+      'tabular-nums'
+  };
+
+const textContainerStyle:
+  React.CSSProperties = {
+    display:
+      'flex',
+
+    minWidth:
+      0,
+
+    flex:
+      '1 1 auto',
+
+    flexDirection:
+      'column',
+
+    justifyContent:
+      'center'
+  };
+
+const titleStyle:
+  React.CSSProperties = {
+    margin:
+      0,
+
+    color:
+      '#201f1e',
+
+    fontSize:
+      '18px',
+
+    fontWeight:
+      600,
+  };
+
+const descriptionStyle:
+  React.CSSProperties = {
+    marginTop:
+      '4px',
+
+    color:
+      '#605e5c',
+
+    fontSize:
+      '12px',
+
+    fontWeight:
+      400,
+  };
+
+const loadingStyle:
+  React.CSSProperties = {
+    boxSizing:
+      'border-box',
+
+    width:
+      '100%',
+
+    padding:
+      '18px',
+
+    color:
+      '#605e5c',
+
+    fontFamily:
+      '"Figtree", "Segoe UI", Arial, sans-serif'
+  };
+
+const warningStyle:
+  React.CSSProperties = {
+    boxSizing:
+      'border-box',
+
+    width:
+      '100%',
+
+    marginBottom:
+      '14px',
+
+    padding:
+      '10px 14px',
+
+    color:
+      '#8a6d1d',
+
+    backgroundColor:
+      '#fff4ce',
+
+    border:
+      '1px solid #f4d780',
+
+    borderRadius:
+      '6px',
+
+    fontSize:
+      '13px',
+
+    lineHeight:
+      '19px'
+  };
 
 export function KpiMetricCards(
   props: IKpiMetricCardsProps
 ): React.ReactElement {
-  const [kpi, setKpi] =
-    useState<IKpiData>(EMPTY_KPI_DATA);
-  const [loading, setLoading] =
-    useState<boolean>(true);
-  const [errorMessage, setErrorMessage] =
-    useState<string>('');
-
-  useEffect((): (() => void) => {
-    let isMounted: boolean = true;
-
-    const listConfigurations:
-      readonly IListConfiguration[] = [
-        {
-          ...DEFAULT_LIST_CONFIGURATIONS[0],
-          title:
-            props.tier1ListTitle ||
-            DEFAULT_LIST_CONFIGURATIONS[0].title
-        },
-        {
-          ...DEFAULT_LIST_CONFIGURATIONS[1],
-          title:
-            props.tier2ListTitle ||
-            DEFAULT_LIST_CONFIGURATIONS[1].title
-        },
-        {
-          ...DEFAULT_LIST_CONFIGURATIONS[2],
-          title:
-            props.tier3ListTitle ||
-            DEFAULT_LIST_CONFIGURATIONS[2].title
-        }
-      ];
-
-    const listConfigurationSignature: string =
-      listConfigurations
-        .map(
-          (
-            configuration: IListConfiguration
-          ): string => {
-            return configuration.title;
-          }
-        )
-        .join('|');
-
-    const cacheSignature: string =
-      createCacheKeySegment(
-        listConfigurationSignature
-      );
-
-    const cacheKey: string =
-      `${CACHE_KEY}_${cacheSignature}`;
-
-    const cacheTimeKey: string =
-      `${CACHE_TIME_KEY}_${cacheSignature}`;
-
-    const fetchListItems = async (
-      configuration: IListConfiguration
-    ): Promise<IListFetchResult> => {
-      try {
-        const sp = getSP(props.context);
-
-        const items = await sp.web.lists
-          .getByTitle(configuration.title)
-          .items.select(
-            'Id',
-            configuration.percentageInternalName
-          )
-          .top(5000)();
-
-        console.info(
-          `[KPI RAW DATA] ${configuration.title} ` +
-          '(first 3 items):',
-          items.slice(0, 3)
-        );
-
-        const mappedItems: IResponseItem[] =
-          items.map(
-            (
-              item: Record<string, unknown>
-            ): IResponseItem => {
-              const idValue: unknown = item.Id;
-              const rawScore: unknown =
-                item[
-                  configuration.percentageInternalName
-                ];
-
-              return {
-                Id:
-                  typeof idValue === 'number'
-                    ? idValue
-                    : undefined,
-                normalizedScore:
-                  normalizeWeightedScore(
-                    rawScore,
-                    configuration.maximumWeightedScore
-                  )
-              };
-            }
-          );
-
-        console.info(
-          `[KPI] ${configuration.title}: ` +
-          `${mappedItems.length} items received.`
-        );
-
-        return {
-          listTitle: configuration.title,
-          items: mappedItems,
-          succeeded: true
-        };
-      } catch (error: unknown) {
-        const message: string =
-          getErrorMessage(error);
-
-        console.error(
-          `[KPI] Failed to retrieve ` +
-          `"${configuration.title}".`,
-          error
-        );
-
-        return {
-          listTitle: configuration.title,
-          items: [],
-          succeeded: false,
-          errorMessage: message
-        };
-      }
-    };
-
-    const fetchMetrics = async (): Promise<void> => {
-      if (!isMounted) {
-        return;
-      }
-
-      setLoading(true);
-      setErrorMessage('');
-
-      const cachedKpi:
-        IKpiData | undefined =
-          readCachedKpi(
-            cacheKey,
-            cacheTimeKey
-          );
-
-      if (cachedKpi) {
-        setKpi(cachedKpi);
-        setLoading(false);
-        console.info(
-          '[KPI] Metrics loaded from sessionStorage.'
-        );
-        return;
-      }
-
-      try {
-        const results: IListFetchResult[] =
-          await Promise.all(
-            listConfigurations.map(
-              (
-                configuration: IListConfiguration
-              ): Promise<IListFetchResult> => {
-                return fetchListItems(configuration);
-              }
-            )
-          );
-
-        if (!isMounted) {
-          return;
-        }
-
-        const successfulResults:
-          IListFetchResult[] =
-            results.filter(
-              (
-                result: IListFetchResult
-              ): boolean => {
-                return result.succeeded;
-              }
-            );
-
-        const failedResults:
-          IListFetchResult[] =
-            results.filter(
-              (
-                result: IListFetchResult
-              ): boolean => {
-                return !result.succeeded;
-              }
-            );
-
-        if (successfulResults.length === 0) {
-          setKpi(EMPTY_KPI_DATA);
-          setErrorMessage(
-            'KPI records could not be loaded from any ' +
-            'SharePoint list. Open the browser console ' +
-            'for details.'
-          );
-          return;
-        }
-
-        const allItems: IResponseItem[] =
-          successfulResults.reduce<IResponseItem[]>(
-            (
-              accumulatedItems: IResponseItem[],
-              currentResult: IListFetchResult
-            ): IResponseItem[] => {
-              return accumulatedItems.concat(
-                currentResult.items
-              );
-            },
-            []
-          );
-
-        const scoredRatios: number[] = allItems
-          .map(
-            (
-              item: IResponseItem
-            ): number | undefined => {
-              return item.normalizedScore;
-            }
-          )
-          .filter(
-            (
-              score: number | undefined
-            ): score is number => {
-              return score !== undefined;
-            }
-          );
-
-        const freshKpi: IKpiData = {
-          total: allItems.length,
-
-          approved: scoredRatios.filter(
-            (score: number): boolean => {
-              return score >= APPROVED_MINIMUM;
-            }
-          ).length,
-
-          pending: scoredRatios.filter(
-            (score: number): boolean => {
-              return (
-                score >= PENDING_MINIMUM &&
-                score < APPROVED_MINIMUM
-              );
-            }
-          ).length,
-
-          actionRequired: scoredRatios.filter(
-            (score: number): boolean => {
-              return (
-                score >= ACTION_REQUIRED_MINIMUM &&
-                score < PENDING_MINIMUM
-              );
-            }
-          ).length,
-
-          highRisk: scoredRatios.filter(
-            (score: number): boolean => {
-              return score < ACTION_REQUIRED_MINIMUM;
-            }
-          ).length
-        };
-
-        setKpi(freshKpi);
-
-        console.info(
-          '[KPI] Calculated metrics summary:',
-          freshKpi
-        );
-
-        if (failedResults.length === 0) {
-          writeCachedKpi(
-            freshKpi,
-            cacheKey,
-            cacheTimeKey
-          );
-        } else {
-          const failedListNames: string =
-            failedResults
-              .map(
-                (
-                  result: IListFetchResult
-                ): string => {
-                  return result.listTitle;
-                }
-              )
-              .join(', ');
-
-          setErrorMessage(
-            'Some KPI data could not be loaded. ' +
-            `Failed lists: ${failedListNames}.`
-          );
-        }
-      } catch (error: unknown) {
-        console.error(
-          'Error calculating KPI metrics:',
-          error
-        );
-
-        if (isMounted) {
-          setKpi(EMPTY_KPI_DATA);
-          setErrorMessage(
-            'An unexpected error occurred while ' +
-            'calculating KPI metrics.'
-          );
-        }
-      } finally {
-        if (isMounted) {
-          setLoading(false);
-        }
-      }
-    };
-
-    fetchMetrics().catch(
-      (error: unknown): void => {
-        console.error(
-          'Unhandled KPI metrics error:',
-          error
-        );
-
-        if (isMounted) {
-          setKpi(EMPTY_KPI_DATA);
-          setLoading(false);
-          setErrorMessage(
-            'An unexpected error occurred while ' +
-            'loading KPI metrics.'
-          );
-        }
-      }
+  const [
+    kpi,
+    setKpi
+  ] =
+    useState<IKpiData>(
+      EMPTY_KPI_DATA
     );
 
-    return (): void => {
-      isMounted = false;
-    };
-  }, [
-    props.context,
-    props.tier1ListTitle,
-    props.tier2ListTitle,
-    props.tier3ListTitle
-  ]);
+  const [
+    loading,
+    setLoading
+  ] =
+    useState<boolean>(
+      true
+    );
 
-  if (loading) {
+  const [
+    errorMessage,
+    setErrorMessage
+  ] =
+    useState<string>(
+      ''
+    );
+
+  useEffect(
+    (): (() => void) => {
+      let isMounted:
+        boolean =
+          true;
+
+      const loadKpiData =
+        async (): Promise<void> => {
+          const configurations:
+            readonly IListConfiguration[] =
+              getListConfigurations(
+                props
+              );
+
+          const webUrl:
+            string =
+              props.context
+                .pageContext
+                .web
+                .absoluteUrl;
+
+          const cacheKey:
+            string =
+              createCacheKey(
+                webUrl,
+                configurations
+              );
+
+          const cachedData:
+            IKpiData | undefined =
+              readCachedKpi(
+                cacheKey
+              );
+
+          if (
+            cachedData &&
+            isMounted
+          ) {
+            setKpi(
+              cachedData
+            );
+
+            setLoading(
+              false
+            );
+          } else if (
+            isMounted
+          ) {
+            setLoading(
+              true
+            );
+          }
+
+          try {
+            const results:
+              IListFetchResult[] =
+                await Promise.all(
+                  configurations.map(
+                    (
+                      configuration:
+                        IListConfiguration
+                    ): Promise<IListFetchResult> => {
+                      return fetchListItems(
+                        props,
+                        configuration
+                      );
+                    }
+                  )
+                );
+
+            if (
+              !isMounted
+            ) {
+              return;
+            }
+
+            const successfulResults:
+              IListFetchResult[] =
+                results.filter(
+                  (
+                    result:
+                      IListFetchResult
+                  ): boolean => {
+                    return result.succeeded;
+                  }
+                );
+
+            const failedResults:
+              IListFetchResult[] =
+                results.filter(
+                  (
+                    result:
+                      IListFetchResult
+                  ): boolean => {
+                    return !result.succeeded;
+                  }
+                );
+
+            if (
+              successfulResults.length === 0
+            ) {
+              setKpi(
+                EMPTY_KPI_DATA
+              );
+
+              setErrorMessage(
+                'KPI metrics could not be loaded from ' +
+                'the configured SharePoint lists.'
+              );
+
+              return;
+            }
+
+            const calculatedData:
+              IKpiData =
+                calculateKpiData(
+                  results,
+                  configurations
+                );
+
+            setKpi(
+              calculatedData
+            );
+
+            writeCachedKpi(
+              cacheKey,
+              calculatedData
+            );
+
+            if (
+              failedResults.length > 0
+            ) {
+              const failedTitles:
+                string =
+                  failedResults
+                    .map(
+                      (
+                        result:
+                          IListFetchResult
+                      ): string => {
+                        return result.listTitle;
+                      }
+                    )
+                    .join(
+                      ', '
+                    );
+
+              setErrorMessage(
+                'Some KPI sources could not be loaded: ' +
+                `${failedTitles}. Metrics shown are partial.`
+              );
+            } else {
+              setErrorMessage(
+                ''
+              );
+            }
+          } catch (
+            error:
+              unknown
+          ) {
+            console.error(
+              '[Supplier ESG KPI] Unexpected KPI loading error.',
+              error
+            );
+
+            if (
+              isMounted
+            ) {
+              setErrorMessage(
+                'An unexpected error occurred while ' +
+                'loading the supplier ESG KPI metrics.'
+              );
+            }
+          } finally {
+            if (
+              isMounted
+            ) {
+              setLoading(
+                false
+              );
+            }
+          }
+        };
+
+      loadKpiData()
+        .catch(
+          (
+            error:
+              unknown
+          ): void => {
+            console.error(
+              '[Supplier ESG KPI] Unhandled KPI loading error.',
+              error
+            );
+
+            if (
+              isMounted
+            ) {
+              setLoading(
+                false
+              );
+
+              setErrorMessage(
+                'An unexpected error occurred while ' +
+                'loading the supplier ESG KPI metrics.'
+              );
+            }
+          }
+        );
+
+      return (): void => {
+        isMounted =
+          false;
+      };
+    },
+    [
+      props.context,
+      props.tier1ListTitle,
+      props.tier2ListTitle,
+      props.tier3ListTitle
+    ]
+  );
+
+  if (
+    loading
+  ) {
     return (
       <div
         role="status"
         aria-live="polite"
-        style={{
-          padding: '12px',
-          fontFamily: '"Segoe UI", sans-serif',
-          color: '#605e5c'
-        }}
+        style={loadingStyle}
       >
-        Loading KPI metrics...
+        <Spinner
+          size={SpinnerSize.small}
+          label="Loading supplier ESG KPI metrics"
+        />
       </div>
     );
   }
 
   return (
     <section
-      aria-label="ESG questionnaire KPI metrics"
       style={wrapperStyle}
+      aria-label="Supplier ESG KPI metrics"
     >
       {errorMessage && (
         <div
           role="alert"
-          aria-live="assertive"
           style={warningStyle}
         >
           {errorMessage}
@@ -760,67 +1263,76 @@ export function KpiMetricCards(
       <div style={containerStyle}>
         {KPI_CARDS.map(
           (
-            card: IKpiCardConfiguration
-          ): React.ReactElement => (
-            <article
-              key={card.key}
-              style={{
-                ...cardStyle,
-                backgroundColor:
-                  card.cardBackgroundColor,
-                border:
-                  `1px solid ${card.borderColor}`
-              }}
-            >
-              <div
-                aria-hidden="true"
+            card:
+              IKpiCardConfiguration
+          ): React.ReactElement => {
+            return (
+              <article
+                key={card.key}
                 style={{
-                  width: '54px',
-                  height: '54px',
-                  flex: '0 0 54px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: card.color,
+                  ...cardStyle,
+
+                  color:
+                    card.color,
+
                   backgroundColor:
-                    card.iconBackgroundColor,
-                  borderRadius: '50%'
+                    card.cardBackgroundColor,
+
+                  borderColor:
+                    card.borderColor
                 }}
+                aria-label={
+                  `${card.title}: ` +
+                  `${kpi[card.key].toString()}`
+                }
               >
-                <Icon
-                  iconName={card.iconName}
-                  styles={{
-                    root: {
-                      fontSize: '27px',
-                      lineHeight: '27px'
-                    }
+                <div
+                  style={{
+                    ...iconContainerStyle,
+
+                    color:
+                      card.color,
+
+                    backgroundColor:
+                      card.iconBackgroundColor
                   }}
-                />
-              </div>
+                  aria-hidden="true"
+                >
+                  <Icon
+                    iconName={
+                      card.iconName
+                    }
+                    styles={{
+                      root: {
+                        color:
+                          card.color,
 
-              <div
-                style={{
-                  minWidth: '36px',
-                  fontSize: '30px',
-                  lineHeight: 1,
-                  fontWeight: 600,
-                  color: '#151515',
-                  textAlign: 'center'
-                }}
-              >
-                {kpi[card.key]}
-              </div>
+                        fontSize:
+                          '36px',
 
-              <div style={cardTextStyle}>
-                <div style={titleStyle}>
-                  {card.title}
+                        lineHeight:
+                          '36px'
+                      }
+                    }}
+                  />
                 </div>
-                <div style={descriptionStyle}>
-                  {card.description}
+
+                <strong style={valueStyle}>
+                  {kpi[card.key]}
+                </strong>
+
+                <div style={textContainerStyle}>
+                  <h3 style={titleStyle}>
+                    {card.title}
+                  </h3>
+
+                  <span style={descriptionStyle}>
+                    {card.description}
+                  </span>
                 </div>
-              </div>
-            </article>
-          )
+              </article>
+            );
+          }
         )}
       </div>
     </section>

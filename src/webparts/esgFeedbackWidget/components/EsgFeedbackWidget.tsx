@@ -317,7 +317,7 @@ const getCategoryScores = (
       value: parseNumber(
         item[configuration.environmentalCountInternalName]
       ),
-      iconName: 'Leaf',
+      iconName: 'Globe',
       color: '#107c10'
     },
     {
@@ -344,7 +344,7 @@ const widgetStyle: React.CSSProperties = {
   width: '100%',
   maxWidth: '100%',
   height: 'auto',
-  minHeight: 'auto',
+  minHeight: 0,
   margin: 0,
   padding: 18,
   color: '#242424',
@@ -354,20 +354,6 @@ const widgetStyle: React.CSSProperties = {
   boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
   fontFamily: 'Segoe UI, sans-serif'
 };
-
-/*const widgetStyle: React.CSSProperties = {
-  width: '100%',
-  maxWidth: '100%',
-  minHeight: '100%',
-  height: '100%',
-  boxSizing: 'border-box',
-  padding: 18,
-  background: '#ffffff',
-  border: '1px solid #e1dfdd',
-  borderRadius: 10,
-  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
-  fontFamily: 'Segoe UI, sans-serif'
-};*/
 
 const headerStyle: React.CSSProperties = {
   display: 'flex',
@@ -568,6 +554,7 @@ const assessmentButtonStyles: IButtonStyles = {
   }
 };
 
+
 export function EsgFeedbackWidget(
   props: IEsgFeedbackWidgetProps
 ): React.ReactElement {
@@ -577,8 +564,8 @@ export function EsgFeedbackWidget(
   const [errorMessage, setErrorMessage] = useState<string>('');
 
   /*
-   * List titles come from the web-part properties. The defaults support
-   * pre-production when an existing web-part instance has no saved values.
+   * Use web-part property values for list titles while retaining the
+   * confirmed tier-specific SharePoint internal field mappings.
    */
   const tierConfigurations: readonly ITierConfiguration[] = [
     {

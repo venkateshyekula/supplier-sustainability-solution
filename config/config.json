@@ -33,6 +33,14 @@
           "manifest": "./src/webparts/questionnaireQuickLinks/QuestionnaireQuickLinksWebPart.manifest.json"
         }
       ]
+    },
+    "supplier-sustainability-dashboard-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/supplierSustainabilityDashboard/SupplierSustainabilityDashboardWebPart.js",
+          "manifest": "./src/webparts/supplierSustainabilityDashboard/SupplierSustainabilityDashboardWebPart.manifest.json"
+        }
+      ]
     }
   },
   "externals": {},
@@ -40,6 +48,7 @@
     "KpiMetricCardsWebPartStrings": "lib/webparts/kpiMetricCards/loc/{locale}.js",
     "EsgFeedbackWidgetWebPartStrings": "lib/webparts/esgFeedbackWidget/loc/{locale}.js",
     "SupplierEsgSearchWebPartStrings": "lib/webparts/supplierEsgSearch/loc/{locale}.js",
-    "QuestionnaireQuickLinksWebPartStrings": "lib/webparts/questionnaireQuickLinks/loc/{locale}.js"
+    "QuestionnaireQuickLinksWebPartStrings": "lib/webparts/questionnaireQuickLinks/loc/{locale}.js",
+    "SupplierSustainabilityDashboardWebPartStrings": "lib/webparts/supplierSustainabilityDashboard/loc/{locale}.js"
   }
 }
