@@ -1,0 +1,88 @@
+@import '../../../common/styles/fonts.scss';
+.footer {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  color: #ffffff;
+  background: linear-gradient(135deg, #273c88 0%, #c8187d 100%);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  font-family: 'Figtree', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.footerContent {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 46px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 12px 22px;
+}
+
+.confidentiality,
+.copyright {
+  margin: 0;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 18px;
+}
+
+.confidentiality {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.copyright {
+  flex: 0 0 auto;
+  text-align: right;
+  white-space: nowrap;
+}
+
+@media screen and (max-width: 768px) {
+  .footerContent {
+    min-height: 62px;
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    padding: 10px 16px;
+  }
+
+  .confidentiality,
+  .copyright {
+    width: 100%;
+    font-size: 10px;
+    line-height: 16px;
+    text-align: left;
+    white-space: normal;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .footerContent {
+    padding:
+      10px
+      12px;
+  }
+
+  .confidentiality,
+  .copyright {
+    font-size: 9px;
+    line-height: 15px;
+  }
+}
+
+@media (forced-colors: active) {
+  .footer {
+    color: CanvasText;
+    background: Canvas;
+    border-color: CanvasText;
+  }
+
+  .confidentiality,
+  .copyright {
+    color: CanvasText;
+  }
+}

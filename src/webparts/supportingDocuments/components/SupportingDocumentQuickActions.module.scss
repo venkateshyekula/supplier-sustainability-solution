@@ -1,0 +1,262 @@
+@import '../../../common/styles/fonts.scss';
+.panel {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  color: #323130;
+  background: #ffffff;
+  border: 1px solid #e1dfdd;
+  border-radius: 12px;
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.05);
+  font-family: 'Figtree', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  button {
+    font-family: inherit;
+  }
+}
+
+.header {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 52px;
+  align-items: center;
+  padding: 0 16px;
+  background: #ffffff;
+  border-bottom: 1px solid #edebe9;
+
+  h2 {
+    margin: 0;
+    color: #172033;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 22px;
+  }
+}
+
+.actions {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  flex-direction: column;
+}
+
+.action {
+  display: grid;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 58px;
+  grid-template-columns:
+    34px
+    minmax(0, 1fr)
+    20px;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px;
+  color: #323130;
+  background: #ffffff;
+  border: 0;
+  border-bottom: 1px solid #edebe9;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  transition:
+    color 120ms ease,
+    background-color 120ms ease;
+
+  &:last-child {
+    border-bottom: 0;
+  }
+
+  &:hover:not(:disabled) {
+    color: #005dc7;
+    background: #f8fbff;
+  }
+
+  &:focus-visible {
+    position: relative;
+    z-index: 1;
+    outline: 2px solid #005dc7;
+    outline-offset: -2px;
+  }
+
+  &:disabled {
+    color: #a19f9d;
+    background: #faf9f8;
+    cursor: default;
+  }
+}
+
+.actionIcon {
+  display: inline-flex;
+  box-sizing: border-box;
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+  align-items: center;
+  justify-content: center;
+  color: #005dc7;
+  background: #edf5ff;
+  border-radius: 50%;
+  font-size: 17px;
+  line-height: 17px;
+
+  :global(.ms-Icon) {
+    color: inherit;
+    font-size: inherit;
+    line-height: inherit;
+  }
+}
+
+.actionText {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+
+  strong,
+  small {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  strong {
+    color: #172033;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 18px;
+  }
+
+  small {
+    margin-top: 2px;
+    color: #605e5c;
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 15px;
+  }
+}
+
+.action:hover:not(:disabled) {
+  .actionIcon {
+    color: #ffffff;
+    background: #005dc7;
+  }
+
+  .actionText strong {
+    color: #005dc7;
+  }
+
+  .arrow {
+    color: #005dc7;
+    transform: translateX(2px);
+  }
+}
+
+.action:disabled {
+  .actionIcon {
+    color: #a19f9d;
+    background: #f3f2f1;
+  }
+
+  .actionText strong,
+  .actionText small,
+  .arrow {
+    color: #a19f9d;
+  }
+}
+
+.arrow {
+  justify-self: end;
+  color: #005dc7;
+  font-size: 12px;
+  line-height: 12px;
+  transition:
+    color 120ms ease,
+    transform 120ms ease;
+}
+
+@media screen and (max-width: 600px) {
+  .panel {
+    border-radius: 10px;
+  }
+
+  .header {
+    min-height: 50px;
+    padding: 0 12px;
+
+    h2 {
+      font-size: 14px;
+    }
+  }
+
+  .action {
+    min-height: 56px;
+    grid-template-columns:
+      32px
+      minmax(0, 1fr)
+      18px;
+    gap: 9px;
+    padding: 9px 12px;
+  }
+
+  .actionIcon {
+    width: 30px;
+    height: 30px;
+    flex-basis: 30px;
+    font-size: 16px;
+  }
+
+  .actionText {
+    strong {
+      font-size: 11px;
+    }
+
+    small {
+      font-size: 9px;
+    }
+  }
+}
+
+@media (forced-colors: active) {
+  .panel,
+  .header,
+  .action {
+    color: CanvasText;
+    background: Canvas;
+    border-color: CanvasText;
+  }
+
+  .actionIcon {
+    color: LinkText;
+    background: Canvas;
+    border: 1px solid CanvasText;
+  }
+
+  .actionText strong,
+  .actionText small {
+    color: CanvasText;
+  }
+
+  .arrow {
+    color: LinkText;
+  }
+
+  .action:focus-visible {
+    outline-color: Highlight;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .action,
+  .arrow {
+    transition: none;
+  }
+
+  .action:hover:not(:disabled) .arrow {
+    transform: none;
+  }
+}

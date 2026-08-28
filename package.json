@@ -1,6 +1,6 @@
 {
   "name": "supplier-sustainability-solution",
-  "version": "0.0.1",
+  "version": "1.0.1",
   "private": true,
   "engines": {
     "node": ">=18.17.1 <19.0.0"
@@ -11,10 +11,15 @@
     "clean": "gulp clean",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "build:ship": "gulp clean && gulp bundle --ship && gulp package-solution --ship",
+    "package:patch": "npm version patch --no-git-tag-version && npm run build:ship",
+    "package:minor": "npm version minor --no-git-tag-version && npm run build:ship",
+    "package:major": "npm version major --no-git-tag-version && npm run build:ship"
   },
   "dependencies": {
     "@fluentui/react": "^8.106.4",
+    "@fluentui/react-charting": "^5.25.11",
     "@microsoft/sp-component-base": "1.20.0",
     "@microsoft/sp-core-library": "1.20.0",
     "@microsoft/sp-lodash-subset": "1.20.0",
@@ -24,7 +29,10 @@
     "@pnp/sp": "^4.20.0",
     "react": "17.0.1",
     "react-dom": "17.0.1",
-    "tslib": "2.3.1"
+    "tslib": "2.3.1",
+    "@microsoft/decorators": "1.20.0",
+    "@microsoft/sp-dialog": "1.20.0",
+    "@microsoft/sp-application-base": "1.20.0"
   },
   "devDependencies": {
     "@microsoft/eslint-config-spfx": "1.20.2",

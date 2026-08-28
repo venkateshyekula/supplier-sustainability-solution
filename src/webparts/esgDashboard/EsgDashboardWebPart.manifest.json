@@ -1,0 +1,44 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+  "id": "71d3ecb9-9106-4483-9ec7-faa704ffff4a",
+  "alias": "EsgDashboardWebPart",
+  "componentType": "WebPart",
+  "version": "*",
+  "manifestVersion": 2,
+  "requiresCustomScript": false,
+  "supportedHosts": ["SharePointWebPart", "SharePointFullPage", "TeamsTab"],
+  "supportsThemeVariants": true,
+  "preconfiguredEntries": [
+    {
+      "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+      "group": {
+        "default": "Advanced"
+      },
+      "title": {
+        "default": "ESG Dashboard"
+      },
+      "description": {
+        "default": "Supplier ESG analytics and submission insights."
+      },
+      "officeFabricIconFontName": "BarChartVertical",
+      "properties": {
+        "tier1ListTitle": "CASSTECH_SSQ",
+        "tier2ListTitle": "Tier 2 ESG Procurement Questionnaire",
+        "tier3ListTitle": "Supplier Sustainability Questionnaires Tier 3",
+
+        "tier1SupplierNameField": "Supplier_x0020_Name",
+        "tier2SupplierNameField": "Supplier_x0020_Name",
+        "tier3SupplierNameField": "Supplier_x0020_Name",
+
+        "tier1DocumentLibraryTitle": "TestSupply",
+        "tier2DocumentLibraryTitle": "SSQ-Tier2 Attachments",
+        "tier3DocumentLibraryTitle": "SSQ-Tier3 Attachments",
+
+        "completedQuestionnairesUrl": "",
+        "supportingDocumentsUrl": "",
+
+        "targetScore": 80
+      }
+    }
+  ]
+}

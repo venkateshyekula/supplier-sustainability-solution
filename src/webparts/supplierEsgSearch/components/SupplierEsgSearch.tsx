@@ -104,7 +104,7 @@ export default class SupplierEsgSearch extends React.Component<
     });
   }
 
-  public componentDidUpdate(previousProps: ISupplierEsgSearchProps): void {
+  /*public componentDidUpdate(previousProps: ISupplierEsgSearchProps): void {
     const listConfigurationChanged: boolean =
       previousProps.tier1ListTitle !== this.props.tier1ListTitle ||
       previousProps.tier2ListTitle !== this.props.tier2ListTitle ||
@@ -117,6 +117,28 @@ export default class SupplierEsgSearch extends React.Component<
         this.props.tier3SupplierNameField ||
       previousProps.qualifiedMinimum !== this.props.qualifiedMinimum ||
       previousProps.conditionalMinimum !== this.props.conditionalMinimum;
+
+    if (listConfigurationChanged) {
+      this.loadSubmissions().catch((error: Error): void => {
+        this.setState({
+          isLoading: false,
+          errorMessage: error.message || "An unexpected error occurred.",
+        });
+      });
+    }
+  }*/
+
+  public componentDidUpdate(previousProps: ISupplierEsgSearchProps): void {
+    const listConfigurationChanged: boolean =
+      previousProps.tier1ListTitle !== this.props.tier1ListTitle ||
+      previousProps.tier2ListTitle !== this.props.tier2ListTitle ||
+      previousProps.tier3ListTitle !== this.props.tier3ListTitle ||
+      previousProps.tier1SupplierNameField !==
+        this.props.tier1SupplierNameField ||
+      previousProps.tier2SupplierNameField !==
+        this.props.tier2SupplierNameField ||
+      previousProps.tier3SupplierNameField !==
+        this.props.tier3SupplierNameField;
 
     if (listConfigurationChanged) {
       this.loadSubmissions().catch((error: Error): void => {
@@ -392,6 +414,11 @@ export default class SupplierEsgSearch extends React.Component<
               &rarr;
             </span>
           </footer>
+        </div>
+        <div className={styles.ruleNote}>
+          <strong>Qualification rules:</strong> Tier 1: Qualified from 10 and
+          conditional from 9.99. Tier 2: Qualified from 5 and conditional from
+          4.99. Tier 3: Qualified from 2 and conditional from 1.99.
         </div>
       </section>
     );

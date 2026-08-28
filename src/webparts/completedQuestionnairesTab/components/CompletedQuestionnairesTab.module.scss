@@ -1,0 +1,302 @@
+@import '../../../common/styles/fonts.scss';
+
+.page {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  flex-direction: column;
+  color: #242424;
+  background: #ffffff;
+  font-family: 'Figtree', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  button,
+  input,
+  select,
+  textarea {
+    font-family: inherit;
+  }
+
+  /* Global font override for all elements and Fluent UI controls */
+  :global {
+
+    html,
+    body,
+    button,
+    input,
+    textarea,
+    select,
+    [class*="ms-"],
+    [class*="Fabric"],
+    .ms-DetailsList,
+    .ms-DetailsRow,
+    .ms-DetailsHeader,
+    .ms-Button {
+      font-family: 'Figtree', 'Segoe UI', sans-serif !important;
+    }
+
+    /* 2. Protect and force Fluent UI Icon font */
+    i,
+    .ms-Icon,
+    [class*="ms-Icon"],
+    [data-icon-name],
+    i[data-icon-name]::before {
+      font-family: 'Fluent MDL2 Hybrid Icons' !important;
+      font-style: normal;
+      font-weight: normal;
+    }
+  }
+
+  /*
+   * Error message rendered after the filter panel.
+   */
+  :global(.ms-MessageBar) {
+    box-sizing: border-box;
+    width: 100%;
+    margin-top: 12px;
+    border-radius: 8px;
+  }
+
+  :global(.ms-MessageBar-content) {
+    align-items: center;
+  }
+
+  :global(.ms-MessageBar-text) {
+    font-family: inherit;
+    font-size: 12px;
+    line-height: 18px;
+  }
+}
+
+/*
+ * KPI cards are displayed below the search and filter panel.
+ */
+.kpis {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  margin-top: 20px;
+}
+
+/*
+ * Recent Submissions and ESG Review Queue.
+ *
+ * Recent Submissions receives approximately 60% width.
+ * ESG Review Queue receives approximately 40% width.
+ */
+.contentGrid {
+  display: grid;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  grid-template-columns:
+    minmax(0, 3fr) minmax(380px, 2fr);
+  align-items: stretch;
+  gap: 16px;
+  margin-top: 20px;
+
+  /*
+   * Both child panels should fill the complete grid-cell height.
+   */
+  >* {
+    box-sizing: border-box;
+    min-width: 0;
+    height: 100%;
+  }
+}
+
+/*
+ * Supplier information notice displayed below both panels.
+ */
+.notice {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  align-items: flex-start;
+  gap: 14px;
+  margin-top: 20px;
+  padding: 14px 18px;
+  color: #323130;
+  background: #f3f9fd;
+  border: 1px solid #c7e0f4;
+  border-left: 4px solid #0078d4;
+  border-radius: 8px;
+
+  p {
+    min-width: 0;
+    margin: 0;
+    color: #323130;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 20px;
+  }
+
+  strong {
+    color: #172033;
+    font-weight: 700;
+  }
+}
+
+.noticeIcon {
+  display: inline-flex;
+  box-sizing: border-box;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 28px;
+  align-items: center;
+  justify-content: center;
+  color: #005a9e;
+  border-radius: 50%;
+  font-size: 18px;
+  line-height: 18px;
+
+  :global(.ms-Icon) {
+    color: inherit;
+    font-size: inherit;
+    line-height: inherit;
+  }
+}
+
+/*
+ * Narrow desktop and standard SharePoint page sections.
+ *
+ * The right-side ESG queue becomes slightly narrower while
+ * remaining next to Recent Submissions.
+ */
+@media screen and (max-width: 1300px) {
+  .contentGrid {
+    grid-template-columns:
+      minmax(0, 3fr) minmax(340px, 2fr);
+    gap: 14px;
+  }
+}
+
+/*
+ * At tablet and narrow desktop widths, stack the panels.
+ *
+ * This prevents the DetailsLists inside both panels from
+ * becoming excessively narrow.
+ */
+@media screen and (max-width: 1100px) {
+  .contentGrid {
+    grid-template-columns:
+      minmax(0, 1fr);
+  }
+
+  .contentGrid>* {
+    width: 100%;
+  }
+}
+
+/*
+ * Tablet layout.
+ */
+@media screen and (max-width: 768px) {
+  .kpis {
+    margin-top: 16px;
+  }
+
+  .contentGrid {
+    gap: 14px;
+    margin-top: 16px;
+  }
+
+  .notice {
+    gap: 12px;
+    margin-top: 16px;
+    padding: 13px 14px;
+  }
+}
+
+/*
+ * Mobile layout.
+ */
+@media screen and (max-width: 640px) {
+  .page {
+    width: 100%;
+  }
+
+  .kpis {
+    margin-top: 14px;
+  }
+
+  .contentGrid {
+    grid-template-columns:
+      minmax(0, 1fr);
+    gap: 12px;
+    margin-top: 14px;
+  }
+
+  .notice {
+    gap: 10px;
+    margin-top: 14px;
+    padding: 12px;
+    border-left-width: 3px;
+
+    p {
+      font-size: 12px;
+      line-height: 19px;
+    }
+  }
+
+  .noticeIcon {
+    width: 26px;
+    height: 26px;
+    flex-basis: 26px;
+    font-size: 16px;
+  }
+
+  .page :global(.ms-MessageBar) {
+    margin-top: 10px;
+  }
+}
+
+/*
+ * Very narrow mobile screens.
+ */
+@media screen and (max-width: 420px) {
+  .notice {
+    align-items: flex-start;
+  }
+
+  .noticeIcon {
+    margin-top: 1px;
+  }
+}
+
+/*
+ * High-contrast and Windows forced-color support.
+ */
+@media (forced-colors: active) {
+  .notice {
+    color: CanvasText;
+    background: Canvas;
+    border-color: CanvasText;
+  }
+
+  .noticeIcon {
+    color: LinkText;
+    background: Canvas;
+    border-color: CanvasText;
+  }
+
+  .notice p,
+  .notice strong {
+    color: CanvasText;
+  }
+}
+
+/*
+ * Reduced-motion accessibility.
+ */
+@media (prefers-reduced-motion: reduce) {
+
+  .page *,
+  .page *::before,
+  .page *::after {
+    scroll-behavior: auto;
+    transition-duration: 0s;
+    animation-duration: 0s;
+  }
+}

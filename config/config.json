@@ -41,6 +41,46 @@
           "manifest": "./src/webparts/supplierSustainabilityDashboard/SupplierSustainabilityDashboardWebPart.manifest.json"
         }
       ]
+    },
+    "completed-questionnaires-tab-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/completedQuestionnairesTab/CompletedQuestionnairesTabWebPart.js",
+          "manifest": "./src/webparts/completedQuestionnairesTab/CompletedQuestionnairesTabWebPart.manifest.json"
+        }
+      ]
+    },
+    "supporting-documents-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/supportingDocuments/SupportingDocumentsWebPart.js",
+          "manifest": "./src/webparts/supportingDocuments/SupportingDocumentsWebPart.manifest.json"
+        }
+      ]
+    },
+    "esg-dashboard-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/esgDashboard/EsgDashboardWebPart.js",
+          "manifest": "./src/webparts/esgDashboard/EsgDashboardWebPart.manifest.json"
+        }
+      ]
+    },
+    "help-page-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/helpPage/HelpPageWebPart.js",
+          "manifest": "./src/webparts/helpPage/HelpPageWebPart.manifest.json"
+        }
+      ]
+    },
+    "supplier-navigation-application-customizer": {
+      "components": [
+        {
+          "entrypoint": "./lib/extensions/supplierNavigation/SupplierNavigationApplicationCustomizer.js",
+          "manifest": "./src/extensions/supplierNavigation/SupplierNavigationApplicationCustomizer.manifest.json"
+        }
+      ]
     }
   },
   "externals": {},
@@ -49,6 +89,11 @@
     "EsgFeedbackWidgetWebPartStrings": "lib/webparts/esgFeedbackWidget/loc/{locale}.js",
     "SupplierEsgSearchWebPartStrings": "lib/webparts/supplierEsgSearch/loc/{locale}.js",
     "QuestionnaireQuickLinksWebPartStrings": "lib/webparts/questionnaireQuickLinks/loc/{locale}.js",
-    "SupplierSustainabilityDashboardWebPartStrings": "lib/webparts/supplierSustainabilityDashboard/loc/{locale}.js"
+    "SupplierSustainabilityDashboardWebPartStrings": "lib/webparts/supplierSustainabilityDashboard/loc/{locale}.js",
+    "CompletedQuestionnairesTabWebPartStrings": "lib/webparts/completedQuestionnairesTab/loc/{locale}.js",
+    "SupportingDocumentsWebPartStrings": "lib/webparts/supportingDocuments/loc/{locale}.js",
+    "EsgDashboardWebPartStrings": "lib/webparts/esgDashboard/loc/{locale}.js",
+    "HelpPageWebPartStrings": "lib/webparts/helpPage/loc/{locale}.js",
+    "SupplierNavigationApplicationCustomizerStrings": "lib/extensions/supplierNavigation/loc/{locale}.js"
   }
 }

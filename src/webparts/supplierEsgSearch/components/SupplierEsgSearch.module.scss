@@ -1,20 +1,40 @@
-
+@import '../../../common/styles/fonts.scss';
 .supplierEsgSearch {
   box-sizing: border-box;
   width: 100%;
   min-width: 0;
   color: #242424;
   background: #ffffff;
-  font-family:
-  'Segoe UI',
-  'Segoe UI Web',
-  Arial,
-  sans-serif;
+  font-family: 'Figtree', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   button,
   input,
   select,
   textarea {
     font-family: inherit;
+  }
+}
+
+/* Global font override for all elements and Fluent UI controls */
+:global {
+  html, body, button, input, textarea, select,
+  [class*="ms-"],
+  [class*="Fabric"],
+  .ms-DetailsList,
+  .ms-DetailsRow,
+  .ms-DetailsHeader,
+  .ms-Button {
+    font-family: 'Figtree', 'Segoe UI', sans-serif !important;
+  }
+  
+  /* 2. Protect and force Fluent UI Icon font */
+  i,
+  .ms-Icon,
+  [class*="ms-Icon"],
+  [data-icon-name],
+  i[data-icon-name]::before {
+    font-family: 'Fluent MDL2 Hybrid Icons' !important;
+    font-style: normal;
+    font-weight: normal;
   }
 }
 

@@ -352,7 +352,7 @@ const widgetStyle: React.CSSProperties = {
   border: '1px solid #e1dfdd',
   borderRadius: 10,
   boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
-  fontFamily: 'Segoe UI, sans-serif'
+  fontFamily: "'Figtree', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
 };
 
 const headerStyle: React.CSSProperties = {

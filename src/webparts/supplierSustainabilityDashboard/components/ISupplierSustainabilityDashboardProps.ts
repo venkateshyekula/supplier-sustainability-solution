@@ -16,7 +16,4 @@ export interface ISupplierSustainabilityDashboardProps {
   tier1DocumentLibraryTitle: string;
   tier2DocumentLibraryTitle: string;
   tier3DocumentLibraryTitle: string;
-
-  qualifiedMinimum: number;
-  conditionalMinimum: number;
 }

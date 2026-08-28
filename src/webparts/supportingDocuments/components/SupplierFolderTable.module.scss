@@ -1,0 +1,687 @@
+@import '../../../common/styles/fonts.scss';
+.panel {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 400px;
+  flex-direction: column;
+  overflow: hidden;
+  color: #242424;
+  background: #ffffff;
+  border: 1px solid #e1dfdd;
+  border-radius: 12px;
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.05);
+  font-family: 'Figtree', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+}
+
+.header {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 56px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0 18px;
+  background: #ffffff;
+  border-bottom: 1px solid #edebe9;
+
+  h2 {
+    min-width: 0;
+    margin: 0;
+    overflow: hidden;
+    color: #172033;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 22px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.resultSummary {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: flex-end;
+  color: #605e5c;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 16px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.scroll {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  background: #ffffff;
+  scrollbar-width: thin;
+  scrollbar-color:
+    #c8c6c4
+    #f3f2f1;
+
+  &::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f3f2f1;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #c8c6c4;
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #a19f9d;
+  }
+
+  :global(.ms-DetailsList),
+  :global(.ms-Shimmer-container) {
+    min-width: 760px;
+  }
+
+  :global(.ms-DetailsList) {
+    background: #ffffff;
+  }
+
+  :global(.ms-DetailsHeader) {
+    box-sizing: border-box;
+    min-width: 760px;
+    padding-top: 0;
+    background: #faf9f8;
+    border-bottom: 1px solid #edebe9;
+  }
+
+  :global(.ms-DetailsHeader-cell) {
+    color: #323130;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  :global(.ms-DetailsHeader-cellTitle) {
+    height: 42px;
+    align-items: center;
+  }
+
+  :global(.ms-DetailsHeader-cellName) {
+    color: #323130;
+    font-weight: 600;
+  }
+
+  :global(.ms-DetailsRow) {
+    box-sizing: border-box;
+    min-width: 760px;
+    min-height: 54px;
+    color: #323130;
+    background: #ffffff;
+    border-bottom: 1px solid #edebe9 !important;
+    transition:
+      background-color 120ms ease,
+      box-shadow 120ms ease;
+  }
+
+  :global(.ms-DetailsRow:hover) {
+    background: #f8fbff;
+  }
+
+  :global(.ms-DetailsRow:last-child) {
+    border-bottom: 0;
+  }
+
+  :global(.ms-DetailsRow-fields) {
+    min-height: 54px;
+    align-items: center;
+  }
+
+  :global(.ms-DetailsRow-cell) {
+    display: flex;
+    min-width: 0;
+    min-height: 54px;
+    align-items: center;
+    color: #323130;
+    font-size: 12px;
+    line-height: 18px;
+  }
+
+  :global(.ms-Link) {
+    overflow: hidden;
+    color: #005a9e;
+    font-weight: 600;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    &:hover {
+      color: #004578;
+      text-decoration: underline;
+    }
+
+    &:focus-visible {
+      outline: 2px solid #273c88;
+      outline-offset: 2px;
+    }
+  }
+
+  :global(.ms-Shimmer-container) {
+    background: #ffffff;
+  }
+}
+
+/*
+ * Custom Fluent UI DetailsRow class.
+ */
+.detailsRow {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 54px;
+  color: #323130;
+  background: #ffffff;
+  transition:
+    background-color 120ms ease,
+    box-shadow 120ms ease;
+
+  &:hover {
+    background: #f8fbff;
+  }
+
+  &:focus-within {
+    position: relative;
+    z-index: 1;
+    box-shadow:
+      inset 3px 0 0 #273c88;
+  }
+
+  :global(.ms-DetailsRow-fields) {
+    min-height: 54px;
+    align-items: center;
+  }
+
+  :global(.ms-DetailsRow-cell) {
+    display: flex;
+    min-width: 0;
+    min-height: 54px;
+    align-items: center;
+  }
+}
+
+/*
+ * Supplier Name column.
+ */
+.supplierCell {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  align-items: center;
+  gap: 10px;
+}
+
+.supplierIcon {
+  display: inline-flex;
+  box-sizing: border-box;
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+  align-items: center;
+  justify-content: center;
+  color: #273c88;
+  background:
+    rgba(39, 60, 136, 0.09);
+  border:
+    1px solid
+    rgba(39, 60, 136, 0.16);
+  border-radius: 50%;
+  font-size: 15px;
+  line-height: 32px;
+
+  :global(.ms-Icon) {
+    color: inherit;
+    font-size: inherit;
+    line-height: inherit;
+  }
+}
+
+.supplierDetails {
+  display: flex;
+  min-width: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.supplierLink {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  overflow: hidden;
+  color: #273c88;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 18px;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  &:hover {
+    color: #c8187d;
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #273c88;
+    outline-offset: 2px;
+  }
+}
+
+.supplierFolderLabel {
+  display: block;
+  overflow: hidden;
+  margin-top: 1px;
+  color: #797775;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 15px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/*
+ * Empty table state.
+ */
+.empty {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 36px 18px;
+  color: #605e5c;
+  background: #ffffff;
+  font-size: 13px;
+  line-height: 20px;
+  text-align: center;
+}
+
+/*
+ * Pagination.
+ */
+.pagination {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 58px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 16px;
+  color: #605e5c;
+  background: #ffffff;
+  border-top: 1px solid #edebe9;
+  font-size: 11px;
+  line-height: 16px;
+}
+
+.paginationButtons {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 5px;
+
+  :global(.ms-Button--icon) {
+    width: 30px;
+    min-width: 30px;
+    height: 30px;
+    color: #273c88;
+    background: #ffffff;
+    border: 1px solid #edebe9;
+    border-radius: 5px;
+
+    &:hover {
+      color: #ffffff;
+      background: #273c88;
+      border-color: #273c88;
+    }
+
+    &:focus-visible {
+      outline: 2px solid #273c88;
+      outline-offset: 2px;
+    }
+
+    &:disabled {
+      color: #a19f9d;
+      background: #f3f2f1;
+      border-color: #edebe9;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+  }
+}
+
+.pageButton,
+.activePageButton {
+  width: 30px;
+  min-width: 30px;
+  height: 30px;
+  min-height: 30px;
+  padding: 0;
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 28px;
+
+  &:focus-visible {
+    outline: 2px solid #273c88;
+    outline-offset: 2px;
+  }
+}
+
+.pageButton {
+  color: #323130;
+  background: #ffffff;
+  border: 1px solid #edebe9;
+
+  &:hover {
+    color: #273c88;
+    background: #f4f5fb;
+    border-color: #273c88;
+  }
+
+  &:disabled {
+    color: #a19f9d;
+    background: #f3f2f1;
+    border-color: #edebe9;
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+}
+
+.activePageButton {
+  color: #ffffff;
+  background: #273c88;
+  border: 1px solid #273c88;
+
+  &:hover {
+    color: #ffffff;
+    background: #1f3070;
+    border-color: #1f3070;
+  }
+
+  &:disabled {
+    color: #ffffff;
+    background: #273c88;
+    border-color: #273c88;
+    cursor: default;
+    opacity: 1;
+  }
+}
+
+.ellipsis {
+  display: inline-flex;
+  box-sizing: border-box;
+  width: 24px;
+  height: 30px;
+  flex: 0 0 24px;
+  align-items: center;
+  justify-content: center;
+  color: #605e5c;
+  font-size: 12px;
+  line-height: 30px;
+  user-select: none;
+}
+
+.pageSizeSelector {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+
+  > span {
+    color: #605e5c;
+    font-size: 11px;
+    line-height: 16px;
+  }
+
+  :global(.ms-Dropdown) {
+    min-width: 72px;
+  }
+
+  :global(.ms-Dropdown-title) {
+    height: 30px;
+    color: #323130;
+    border-color: #edebe9;
+    font-size: 11px;
+    line-height: 28px;
+  }
+
+  :global(.ms-Dropdown-caretDownWrapper) {
+    height: 28px;
+    line-height: 28px;
+  }
+
+  :global(.ms-Dropdown:hover .ms-Dropdown-title) {
+    border-color: #273c88;
+  }
+
+  :global(.ms-Dropdown:focus-within .ms-Dropdown-title) {
+    border-color: #273c88;
+    box-shadow:
+      inset 0 0 0 1px #273c88;
+  }
+
+  :global(.ms-Dropdown.is-disabled .ms-Dropdown-title) {
+    color: #a19f9d;
+    background: #f3f2f1;
+    border-color: #edebe9;
+  }
+}
+
+/*
+ * Tablet layout.
+ */
+@media screen and (max-width: 900px) {
+  .panel {
+    header {
+      padding-right: 14px;
+      padding-left: 14px;
+    }
+  }
+
+  .pagination {
+    padding-right: 14px;
+    padding-left: 14px;
+  }
+}
+
+/*
+ * Compact tablet and phone layout.
+ */
+@media screen and (max-width: 700px) {
+  .panel {
+    border-radius: 10px;
+
+    header {
+      min-height: 60px;
+      padding: 10px 12px;
+    }
+  }
+
+  .scroll {
+    :global(.ms-DetailsList),
+    :global(.ms-Shimmer-container),
+    :global(.ms-DetailsHeader),
+    :global(.ms-DetailsRow) {
+      min-width: 760px;
+    }
+  }
+
+  .detailsRow {
+    min-height: 50px;
+
+    :global(.ms-DetailsRow-fields) {
+      min-height: 50px;
+    }
+
+    :global(.ms-DetailsRow-cell) {
+      min-height: 50px;
+    }
+  }
+
+  .supplierCell {
+    gap: 8px;
+  }
+
+  .supplierIcon {
+    width: 28px;
+    height: 28px;
+    flex-basis: 28px;
+    font-size: 13px;
+    line-height: 28px;
+  }
+
+  .supplierLink {
+    font-size: 11px;
+    line-height: 17px;
+  }
+
+  .supplierFolderLabel {
+    font-size: 9px;
+    line-height: 13px;
+  }
+
+  .pagination {
+    min-height: auto;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+    padding: 12px;
+  }
+
+  .paginationButtons {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    padding-bottom: 3px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: thin;
+  }
+
+  .pageSizeSelector {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .header {
+    min-height: 60px;
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2px;
+    padding: 9px 12px;
+  }
+
+  .resultSummary {
+    width: 100%;
+    justify-content: flex-start;
+    text-align: left;
+  }
+}
+
+/*
+ * Small phone layout.
+ */
+@media screen and (max-width: 480px) {
+  .panel {
+    header {
+      h2 {
+        font-size: 15px;
+      }
+
+      span {
+        font-size: 10px;
+      }
+    }
+  }
+
+  .paginationButtons {
+    gap: 4px;
+
+    :global(.ms-Button--icon) {
+      width: 28px;
+      min-width: 28px;
+      height: 28px;
+    }
+  }
+
+  .pageButton,
+  .activePageButton {
+    width: 28px;
+    min-width: 28px;
+    height: 28px;
+    min-height: 28px;
+    line-height: 26px;
+  }
+
+  .ellipsis {
+    width: 20px;
+    height: 28px;
+    flex-basis: 20px;
+    line-height: 28px;
+  }
+
+  .pageSizeSelector {
+    justify-content: space-between;
+  }
+}
+
+/*
+ * Windows high-contrast and forced-colors support.
+ */
+@media (forced-colors: active) {
+  .panel,
+  .detailsRow {
+    border-color: CanvasText;
+  }
+
+  .supplierIcon {
+    color: LinkText;
+    background: Canvas;
+    border-color: CanvasText;
+  }
+
+  .supplierLink {
+    color: LinkText;
+  }
+
+  .pageButton,
+  .activePageButton,
+  .paginationButtons :global(.ms-Button--icon) {
+    border-color: ButtonText;
+  }
+
+  .activePageButton {
+    color: HighlightText;
+    background: Highlight;
+  }
+}
+
+/*
+ * Reduced-motion accessibility.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .detailsRow,
+  .paginationButtons :global(.ms-Button--icon),
+  .pageButton,
+  .activePageButton,
+  .scroll :global(.ms-Link) {
+    transition: none;
+  }
+}

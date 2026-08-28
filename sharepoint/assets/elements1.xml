@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+    <CustomAction
+        Title="Supplier Navigation"
+        Location="ClientSideExtension.ApplicationCustomizer"
+        ClientSideComponentId="f961f110-75b0-45dc-90ec-2accd2523d22"
+        ClientSideComponentProperties="{&quot;siteTitle&quot;:&quot;Supplier Sustainability&quot;,&quot;homeUrl&quot;:&quot;/sites/ltsadev/sc/SitePages/Home.aspx&quot;,&quot;completedQuestionnairesUrl&quot;:&quot;/sites/ltsadev/sc/SitePages/Completed-Questionnaires.aspx&quot;,&quot;supportingDocumentsUrl&quot;:&quot;/sites/ltsadev/sc/SitePages/Supporting-Documents.aspx&quot;,&quot;dashboardUrl&quot;:&quot;/sites/ltsadev/sc/SitePages/Dashboard.aspx&quot;,&quot;helpUrl&quot;:&quot;/sites/ltsadev/sc/SitePages/Help.aspx&quot;}" />
+</Elements>

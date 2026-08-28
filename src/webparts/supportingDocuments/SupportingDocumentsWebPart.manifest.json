@@ -1,0 +1,46 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+  "id": "fc8d0b6d-6bff-465a-8015-061066164951",
+  "alias": "SupportingDocumentsWebPart",
+  "componentType": "WebPart",
+  "version": "*",
+  "manifestVersion": 2,
+  "requiresCustomScript": false,
+  "supportedHosts": [
+    "SharePointWebPart",
+    "TeamsPersonalApp",
+    "TeamsTab",
+    "SharePointFullPage"
+  ],
+  "supportsThemeVariants": true,
+  "preconfiguredEntries": [
+    {
+      "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+      "group": {
+        "default": "Advanced"
+      },
+      "title": {
+        "default": "Supporting Documents"
+      },
+      "description": {
+        "default": "Compare supplier questionnaire submissions with supporting documents across all configured questionnaire tiers."
+      },
+      "officeFabricIconFontName": "FabricFolderSearch",
+      "properties": {
+        "tier1QuestionnaireListTitle": "CASSTECH_SSQ",
+        "tier2QuestionnaireListTitle": "Tier 2 ESG Procurement Questionnaire",
+        "tier3QuestionnaireListTitle": "Supplier Sustainability Questionnaires Tier 3",
+
+        "tier1SupplierNameField": "Supplier_x0020_Name",
+        "tier2SupplierNameField": "Supplier_x0020_Name",
+        "tier3SupplierNameField": "Supplier_x0020_Name",
+
+        "tier1DocumentLibraryTitle": "TestSupply",
+        "tier2DocumentLibraryTitle": "SSQ-Tier2 Attachments",
+        "tier3DocumentLibraryTitle": "SSQ-Tier3 Attachments",
+
+        "documentGuidanceUrl": ""
+      }
+    }
+  ]
+}

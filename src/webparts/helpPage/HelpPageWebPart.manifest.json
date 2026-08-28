@@ -1,0 +1,45 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+  "id": "cd6ed13e-ba10-41dd-9321-10c4077c2601",
+  "alias": "HelpPageWebPart",
+  "componentType": "WebPart",
+  "version": "*",
+  "manifestVersion": 2,
+  "requiresCustomScript": false,
+  "supportedHosts": [
+    "SharePointWebPart",
+    "TeamsPersonalApp",
+    "TeamsTab",
+    "SharePointFullPage"
+  ],
+  "supportsThemeVariants": true,
+  "preconfiguredEntries": [
+    {
+      "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+      "group": {
+        "default": "Advanced"
+      },
+      "title": {
+        "default": "Help & Support"
+      },
+      "description": {
+        "default": "Guidance, resources, frequently asked questions, and support contacts for Supplier Sustainability Surveys."
+      },
+      "officeFabricIconFontName": "Help",
+      "properties": {
+        "supportEmail": "support@liquid.tech",
+        "procurementEmail": "GroupProcurement@cassava.tech",
+        "supportPhone": "+27 11 585 0000",
+        "supportHours": "Mon – Fri, 8:30 AM – 5:30 PM (GMT/SAST)",
+        "serviceNowUrl": "https://oneliquidsupport.service-now.com/staffportal?id=itsm_index",
+        "esgGuidelinesUrl": "",
+        "userGuideUrl": "",
+        "supplierPortalUrl": "",
+        "policyComplianceUrl": "https://liquidtelecommunications.sharepoint.com/sites/ltsadev/sc/Shared%20Documents/Forms/AllItems.aspx?viewid=11f25148%2D8250%2D4372%2D8f70%2D6c9b4830b863&id=%2Fsites%2Fltsadev%2Fsc%2FShared%20Documents%2FSupplier%20Code%20of%20Conduct%2FSupplier%20Code%20of%20Conduct%20Confirmation%20%2Epdf&parent=%2Fsites%2Fltsadev%2Fsc%2FShared%20Documents%2FSupplier%20Code%20of%20Conduct",
+        "supplierGuideUrl": "",
+        "procurementGuideUrl": "",
+        "faqPageUrl": "https://liquidtelecommunications.sharepoint.com/sites/ltsadev/sc/SitePages/FAQ.aspx"
+      }
+    }
+  ]
+}

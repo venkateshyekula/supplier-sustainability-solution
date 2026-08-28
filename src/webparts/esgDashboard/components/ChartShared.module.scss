@@ -1,0 +1,1209 @@
+@import '../../../common/styles/fonts.scss';
+.panel {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  min-height: 260px;
+  flex-direction: column;
+  overflow: hidden;
+  color: #172033;
+  background: #ffffff;
+  border: 1px solid #e1e7ef;
+  border-radius: 10px;
+  box-shadow:
+    0 2px 8px rgba(15, 23, 42, 0.04);
+  font-family: 'Figtree', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.header {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 58px;
+  flex: 0 0 auto;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 13px 16px 8px;
+}
+
+.headerContent {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.panelTitle {
+  overflow: hidden;
+  margin: 0;
+  color: #172033;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 20px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.panelSubtitle {
+  display: -webkit-box;
+  margin: 3px 0 0;
+  overflow: hidden;
+  color: #64748b;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 15px;
+  -webkit-box-orient: vertical;
+  line-clamp: 2;
+}
+
+.body {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  flex: 1 1 auto;
+  padding: 10px 16px 16px;
+}
+
+.view {
+  display: inline-flex;
+  min-height: 28px;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 2px;
+  color: #005dc7;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 16px;
+  text-decoration: none;
+  white-space: nowrap;
+
+  &:hover,
+  &:focus {
+    color: #004578;
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #005dc7;
+    outline-offset: 2px;
+  }
+}
+
+.viewIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  font-size: 12px;
+  line-height: 12px;
+}
+
+.legend {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.legendRow {
+  display: grid;
+  min-width: 0;
+  grid-template-columns:
+    10px
+    minmax(80px, 1fr)
+    30px
+    35px;
+  align-items: center;
+  gap: 8px;
+  color: #172033;
+  font-size: 10px;
+  line-height: 15px;
+}
+
+.dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+
+.legendLabel {
+  overflow: hidden;
+  color: #172033;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.legendValue {
+  color: #172033;
+  font-size: 10px;
+  font-weight: 700;
+  font-variant-numeric:
+    tabular-nums;
+  text-align: right;
+}
+
+.legendPercentage {
+  color: #475569;
+  font-size: 10px;
+  font-weight: 600;
+  font-variant-numeric:
+    tabular-nums;
+  text-align: right;
+}
+
+.legendTotal,
+.chartTotal {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 5px;
+  padding-top: 10px;
+  color: #172033;
+  border-top: 1px solid #e5eaf0;
+  font-size: 10px;
+  line-height: 15px;
+
+  span {
+    font-weight: 600;
+  }
+
+  strong {
+    font-size: 11px;
+    font-weight: 700;
+    font-variant-numeric:
+      tabular-nums;
+  }
+}
+
+.muted {
+  color: #64748b;
+}
+
+@media screen and (max-width: 1250px) {
+  .donutArea {
+    grid-template-columns:
+      135px
+      minmax(0, 1fr);
+    gap: 16px;
+  }
+
+  .donut {
+    width: 132px;
+    height: 132px;
+
+    &::after {
+      width: 70px;
+      height: 70px;
+    }
+  }
+
+  .donutCenter {
+    width: 62px;
+    height: 62px;
+  }
+
+  .donutCenterValue {
+    font-size: 18px;
+  }
+}
+
+@media screen and (max-width: 760px) {
+  .donutArea {
+    grid-template-columns:
+      minmax(0, 1fr);
+    justify-items: center;
+  }
+
+  .legend {
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  .legendRow {
+    grid-template-columns:
+      10px
+      minmax(100px, 1fr)
+      36px
+      40px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .donut {
+    width: 124px;
+    height: 124px;
+
+    &::after {
+      width: 66px;
+      height: 66px;
+    }
+  }
+
+  .donutCenterValue {
+    font-size: 17px;
+  }
+
+  .legendRow {
+    gap: 6px;
+    font-size: 9px;
+  }
+}
+
+@media (forced-colors: active) {
+  .donut {
+    background: Canvas !important;
+    border: 2px solid CanvasText;
+    box-shadow: none;
+
+    &::after {
+      background: Canvas;
+      border: 1px solid CanvasText;
+    }
+  }
+
+  .dot {
+    forced-color-adjust: none;
+  }
+
+  .donutCenterValue,
+  .donutCenterLabel,
+  .legendLabel,
+  .legendValue,
+  .legendPercentage,
+  .legendTotal {
+    color: CanvasText;
+  }
+}
+
+.donutArea {
+  display: grid;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  grid-template-columns:
+    170px
+    minmax(0, 1fr);
+  align-items: center;
+  gap: 20px;
+  padding: 4px 2px 8px;
+}
+
+.donutChart {
+  display: flex;
+  box-sizing: border-box;
+  width: 165px;
+  height: 165px;
+  align-items: center;
+  justify-content: center;
+}
+
+.donutSvg {
+  display: block;
+  width: 165px;
+  height: 165px;
+  overflow: visible;
+  filter:
+    drop-shadow(
+      0 3px 6px
+      rgba(15, 23, 42, 0.1)
+    );
+}
+
+.donutBackground {
+  stroke: #edf0f4;
+}
+
+.donutSegment {
+  stroke: #ffffff;
+  stroke-width: 1;
+  stroke-linejoin: round;
+  transition:
+    opacity 120ms ease,
+    filter 120ms ease;
+
+  &:hover {
+    opacity: 0.88;
+    filter: brightness(1.03);
+  }
+}
+
+.donutCenterCircle {
+  fill: #ffffff;
+  stroke: #edf0f4;
+  stroke-width: 1;
+}
+
+.donutPercentage {
+  pointer-events: none;
+  fill: #ffffff;
+  font-family:
+    'Segoe UI',
+    'Segoe UI Web',
+    Arial,
+    sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  paint-order: stroke;
+  stroke: rgba(0, 0, 0, 0.12);
+  stroke-width: 1px;
+  stroke-linejoin: round;
+}
+
+.legend {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.legendRow {
+  display: grid;
+  min-width: 0;
+  grid-template-columns:
+    10px
+    minmax(80px, 1fr)
+    30px
+    35px;
+  align-items: center;
+  gap: 8px;
+  color: #172033;
+  font-size: 10px;
+  line-height: 15px;
+}
+
+.dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+
+.legendLabel {
+  overflow: hidden;
+  color: #172033;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.legendValue {
+  color: #172033;
+  font-size: 10px;
+  font-weight: 700;
+  text-align: right;
+  font-variant-numeric:
+    tabular-nums;
+}
+
+.legendPercentage {
+  color: #475569;
+  font-size: 10px;
+  font-weight: 600;
+  text-align: right;
+  font-variant-numeric:
+    tabular-nums;
+}
+
+.legendTotal {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 5px;
+  padding-top: 10px;
+  color: #172033;
+  border-top: 1px solid #e5eaf0;
+  font-size: 10px;
+  line-height: 15px;
+
+  span {
+    font-weight: 600;
+  }
+
+  strong {
+    font-size: 11px;
+    font-weight: 700;
+    font-variant-numeric:
+      tabular-nums;
+  }
+}
+
+@media screen and (max-width: 1250px) {
+  .donutArea {
+    grid-template-columns:
+      150px
+      minmax(0, 1fr);
+    gap: 16px;
+  }
+
+  .donutChart,
+  .donutSvg {
+    width: 145px;
+    height: 145px;
+  }
+
+  .donutPercentage {
+    font-size: 11px;
+  }
+}
+
+@media screen and (max-width: 760px) {
+  .donutArea {
+    grid-template-columns:
+      minmax(0, 1fr);
+    justify-items: center;
+  }
+
+  .legend {
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  .legendRow {
+    grid-template-columns:
+      10px
+      minmax(100px, 1fr)
+      36px
+      40px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .donutChart,
+  .donutSvg {
+    width: 135px;
+    height: 135px;
+  }
+
+  .donutPercentage {
+    font-size: 10px;
+  }
+
+  .legendRow {
+    gap: 6px;
+    font-size: 9px;
+  }
+}
+
+@media (forced-colors: active) {
+  .donutBackground {
+    stroke: CanvasText;
+  }
+
+  .donutSegment {
+    forced-color-adjust: none;
+    stroke: Canvas;
+  }
+
+  .donutCenterCircle {
+    fill: Canvas;
+    stroke: CanvasText;
+  }
+
+  .donutPercentage {
+    fill: CanvasText;
+    stroke: Canvas;
+  }
+
+  .dot {
+    forced-color-adjust: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .donutSegment {
+    transition: none;
+  }
+}
+
+.trendChart {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+}
+
+.lineChart {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  height: 200px;
+  overflow: visible;
+}
+
+.gridLine {
+  stroke: #e5eaf0;
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.axis {
+  stroke: #cbd5e1;
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.axisLabel {
+  fill: #64748b;
+  font-family:
+    'Segoe UI',
+    'Segoe UI Web',
+    Arial,
+    sans-serif;
+  font-size: 8px;
+  font-weight: 400;
+}
+
+.line {
+  fill: none;
+  stroke: #1675e0;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.pointHitArea {
+  cursor: pointer;
+  fill: transparent;
+}
+
+.point {
+  pointer-events: none;
+  fill: #1675e0;
+  stroke: #ffffff;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.pointValue {
+  pointer-events: none;
+  fill: #172033;
+  font-family:
+    'Segoe UI',
+    'Segoe UI Web',
+    Arial,
+    sans-serif;
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.labels {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 3px 0 26px;
+  color: #64748b;
+  font-size: 8px;
+  font-weight: 400;
+  line-height: 12px;
+
+  span {
+    min-width: 0;
+    overflow: hidden;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.trendLegend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  margin-top: 12px;
+  color: #475569;
+  font-size: 9px;
+  font-weight: 500;
+  line-height: 14px;
+}
+
+.trendLegendLine {
+  position: relative;
+  display: inline-block;
+  width: 19px;
+  height: 3px;
+  background: #1675e0;
+  border-radius: 2px;
+
+  &::after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 7px;
+    height: 7px;
+    background: #1675e0;
+    border: 1px solid #ffffff;
+    border-radius: 50%;
+    content: '';
+    transform: translate(
+      -50%,
+      -50%
+    );
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .lineChart {
+    min-width: 550px;
+  }
+
+  .trendChart {
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 4px;
+  }
+
+  .labels {
+    min-width: 550px;
+  }
+}
+
+@media (forced-colors: active) {
+  .gridLine,
+  .axis {
+    stroke: CanvasText;
+  }
+
+  .line {
+    stroke: Highlight;
+  }
+
+  .point {
+    fill: Highlight;
+    stroke: Canvas;
+  }
+
+  .axisLabel,
+  .pointValue {
+    fill: CanvasText;
+  }
+
+  .trendLegendLine {
+    background: Highlight;
+
+    &::after {
+      background: Highlight;
+      border-color: Canvas;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .line,
+  .point {
+    transition: none;
+  }
+}
+
+.bars {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  flex-direction: column;
+  gap: 12px;
+  padding: 4px 0 2px;
+}
+
+.barRow {
+  display: grid;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  grid-template-columns:
+    76px
+    minmax(80px, 1fr)
+    28px
+    36px;
+  align-items: center;
+  gap: 9px;
+  color: #475569;
+  font-size: 9px;
+  line-height: 14px;
+}
+
+.barLabel {
+  overflow: hidden;
+  color: #475569;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 15px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.barTrack {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  height: 11px;
+  overflow: hidden;
+  background: #f1f3f5;
+  border-radius: 6px;
+
+  &::after {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    border-left: 1px dashed
+      rgba(100, 116, 139, 0.22);
+    content: '';
+  }
+}
+
+.barFill {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  min-width: 0;
+  border-radius: 6px;
+  box-shadow:
+    0 1px 3px
+    rgba(15, 23, 42, 0.12);
+  transition:
+    width 300ms ease,
+    opacity 120ms ease;
+
+  &:hover {
+    opacity: 0.84;
+  }
+}
+
+.barValue {
+  color: #172033;
+  font-size: 10px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 15px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.barPercentage {
+  color: #475569;
+  font-size: 9px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: 14px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.barTotal {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 5px;
+  padding-top: 10px;
+  color: #172033;
+  border-top: 1px solid #e5eaf0;
+  font-size: 10px;
+  line-height: 15px;
+
+  span {
+    font-weight: 600;
+  }
+
+  strong {
+    font-size: 11px;
+    font-weight: 700;
+    font-variant-numeric:
+      tabular-nums;
+  }
+}
+
+.chartEmptyState {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 115px;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  color: #64748b;
+  background: #fafbfc;
+  border: 1px dashed #dfe5ec;
+  border-radius: 8px;
+  font-size: 10px;
+  line-height: 16px;
+  text-align: center;
+}
+
+@media screen and (max-width: 1250px) {
+  .barRow {
+    grid-template-columns:
+      70px
+      minmax(70px, 1fr)
+      25px
+      32px;
+    gap: 7px;
+  }
+
+  .barLabel {
+    font-size: 9px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .bars {
+    gap: 10px;
+  }
+
+  .barRow {
+    grid-template-columns:
+      68px
+      minmax(85px, 1fr)
+      24px
+      30px;
+    gap: 6px;
+  }
+
+  .barTrack {
+    height: 10px;
+  }
+
+  .barPercentage {
+    font-size: 8px;
+  }
+}
+
+@media (forced-colors: active) {
+  .barLabel,
+  .barValue,
+  .barPercentage,
+  .barTotal {
+    color: CanvasText;
+  }
+
+  .barTrack {
+    background: Canvas;
+    border: 1px solid CanvasText;
+
+    &::after {
+      border-left-color: CanvasText;
+    }
+  }
+
+  .barFill {
+    background: Highlight !important;
+    box-shadow: none;
+  }
+
+  .chartEmptyState {
+    color: CanvasText;
+    background: Canvas;
+    border-color: CanvasText;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .barFill {
+    transition: none;
+  }
+}
+
+/*
+ * Vertical bar chart.
+ *
+ * Structure:
+ * vValue
+ * vBarTrack containing vBar
+ * vLabel
+ */
+.vertical {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  height: 190px;
+  align-items: stretch;
+  justify-content: space-around;
+  gap: 18px;
+  padding: 8px 12px 0;
+  border-bottom: 1px solid #dfe5ec;
+}
+
+.vItem {
+  display: grid;
+  box-sizing: border-box;
+  min-width: 70px;
+  height: 100%;
+  grid-template-rows:
+    20px
+    minmax(0, 1fr)
+    24px;
+  align-items: end;
+  justify-items: center;
+  gap: 5px;
+}
+
+.vValue {
+  align-self: center;
+  color: #172033;
+  font-size: 11px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 16px;
+  white-space: nowrap;
+}
+
+.vBarTrack {
+  position: relative;
+  display: flex;
+  box-sizing: border-box;
+  width: 44px;
+  height: 100%;
+  min-height: 110px;
+  align-items: flex-end;
+  justify-content: center;
+  overflow: hidden;
+  background:
+    linear-gradient(
+      to top,
+      rgba(226, 232, 240, 0.48),
+      rgba(248, 250, 252, 0.15)
+    );
+  border-radius: 5px 5px 0 0;
+
+  &::before {
+    position: absolute;
+    right: 0;
+    bottom: 50%;
+    left: 0;
+    border-top: 1px dashed #d8dee8;
+    content: '';
+  }
+}
+
+.vBar {
+  position: relative;
+  z-index: 1;
+  width: 38px;
+  min-height: 2px;
+  border-radius: 4px 4px 0 0;
+  box-shadow:
+    0 2px 6px
+    rgba(15, 23, 42, 0.12);
+  transition:
+    height 300ms ease,
+    opacity 120ms ease;
+
+  &:hover {
+    opacity: 0.86;
+  }
+}
+
+.vLabel {
+  align-self: start;
+  overflow: hidden;
+  max-width: 100%;
+  color: #475569;
+  font-size: 9px;
+  font-weight: 600;
+  line-height: 14px;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/*
+ * Medium dashboard cards.
+ */
+@media screen and (max-width: 1250px) {
+  .vertical {
+    gap: 12px;
+    padding-right: 8px;
+    padding-left: 8px;
+  }
+
+  .vItem {
+    min-width: 60px;
+  }
+
+  .vBarTrack {
+    width: 40px;
+  }
+
+  .vBar {
+    width: 34px;
+  }
+}
+
+/*
+ * Tablet and mobile layout.
+ */
+@media screen and (max-width: 760px) {
+  .donutArea {
+    grid-template-columns:
+      minmax(0, 1fr);
+    justify-items: center;
+  }
+
+  .legend {
+    width: 100%;
+  }
+
+  .barRow {
+    grid-template-columns:
+      68px
+      minmax(70px, 1fr)
+      24px
+      30px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .header {
+    padding:
+      12px
+      12px
+      6px;
+  }
+
+  .body {
+    padding:
+      10px
+      12px
+      14px;
+  }
+
+  .vertical {
+    height: 175px;
+    justify-content: flex-start;
+    gap: 8px;
+    padding-right: 4px;
+    padding-left: 4px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: thin;
+  }
+
+  .vItem {
+    min-width: 70px;
+    flex: 0 0 70px;
+  }
+
+  .labels {
+    min-width: 360px;
+  }
+}
+
+/*
+ * Windows high-contrast and forced-colors support.
+ */
+@media (forced-colors: active) {
+  .panel,
+  .vertical {
+    border-color: CanvasText;
+  }
+
+  .vValue,
+  .vLabel,
+  .legendRow,
+  .muted {
+    color: CanvasText;
+  }
+
+  .vBarTrack,
+  .barTrack {
+    background: Canvas;
+    border: 1px solid CanvasText;
+  }
+
+  .vBar,
+  .barFill {
+    background: Highlight !important;
+    box-shadow: none;
+  }
+
+  .line {
+    stroke: Highlight;
+  }
+
+  .point {
+    fill: Highlight;
+    stroke: Canvas;
+  }
+
+  .view {
+    color: LinkText;
+  }
+}
+
+/*
+ * Reduced-motion accessibility.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .vBar {
+    transition: none;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .header {
+    min-height: 54px;
+    padding:
+      12px
+      12px
+      6px;
+  }
+
+  .body {
+    padding:
+      10px
+      12px
+      14px;
+  }
+
+  .panelTitle {
+    font-size: 13px;
+  }
+
+  .panelSubtitle {
+    font-size: 9px;
+    line-height: 14px;
+  }
+
+  .view {
+    font-size: 9px;
+  }
+}
+
+@media (forced-colors: active) {
+  .panel,
+  .header,
+  .vertical {
+    color: CanvasText;
+    background: Canvas;
+    border-color: CanvasText;
+  }
+
+  .panelTitle,
+  .panelSubtitle,
+  .chartTotal {
+    color: CanvasText;
+  }
+
+  .view {
+    color: LinkText;
+  }
+}

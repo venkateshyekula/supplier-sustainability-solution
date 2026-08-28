@@ -1,0 +1,853 @@
+@import '../../../common/styles/fonts.scss';
+.panel {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 300px;
+  flex-direction: column;
+  overflow: hidden;
+  color: #323130;
+  background: #ffffff;
+  border: 1px solid #e1dfdd;
+  border-radius: 12px;
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.05);
+  font-family: 'Figtree', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  button,
+  input,
+  select,
+  textarea {
+    font-family: inherit;
+  }
+}
+
+.header {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 58px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 16px;
+  background: #ffffff;
+  border-bottom: 1px solid #edebe9;
+
+  > div {
+    min-width: 0;
+  }
+
+  h2 {
+    overflow: hidden;
+    margin: 0;
+    color: #172033;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 22px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.headerSubtitle {
+  display: block;
+  margin-top: 2px;
+  overflow: hidden;
+  color: #605e5c;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 15px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.countBadge {
+  display: inline-flex;
+  box-sizing: border-box;
+  min-width: 24px;
+  min-height: 20px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  padding: 1px 7px;
+  color: #a4262c;
+  background: #fde7e9;
+  border: 1px solid #f5c2c7;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 16px;
+}
+
+/*
+ * This is the only horizontal scrolling container.
+ */
+.tableScroll {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  flex: 1 1 auto;
+  overflow-x: auto;
+  overflow-y: hidden;
+  background: #ffffff;
+  scrollbar-width: thin;
+  scrollbar-color:
+    #c8c6c4 transparent;
+  -webkit-overflow-scrolling: touch;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #c8c6c4;
+    border: 2px solid #ffffff;
+    border-radius: 8px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #a19f9d;
+  }
+}
+
+/*
+ * DetailsList requires enough width to keep all
+ * four columns readable.
+ */
+.tableScroll :global(.ms-DetailsList) {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 470px;
+  overflow: visible;
+}
+
+/*
+ * Prevent nested Fluent UI elements from creating
+ * an additional horizontal scrollbar.
+ */
+.tableScroll :global(.ms-DetailsList-contentWrapper),
+.tableScroll :global(.ms-List),
+.tableScroll :global(.ms-List-surface),
+.tableScroll :global(.ms-FocusZone) {
+  overflow: visible;
+}
+
+/*
+ * DetailsList header.
+ */
+.tableScroll :global(.ms-DetailsHeader) {
+  min-width: 470px;
+  min-height: 38px;
+  padding-top: 0;
+  color: #3b4354;
+  background: #faf9f8;
+  border-bottom: 1px solid #edebe9;
+}
+
+.tableScroll :global(.ms-DetailsHeader-cell) {
+  min-height: 38px;
+  color: #3b4354;
+  background: #faf9f8;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.tableScroll :global(.ms-DetailsHeader-cellTitle) {
+  padding-right: 5px;
+  padding-left: 5px;
+}
+
+.tableScroll :global(.ms-DetailsHeader-cellName) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tableScroll :global(.ms-DetailsHeader-cellSizer) {
+  border-right-color: #c8c6c4;
+}
+
+/*
+ * DetailsList rows.
+ */
+.tableScroll :global(.ms-DetailsRow) {
+  min-width: 470px;
+  min-height: 52px;
+  color: #323130;
+  background: #ffffff;
+  border-bottom: 1px solid #edebe9;
+  cursor: pointer;
+  transition:
+    background-color 120ms ease;
+}
+
+.tableScroll :global(.ms-DetailsRow:hover) {
+  background: #fff8f8;
+}
+
+.tableScroll :global(.ms-DetailsRow:focus-within) {
+  position: relative;
+  z-index: 1;
+  outline: 2px solid #005dc7;
+  outline-offset: -2px;
+}
+
+.tableScroll :global(.ms-DetailsRow-cell) {
+  display: flex;
+  min-width: 0;
+  min-height: 52px;
+  align-items: center;
+  overflow: hidden;
+  padding-right: 5px;
+  padding-left: 5px;
+  color: #323130;
+  font-size: 10px;
+  line-height: 16px;
+}
+
+/*
+ * Shimmer rows.
+ */
+.tableScroll :global(.ms-Shimmer-container) {
+  min-width: 470px;
+  min-height: 52px;
+  background: #ffffff;
+  border-bottom: 1px solid #edebe9;
+}
+
+.tableScroll :global(.ms-Shimmer-shimmerWrapper) {
+  background: #ffffff;
+}
+
+.tableScroll :global(.ms-ShimmerLine-root) {
+  border-radius: 4px;
+}
+
+.tableScroll :global(.ms-ShimmerGap-root) {
+  background: #ffffff;
+}
+
+/*
+ * Clickable row wrapper used by onRenderRow.
+ */
+.clickableRow {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 470px;
+  cursor: pointer;
+
+  &:hover {
+    :global(.ms-DetailsRow) {
+      background: #fff8f8;
+    }
+  }
+
+  &:focus-visible {
+    position: relative;
+    z-index: 2;
+    outline: 2px solid #005dc7;
+    outline-offset: -2px;
+  }
+
+  &[aria-disabled='true'] {
+    cursor: default;
+    pointer-events: none;
+  }
+}
+
+/*
+ * Supplier column.
+ */
+.supplierCell {
+  display: grid;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  grid-template-columns:
+    24px
+    minmax(0, 1fr);
+  align-items: center;
+  gap: 7px;
+}
+
+.supplierText {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.warningIcon {
+  display: inline-flex;
+  box-sizing: border-box;
+  width: 24px;
+  height: 24px;
+  flex: 0 0 24px;
+  align-items: center;
+  justify-content: center;
+  color: #d13438;
+  background: #fde7e9;
+  border-radius: 50%;
+  font-size: 13px;
+  line-height: 13px;
+
+  :global(.ms-Icon) {
+    color: inherit;
+    font-size: inherit;
+    line-height: inherit;
+  }
+}
+
+.supplierName {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  color: #005a9e;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 16px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-decoration: none;
+
+  &:hover,
+  &:focus {
+    color: #004578;
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #005dc7;
+    outline-offset: 2px;
+  }
+}
+
+.supplierListLabel {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  margin-top: 1px;
+  overflow: hidden;
+  color: #797775;
+  font-size: 9px;
+  font-weight: 400;
+  line-height: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/*
+ * Tier badges.
+ */
+.tierBadge {
+  display: inline-flex;
+  box-sizing: border-box;
+  width: max-content;
+  max-width: 100%;
+  min-height: 20px;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 7px;
+  overflow: hidden;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  font-size: 9px;
+  font-weight: 600;
+  line-height: 14px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tier1 {
+  color: #004578;
+  background: #deecf9;
+  border-color: #c7e0f4;
+}
+
+.tier2 {
+  color: #8a5d00;
+  background: #fff4ce;
+  border-color: #fce6a7;
+}
+
+.tier3 {
+  color: #5c2d91;
+  background: #eee5f8;
+  border-color: #dfd0f0;
+}
+
+.defaultTier {
+  color: #323130;
+  background: #f3f2f1;
+  border-color: #edebe9;
+}
+
+.submissionDate {
+  color: #605e5c;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 15px;
+  font-variant-numeric:
+    tabular-nums;
+  white-space: nowrap;
+}
+
+.missingBadge {
+  display: inline-flex;
+  box-sizing: border-box;
+  min-height: 21px;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 8px;
+  color: #a4262c;
+  background: #fde7e9;
+  border: 1px solid #f5c2c7;
+  border-radius: 11px;
+  font-size: 9px;
+  font-weight: 600;
+  line-height: 15px;
+  white-space: nowrap;
+}
+
+/*
+ * Empty state.
+ */
+.message {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 190px;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px;
+  color: #605e5c;
+  background: #ffffff;
+  text-align: center;
+
+  strong {
+    color: #323130;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 19px;
+  }
+
+  p {
+    max-width: 280px;
+    margin: 0;
+    font-size: 11px;
+    line-height: 17px;
+  }
+}
+
+.completeIcon {
+  display: inline-flex;
+  box-sizing: border-box;
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+  align-items: center;
+  justify-content: center;
+  color: #107c10;
+  background: #dff6dd;
+  border-radius: 50%;
+  font-size: 21px;
+  line-height: 21px;
+
+  :global(.ms-Icon) {
+    color: inherit;
+    font-size: inherit;
+    line-height: inherit;
+  }
+}
+
+/*
+ * Pagination footer.
+ */
+.footer {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 58px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 10px 14px;
+  color: #605e5c;
+  background: #ffffff;
+  border-top: 1px solid #edebe9;
+  font-size: 10px;
+  line-height: 15px;
+}
+
+.paginationButtons {
+  display: flex;
+  min-width: 0;
+  flex: 0 1 auto;
+  align-items: center;
+  gap: 4px;
+
+  :global(.ms-Button--icon) {
+    width: 28px;
+    min-width: 28px;
+    height: 28px;
+    color: #005dc7;
+    background: #ffffff;
+    border: 1px solid #edebe9;
+    border-radius: 5px;
+
+    &:hover:not(:disabled) {
+      color: #004578;
+      background: #edf5ff;
+      border-color: #c7e0f4;
+    }
+
+    &:focus-visible {
+      outline: 2px solid #005dc7;
+      outline-offset: 1px;
+    }
+
+    &:disabled {
+      color: #a19f9d;
+      background: #faf9f8;
+      border-color: #edebe9;
+      cursor: default;
+    }
+  }
+}
+
+.pageButton,
+.activePageButton {
+  width: 28px;
+  min-width: 28px;
+  height: 28px;
+  min-height: 28px;
+  padding: 0;
+  border-radius: 5px;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 26px;
+
+  :global(.ms-Button-label) {
+    margin: 0;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #005dc7;
+    outline-offset: 1px;
+  }
+}
+
+.pageButton {
+  color: #323130;
+  background: #ffffff;
+  border: 1px solid #edebe9;
+
+  &:hover:not(:disabled) {
+    color: #005dc7;
+    background: #edf5ff;
+    border-color: #c7e0f4;
+  }
+
+  &:disabled {
+    color: #a19f9d;
+    background: #faf9f8;
+    cursor: default;
+  }
+}
+
+.activePageButton {
+  color: #ffffff;
+  background: #005dc7;
+  border: 1px solid #005dc7;
+
+  &:hover:not(:disabled) {
+    color: #ffffff;
+    background: #004578;
+    border-color: #004578;
+  }
+
+  &:disabled {
+    color: #ffffff;
+    background: #005dc7;
+    border-color: #005dc7;
+    opacity: 0.65;
+  }
+}
+
+.ellipsis {
+  display: inline-flex;
+  box-sizing: border-box;
+  width: 20px;
+  height: 28px;
+  flex: 0 0 20px;
+  align-items: center;
+  justify-content: center;
+  color: #605e5c;
+  font-size: 11px;
+  line-height: 28px;
+  user-select: none;
+}
+
+.footerActions {
+  display: flex;
+  min-width: 0;
+  flex: 0 1 auto;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+
+  :global(.ms-Link) {
+    flex: 0 0 auto;
+    color: #005dc7;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 15px;
+    text-decoration: none;
+
+    &:hover,
+    &:focus {
+      color: #004578;
+      text-decoration: underline;
+    }
+
+    &:focus-visible {
+      outline: 2px solid #005dc7;
+      outline-offset: 2px;
+    }
+
+    &[aria-disabled='true'] {
+      color: #a19f9d;
+      cursor: default;
+      pointer-events: none;
+      text-decoration: none;
+    }
+  }
+}
+
+.footerCount {
+  color: #605e5c;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 15px;
+  white-space: nowrap;
+}
+
+.pageSizeSelector {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+
+  > span {
+    color: #605e5c;
+    font-size: 10px;
+    line-height: 15px;
+  }
+
+  :global(.ms-Dropdown) {
+    min-width: 72px;
+  }
+
+  :global(.ms-Dropdown-title) {
+    height: 28px;
+    min-height: 28px;
+    color: #323130;
+    border-color: #c8c6c4;
+    font-size: 10px;
+    line-height: 26px;
+  }
+
+  :global(.ms-Dropdown-caretDownWrapper) {
+    height: 27px;
+    line-height: 27px;
+  }
+
+  :global(.ms-Dropdown:hover .ms-Dropdown-title) {
+    border-color: #005dc7;
+  }
+
+  :global(.ms-Dropdown.is-disabled .ms-Dropdown-title) {
+    color: #a19f9d;
+    background: #faf9f8;
+    border-color: #edebe9;
+  }
+}
+
+/*
+ * Medium-size panels.
+ */
+@media screen and (max-width: 1050px) {
+  .footer {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .paginationButtons {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 3px;
+    scrollbar-width: thin;
+  }
+
+  .footerActions {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+/*
+ * Tablet and mobile.
+ */
+@media screen and (max-width: 600px) {
+  .panel {
+    min-height: 280px;
+    border-radius: 10px;
+  }
+
+  .header {
+    min-height: 54px;
+    padding: 8px 12px;
+
+    h2 {
+      font-size: 14px;
+    }
+  }
+
+  .headerSubtitle {
+    font-size: 9px;
+    line-height: 13px;
+  }
+
+  .tableScroll :global(.ms-DetailsList),
+  .tableScroll :global(.ms-DetailsHeader),
+  .tableScroll :global(.ms-DetailsRow),
+  .tableScroll :global(.ms-Shimmer-container),
+  .clickableRow {
+    min-width: 450px;
+  }
+
+  .footer {
+    padding: 10px 12px;
+  }
+
+  .footerActions {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .pageSizeSelector {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+/*
+ * Very narrow mobile screens.
+ */
+@media screen and (max-width: 420px) {
+  .paginationButtons {
+    gap: 3px;
+
+    :global(.ms-Button--icon) {
+      width: 26px;
+      min-width: 26px;
+      height: 26px;
+    }
+  }
+
+  .pageButton,
+  .activePageButton {
+    width: 26px;
+    min-width: 26px;
+    height: 26px;
+    min-height: 26px;
+    line-height: 24px;
+  }
+
+  .ellipsis {
+    width: 18px;
+    height: 26px;
+    flex-basis: 18px;
+    line-height: 26px;
+  }
+}
+
+/*
+ * Windows high-contrast and forced-color support.
+ */
+@media (forced-colors: active) {
+  .panel,
+  .header,
+  .tableScroll :global(.ms-DetailsHeader),
+  .tableScroll :global(.ms-DetailsRow),
+  .footer {
+    color: CanvasText;
+    background: Canvas;
+    border-color: CanvasText;
+  }
+
+  .countBadge,
+  .tierBadge,
+  .missingBadge,
+  .completeIcon,
+  .warningIcon {
+    color: CanvasText;
+    background: Canvas;
+    border: 1px solid CanvasText;
+  }
+
+  .supplierName,
+  .footerActions :global(.ms-Link),
+  .paginationButtons :global(.ms-Button--icon) {
+    color: LinkText;
+  }
+
+  .activePageButton {
+    color: HighlightText;
+    background: Highlight;
+    border-color: Highlight;
+  }
+
+  .tableScroll :global(.ms-DetailsRow:focus-within),
+  .clickableRow:focus-visible {
+    outline-color: Highlight;
+  }
+}
+
+/*
+ * Reduced-motion support.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .tableScroll :global(.ms-DetailsRow),
+  .paginationButtons :global(.ms-Button--icon),
+  .pageButton,
+  .activePageButton,
+  .footerActions :global(.ms-Link) {
+    transition: none;
+  }
+}

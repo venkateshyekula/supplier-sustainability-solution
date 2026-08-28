@@ -2,5 +2,47 @@
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/spfx-serve.schema.json",
   "port": 4321,
   "https": true,
-  "initialPage": "https://liquidtelecommunications.sharepoint.com/_layouts/workbench.aspx"
+  "initialPage": "https://liquidtelecommunications.sharepoint.com/sites/ltsadev/sc/SitePages/Home.aspx",
+  "serveConfigurations": {
+    "default": {
+      "pageUrl": "https://liquidtelecommunications.sharepoint.com/sites/ltsadev/sc/SitePages/Home.aspx",
+      "customActions": {
+        "f961f110-75b0-45dc-90ec-2accd2523d22": {
+          "location": "ClientSideExtension.ApplicationCustomizer",
+          "properties": {
+            "organizationName": "Cassava Technologies",
+            "confidentialityText": "All information is confidential and must be used in accordance with our privacy and security policies.",
+            "homeUrl": "/sites/ltsadev/sc/SitePages/Home.aspx",
+            "completedQuestionnairesUrl": "/sites/ltsadev/sc/SitePages/Completed-Questionnaires.aspx",
+            "supportingDocumentsUrl": "/sites/ltsadev/sc/SitePages/Supporting-Documents.aspx",
+            "dashboardUrl": "/sites/ltsadev/sc/SitePages/Dashboard.aspx",
+            "helpUrl": "/sites/ltsadev/sc/SitePages/Help.aspx",
+            "footerText": "Supplier ESG questionnaire and sustainability portal",
+            "privacyUrl": "/sites/ltsadev/sc/SitePages/Privacy.aspx",
+            "accessibilityUrl": "/sites/ltsadev/sc/SitePages/Accessibility.aspx"
+          }
+        }
+      }
+    },
+    "supplierNavigation": {
+      "pageUrl": "https://liquidtelecommunications.sharepoint.com/sites/ltsadev/sc/SitePages/Home.aspx",
+      "customActions": {
+        "f961f110-75b0-45dc-90ec-2accd2523d22": {
+          "location": "ClientSideExtension.ApplicationCustomizer",
+          "properties": {
+            "organizationName": "Cassava Technologies",
+            "confidentialityText": "All information is confidential and must be used in accordance with our privacy and security policies.",
+            "homeUrl": "/sites/ltsadev/sc/SitePages/Home.aspx",
+            "completedQuestionnairesUrl": "/sites/ltsadev/sc/SitePages/Completed-Questionnaires.aspx",
+            "supportingDocumentsUrl": "/sites/ltsadev/sc/SitePages/Supporting-Documents.aspx",
+            "dashboardUrl": "/sites/ltsadev/sc/SitePages/Dashboard.aspx",
+            "helpUrl": "/sites/ltsadev/sc/SitePages/Help.aspx",
+            "footerText": "Supplier ESG questionnaire and sustainability portal",
+            "privacyUrl": "/sites/ltsadev/sc/SitePages/Privacy.aspx",
+            "accessibilityUrl": "/sites/ltsadev/sc/SitePages/Accessibility.aspx"
+          }
+        }
+      }
+    }
+  }
 }

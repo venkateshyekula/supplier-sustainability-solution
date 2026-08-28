@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+
+  <CustomAction
+    Title="Supplier Navigation"
+    Description="Displays the Supplier Sustainability navigation and footer."
+    Location="ClientSideExtension.ApplicationCustomizer"
+    ClientSideComponentId="f961f110-75b0-45dc-90ec-2accd2523d22"
+    ClientSideComponentProperties="{&quot;organizationName&quot;:&quot;Cassava Technologies&quot;,&quot;homeUrl&quot;:&quot;&quot;,&quot;completedQuestionnairesUrl&quot;:&quot;&quot;,&quot;supportingDocumentsUrl&quot;:&quot;&quot;,&quot;dashboardUrl&quot;:&quot;&quot;,&quot;helpUrl&quot;:&quot;&quot;,&quot;footerText&quot;:&quot;Supplier ESG questionnaire and sustainability portal&quot;,&quot;confidentialityText&quot;:&quot;All information is confidential and must be used in accordance with our privacy and security policies.&quot;,&quot;allowedSiteUrls&quot;:&quot;https://liquidtelecommunications.sharepoint.com/sites/ltsadev/sc;https://liquidtelecommunications.sharepoint.com/sites/sss&quot;}"
+    Sequence="1000">
+  </CustomAction>
+
+</Elements>

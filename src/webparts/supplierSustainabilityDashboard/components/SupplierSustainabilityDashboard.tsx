@@ -88,8 +88,6 @@ export function SupplierSustainabilityDashboard(
           tier1SupplierNameField={props.tier1SupplierNameField}
           tier2SupplierNameField={props.tier2SupplierNameField}
           tier3SupplierNameField={props.tier3SupplierNameField}
-          qualifiedMinimum={props.qualifiedMinimum}
-          conditionalMinimum={props.conditionalMinimum}
         />
       </section>
       <div

@@ -5,6 +5,10 @@
     "woff2",
     "ttf",
     "eot",
-    "otf"
+    "otf",
+    "png",
+    "jpg",
+    "jpeg",
+    "svg"
   ]
 }

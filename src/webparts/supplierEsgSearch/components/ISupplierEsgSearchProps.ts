@@ -10,7 +10,4 @@ export interface ISupplierEsgSearchProps {
   tier1SupplierNameField: string;
   tier2SupplierNameField: string;
   tier3SupplierNameField: string;
-
-  qualifiedMinimum: number;
-  conditionalMinimum: number;
 }

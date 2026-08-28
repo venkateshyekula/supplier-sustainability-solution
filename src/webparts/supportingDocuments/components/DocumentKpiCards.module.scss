@@ -1,0 +1,405 @@
+@import '../../../common/styles/fonts.scss';
+.metricsLayout {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  color: #172033;
+  font-family: 'Figtree', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/*
+ * Keep all four KPI cards in one row.
+ *
+ * On narrower screens, the container scrolls horizontally
+ * instead of changing to two rows.
+ */
+.cardsGrid {
+  display: grid;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  grid-template-columns:
+    repeat(4, minmax(195px, 1fr));
+  align-items: stretch;
+  gap: 12px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 2px;
+  scrollbar-width: thin;
+  scrollbar-color:
+    #c8c6c4 transparent;
+  -webkit-overflow-scrolling: touch;
+
+  &::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #c8c6c4;
+    border: 2px solid #ffffff;
+    border-radius: 8px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #a19f9d;
+  }
+}
+
+.shimmer {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+
+  :global(.ms-Shimmer-container) {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 112px;
+    padding: 15px 14px;
+    background: #ffffff;
+    border: 1px solid #e1dfdd;
+    border-radius: 10px;
+  }
+
+  :global(.ms-Shimmer-shimmerWrapper) {
+    width: 100%;
+    background: #ffffff;
+  }
+
+  :global(.ms-ShimmerLine-root) {
+    border-radius: 4px;
+  }
+
+  :global(.ms-ShimmerGap-root) {
+    background: #ffffff;
+  }
+}
+
+.card {
+  display: grid;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 112px;
+  grid-template-columns:
+    52px
+    minmax(0, 1fr)
+    70px;
+  align-items: center;
+  gap: 12px;
+  padding: 15px 14px;
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid #e1dfdd;
+  border-radius: 10px;
+  box-shadow:
+    0 2px 8px rgba(15, 23, 42, 0.04);
+  transition:
+    border-color 120ms ease,
+    box-shadow 120ms ease,
+    transform 120ms ease;
+
+  &:hover {
+    box-shadow:
+      0 4px 12px rgba(15, 23, 42, 0.08);
+    transform: translateY(-1px);
+  }
+}
+
+.totalCard {
+  background: #f7faff;
+  border-color: #d8e7f9;
+
+  &:hover {
+    border-color: #b9d7f7;
+  }
+}
+
+.submittedCard {
+  background: #f7fcf8;
+  border-color: #d7eadb;
+
+  &:hover {
+    border-color: #b8ddc1;
+  }
+}
+
+.pendingCard {
+  background: #fffaf2;
+  border-color: #f1dfbb;
+
+  &:hover {
+    border-color: #e9ca8c;
+  }
+}
+
+.missingCard {
+  background: #fff7f8;
+  border-color: #f1d6da;
+
+  &:hover {
+    border-color: #e9b9c0;
+  }
+}
+
+.iconContainer {
+  display: inline-flex;
+  box-sizing: border-box;
+  width: 50px;
+  height: 50px;
+  flex: 0 0 50px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: 50%;
+}
+
+.totalIcon {
+  color: #005dc7;
+  background: #e8f2ff;
+  border-color: #d0e4ff;
+}
+
+.submittedIcon {
+  color: #107c41;
+  background: #e8f6ec;
+  border-color: #cdebd5;
+}
+
+.pendingIcon {
+  color: #a15c00;
+  background: #fff1d6;
+  border-color: #f5dba5;
+}
+
+.missingIcon {
+  color: #c50f1f;
+  background: #fde8ea;
+  border-color: #f5cdd1;
+}
+
+.icon {
+  color: inherit;
+  font-size: 24px;
+  line-height: 24px;
+}
+
+.cardContent {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.cardTitle {
+  overflow: hidden;
+  color: #172033;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 15px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cardValue {
+  margin-top: 3px;
+  color: #0f172a;
+  font-size: 29px;
+  font-weight: 700;
+  line-height: 32px;
+  font-variant-numeric:
+    tabular-nums;
+}
+
+.cardSubtitle {
+  overflow: hidden;
+  color: #475569;
+  font-size: 9px;
+  font-weight: 500;
+  line-height: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tierBreakdown {
+  display: flex;
+  box-sizing: border-box;
+  min-width: 0;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  padding-left: 10px;
+  border-left:
+    1px solid rgba(148, 163, 184, 0.3);
+
+  > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 5px;
+    color: #475569;
+    font-size: 9px;
+    line-height: 12px;
+    white-space: nowrap;
+  }
+
+  strong {
+    color: #172033;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 12px;
+    font-variant-numeric:
+      tabular-nums;
+  }
+}
+
+/*
+ * Keep four cards in one row on ordinary desktop widths.
+ * Slightly reduce the card minimum width when required.
+ */
+@media screen and (max-width: 1500px) {
+  .cardsGrid {
+    grid-template-columns:
+      repeat(4, minmax(180px, 1fr));
+  }
+
+  .card {
+    grid-template-columns:
+      48px
+      minmax(0, 1fr)
+      64px;
+    gap: 10px;
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  .iconContainer {
+    width: 46px;
+    height: 46px;
+    flex-basis: 46px;
+  }
+
+  .icon {
+    font-size: 22px;
+  }
+
+  .cardValue {
+    font-size: 27px;
+    line-height: 30px;
+  }
+}
+
+/*
+ * Continue using one row below 1250px.
+ * Horizontal scrolling appears only if the containing
+ * SharePoint section cannot provide the minimum width.
+ */
+@media screen and (max-width: 1250px) {
+  .cardsGrid {
+    grid-template-columns:
+      repeat(4, minmax(175px, 1fr));
+  }
+
+  .card {
+    grid-template-columns:
+      46px
+      minmax(0, 1fr)
+      62px;
+    gap: 9px;
+    padding: 13px 10px;
+  }
+
+  .iconContainer {
+    width: 44px;
+    height: 44px;
+    flex-basis: 44px;
+  }
+
+  .cardTitle {
+    font-size: 10px;
+  }
+
+  .cardValue {
+    font-size: 25px;
+    line-height: 28px;
+  }
+
+  .cardSubtitle {
+    font-size: 8px;
+  }
+
+  .tierBreakdown {
+    gap: 5px;
+    padding-left: 8px;
+
+    > div {
+      font-size: 8px;
+    }
+
+    strong {
+      font-size: 9px;
+    }
+  }
+}
+
+/*
+ * On tablet widths, preserve one row and allow horizontal
+ * scrolling instead of changing to two columns.
+ */
+@media screen and (max-width: 900px) {
+  .cardsGrid {
+    grid-template-columns:
+      repeat(4, minmax(210px, 1fr));
+  }
+}
+
+/*
+ * Mobile also preserves one row with horizontal scrolling.
+ */
+@media screen and (max-width: 650px) {
+  .cardsGrid {
+    grid-template-columns:
+      repeat(4, minmax(220px, 1fr));
+    gap: 10px;
+  }
+
+  .card {
+    min-height: 106px;
+    grid-template-columns:
+      46px
+      minmax(0, 1fr)
+      68px;
+  }
+}
+
+@media (forced-colors: active) {
+  .card,
+  .iconContainer {
+    color: CanvasText;
+    background: Canvas;
+    border-color: CanvasText;
+  }
+
+  .cardTitle,
+  .cardValue,
+  .cardSubtitle,
+  .tierBreakdown,
+  .tierBreakdown strong {
+    color: CanvasText;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition: none;
+
+    &:hover {
+      transform: none;
+    }
+  }
+}

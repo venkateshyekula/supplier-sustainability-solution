@@ -772,8 +772,7 @@ const wrapperStyle:
     minWidth:
       0,
 
-    fontFamily:
-      '"Segoe UI", Arial, sans-serif'
+    fontFamily: "'Figtree', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
   };
 
 const containerStyle:
@@ -942,8 +941,7 @@ const loadingStyle:
     color:
       '#605e5c',
 
-    fontFamily:
-      '"Figtree", "Segoe UI", Arial, sans-serif'
+    fontFamily: "'Figtree', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
   };
 
 const warningStyle:

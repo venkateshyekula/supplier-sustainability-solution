@@ -34,9 +34,6 @@ export interface ISupplierSustainabilityDashboardWebPartProps {
   tier1DocumentLibraryTitle: string;
   tier2DocumentLibraryTitle: string;
   tier3DocumentLibraryTitle: string;
-
-  qualifiedMinimum: number;
-  conditionalMinimum: number;
 }
 
 export default class SupplierSustainabilityDashboardWebPart
@@ -83,16 +80,6 @@ export default class SupplierSustainabilityDashboardWebPart
         tier3DocumentLibraryTitle:
           this.properties.tier3DocumentLibraryTitle ||
           'SSQ-Tier3 Attachments',
-
-        qualifiedMinimum:
-          this.properties.qualifiedMinimum !== undefined
-            ? this.properties.qualifiedMinimum
-            : 70,
-
-        conditionalMinimum:
-          this.properties.conditionalMinimum !== undefined
-            ? this.properties.conditionalMinimum
-            : 52
       };
 
     const element: React.ReactElement<
@@ -309,18 +296,6 @@ export default class SupplierSustainabilityDashboardWebPart
     if (!this.properties.tier3DocumentLibraryTitle) {
       this.properties.tier3DocumentLibraryTitle =
         'SSQ-Tier3 Attachments';
-    }
-
-    if (
-      this.properties.qualifiedMinimum === undefined
-    ) {
-      this.properties.qualifiedMinimum = 70;
-    }
-
-    if (
-      this.properties.conditionalMinimum === undefined
-    ) {
-      this.properties.conditionalMinimum = 52;
     }
   }
 }

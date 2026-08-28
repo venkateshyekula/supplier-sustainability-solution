@@ -35,9 +35,6 @@ export interface ISupplierEsgSearchWebPartProps {
   tier1WeightagePercentage: number;
   tier2WeightagePercentage: number;
   tier3WeightagePercentage: number;
-
-  qualifiedMinimum: number;
-  conditionalMinimum: number;
 }
 
 export default class SupplierEsgSearchWebPart
@@ -74,17 +71,7 @@ export default class SupplierEsgSearchWebPart
 
         tier3SupplierNameField:
           this.properties.tier3SupplierNameField ||
-          'Supplier_x0020_Name',
-
-        qualifiedMinimum:
-          this.properties.qualifiedMinimum !== undefined
-            ? this.properties.qualifiedMinimum
-            : 80,
-
-        conditionalMinimum:
-          this.properties.conditionalMinimum !== undefined
-            ? this.properties.conditionalMinimum
-            : 60
+          'Supplier_x0020_Name'
       }
     );
 
@@ -242,18 +229,6 @@ export default class SupplierEsgSearchWebPart
     if (!this.properties.tier3SupplierNameField) {
       this.properties.tier3SupplierNameField =
         'Supplier_x0020_Name';
-    }
-
-    if (
-      this.properties.qualifiedMinimum === undefined
-    ) {
-      this.properties.qualifiedMinimum = 80;
-    }
-
-    if (
-      this.properties.conditionalMinimum === undefined
-    ) {
-      this.properties.conditionalMinimum = 60;
     }
   }
 }
