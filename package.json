@@ -1,6 +1,6 @@
 {
   "name": "supplier-sustainability-solution",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "private": true,
   "engines": {
     "node": ">=18.17.1 <19.0.0"
