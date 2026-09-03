@@ -124,8 +124,8 @@
   display: block;
   overflow: hidden;
   color: #172033;
-  font-size: 10px;
-  font-weight: 700;
+  font-size: 11px;
+  font-weight: 500;
   line-height: 15px;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -135,8 +135,8 @@
   display: block;
   margin-top: 2px;
   color: #0f172a;
-  font-size: 26px;
-  font-weight: 700;
+  font-size: 24px;
+  font-weight: 500;
   line-height: 30px;
   font-variant-numeric:
     tabular-nums;
@@ -146,7 +146,7 @@
   display: block;
   overflow: hidden;
   color: #475569;
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 400;
   line-height: 13px;
   text-overflow: ellipsis;
@@ -274,7 +274,7 @@
   }
 
   .cardTitle {
-    font-size: 9px;
+    font-size: 11px;
   }
 
   .cardValue {
@@ -283,7 +283,7 @@
   }
 
   .percentage {
-    font-size: 8px;
+    font-size: 11px;
   }
 
   .trend {
