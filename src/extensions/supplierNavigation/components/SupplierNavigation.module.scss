@@ -26,18 +26,20 @@
     font-family: 'Figtree', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
   }
 
-  /* 2. Target ALL icon elements (including SharePoint Suite Bar & Header icons) */
-  i,
-  .ms-Icon,
-  [class*="ms-Icon"],
-  [class*="Icon-"],
-  [data-icon-name],
-  .ms-Button-icon,
-  i[data-icon-name]::before,
-  span[data-icon-name]::before {
-    font-family: 'Fluent MDL2 Hybrid Icons' !important;
-    font-style: normal;
-    font-weight: normal;
+  /* 2. Target Fluent UI icon elements while protecting native O365 SuiteBar icons */
+  :not(#SuiteNavWrapper *):not(div[id^="O365_"] *) {
+    i,
+    .ms-Icon,
+    [class*="ms-Icon"],
+    [class*="Icon-"],
+    [data-icon-name],
+    .ms-Button-icon,
+    i[data-icon-name]::before,
+    span[data-icon-name]::before {
+      font-family: 'Fluent MDL2 Hybrid Icons' !important;
+      font-style: normal;
+      font-weight: normal;
+    }
   }
 }
 
