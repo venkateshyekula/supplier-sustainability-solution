@@ -35,7 +35,7 @@
   [class*="ms-Icon-"],
   [class*="Icon-"],
   [data-icon-name] {
-    font-family: inherit; /* Restores SharePoint's native icon font mappings */
+    font-family: 'FabricMDL2Icons', 'Fluent MDL2 Hybrid Icons' !important; /* Restores SharePoint's native icon font mappings */
   }
 }
 
