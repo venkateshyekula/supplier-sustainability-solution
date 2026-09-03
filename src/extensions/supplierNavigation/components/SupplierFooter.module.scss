@@ -11,23 +11,26 @@
 
 /* Global font override for all elements and Fluent UI controls */
 :global {
+  /* 1. Apply Figtree to text elements, explicitly excluding Icon classes */
   html, body, button, input, textarea, select,
-  [class*="ms-"],
-  [class*="Fabric"],
+  div, span, p, a, h1, h2, h3, h4, h5, h6,
+  [class*="ms-"]:not([class*="Icon"]):not([data-icon-name]),
+  [class*="Fabric"]:not([class*="Icon"]),
   .ms-DetailsList,
   .ms-DetailsRow,
-  .ms-DetailsHeader,
-  .ms-Button {
-    font-family: 'Figtree', 'Segoe UI', sans-serif !important;
+  .ms-DetailsHeader {
+    font-family: 'Figtree', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
   }
-  
-  /* Protect and force Fluent UI Icon font */
+
+  /* 2. Target ALL icon elements (including SharePoint Suite Bar & Header icons) */
   i,
   .ms-Icon,
   [class*="ms-Icon"],
+  [class*="Icon-"],
   [data-icon-name],
-  :not(i),
-  i[data-icon-name]::before {
+  .ms-Button-icon,
+  i[data-icon-name]::before,
+  span[data-icon-name]::before {
     font-family: 'Fluent MDL2 Hybrid Icons' !important;
     font-style: normal;
     font-weight: normal;
