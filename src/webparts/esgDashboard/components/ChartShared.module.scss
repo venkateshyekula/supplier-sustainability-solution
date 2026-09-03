@@ -1,4 +1,9 @@
 @import '../../../common/styles/fonts.scss';
+
+/* ==========================================================
+ * Shared chart panel
+ * ========================================================== */
+
 .panel {
   display: flex;
   box-sizing: border-box;
@@ -14,12 +19,29 @@
   border-radius: 10px;
   box-shadow:
     0 2px 8px rgba(15, 23, 42, 0.04);
-  font-family: 'Figtree', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  font-family:
+    'Figtree',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    sans-serif !important;
 }
 
-/* Global font override for all elements and Fluent UI controls */
+/*
+ * Add this class to the outer panel of DonutPanel.tsx.
+ * It provides sufficient vertical space for the chart
+ * and the legend displayed below it.
+ */
+.donutPanel {
+  min-height: 430px;
+}
+
+/* ==========================================================
+ * Global font support
+ * ========================================================== */
+
 :global {
-  /* 1. Apply Figtree safely to body and text containers without breaking icons */
   body,
   #spPageCanvasContent,
   .sp-app-main,
@@ -49,18 +71,33 @@
   .ms-DatePicker,
   .ms-Label,
   .ms-Dropdown {
-    font-family: 'Figtree', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif !important;
+    font-family:
+      'Figtree',
+      'Segoe UI',
+      -apple-system,
+      BlinkMacSystemFont,
+      Roboto,
+      sans-serif !important;
   }
 
-  /* 2. Protect ALL icon elements across SharePoint from font overrides */
+  /*
+   * Protect Fluent UI and SharePoint icons from
+   * the global Figtree font override.
+   */
   i,
   .ms-Icon,
-  [class*="ms-Icon-"],
-  [class*="Icon-"],
+  [class*='ms-Icon-'],
+  [class*='Icon-'],
   [data-icon-name] {
-    font-family: 'FabricMDL2Icons', 'Fluent MDL2 Hybrid Icons' !important; /* Restores SharePoint's native icon font mappings */
+    font-family:
+      'FabricMDL2Icons',
+      'Fluent MDL2 Hybrid Icons' !important;
   }
 }
+
+/* ==========================================================
+ * Panel header
+ * ========================================================== */
 
 .header {
   display: flex;
@@ -100,8 +137,13 @@
   font-weight: 400;
   line-height: 15px;
   -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
   line-clamp: 2;
 }
+
+/* ==========================================================
+ * Panel body
+ * ========================================================== */
 
 .body {
   box-sizing: border-box;
@@ -110,7 +152,13 @@
   min-height: 0;
   flex: 1 1 auto;
   padding: 10px 16px 16px;
+  overflow-x: hidden;
+  overflow-y: visible;
 }
+
+/* ==========================================================
+ * View details link
+ * ========================================================== */
 
 .view {
   display: inline-flex;
@@ -147,196 +195,24 @@
   line-height: 12px;
 }
 
-.legend {
-  display: flex;
-  min-width: 0;
-  flex-direction: column;
-  gap: 11px;
-}
-
-.legendRow {
-  display: grid;
-  min-width: 0;
-  grid-template-columns:
-    10px
-    minmax(80px, 1fr)
-    30px
-    35px;
-  align-items: center;
-  gap: 8px;
-  color: #172033;
-  font-size: 10px;
-  line-height: 15px;
-}
-
-.dot {
-  display: inline-block;
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-}
-
-.legendLabel {
-  overflow: hidden;
-  color: #172033;
-  font-weight: 600;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.legendValue {
-  color: #172033;
-  font-size: 10px;
-  font-weight: 700;
-  font-variant-numeric:
-    tabular-nums;
-  text-align: right;
-}
-
-.legendPercentage {
-  color: #475569;
-  font-size: 10px;
-  font-weight: 600;
-  font-variant-numeric:
-    tabular-nums;
-  text-align: right;
-}
-
-.legendTotal,
-.chartTotal {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-top: 5px;
-  padding-top: 10px;
-  color: #172033;
-  border-top: 1px solid #e5eaf0;
-  font-size: 10px;
-  line-height: 15px;
-
-  span {
-    font-weight: 600;
-  }
-
-  strong {
-    font-size: 11px;
-    font-weight: 700;
-    font-variant-numeric:
-      tabular-nums;
-  }
-}
-
 .muted {
   color: #64748b;
 }
 
-@media screen and (max-width: 1250px) {
-  .donutArea {
-    grid-template-columns:
-      135px
-      minmax(0, 1fr);
-    gap: 16px;
-  }
-
-  .donut {
-    width: 132px;
-    height: 132px;
-
-    &::after {
-      width: 70px;
-      height: 70px;
-    }
-  }
-
-  .donutCenter {
-    width: 62px;
-    height: 62px;
-  }
-
-  .donutCenterValue {
-    font-size: 18px;
-  }
-}
-
-@media screen and (max-width: 760px) {
-  .donutArea {
-    grid-template-columns:
-      minmax(0, 1fr);
-    justify-items: center;
-  }
-
-  .legend {
-    box-sizing: border-box;
-    width: 100%;
-  }
-
-  .legendRow {
-    grid-template-columns:
-      10px
-      minmax(100px, 1fr)
-      36px
-      40px;
-  }
-}
-
-@media screen and (max-width: 480px) {
-  .donut {
-    width: 124px;
-    height: 124px;
-
-    &::after {
-      width: 66px;
-      height: 66px;
-    }
-  }
-
-  .donutCenterValue {
-    font-size: 17px;
-  }
-
-  .legendRow {
-    gap: 6px;
-    font-size: 9px;
-  }
-}
-
-@media (forced-colors: active) {
-  .donut {
-    background: Canvas !important;
-    border: 2px solid CanvasText;
-    box-shadow: none;
-
-    &::after {
-      background: Canvas;
-      border: 1px solid CanvasText;
-    }
-  }
-
-  .dot {
-    forced-color-adjust: none;
-  }
-
-  .donutCenterValue,
-  .donutCenterLabel,
-  .legendLabel,
-  .legendValue,
-  .legendPercentage,
-  .legendTotal {
-    color: CanvasText;
-  }
-}
+/* ==========================================================
+ * Doughnut chart
+ * Chart displayed above the legend
+ * ========================================================== */
 
 .donutArea {
-  display: grid;
+  display: flex;
   box-sizing: border-box;
   width: 100%;
   min-width: 0;
-  grid-template-columns:
-    170px
-    minmax(0, 1fr);
+  flex-direction: column;
   align-items: center;
-  gap: 20px;
+  justify-content: flex-start;
+  gap: 18px;
   padding: 4px 2px 8px;
 }
 
@@ -345,6 +221,7 @@
   box-sizing: border-box;
   width: 165px;
   height: 165px;
+  flex: 0 0 165px;
   align-items: center;
   justify-content: center;
 }
@@ -356,12 +233,12 @@
   overflow: visible;
   filter:
     drop-shadow(
-      0 3px 6px
-      rgba(15, 23, 42, 0.1)
+      0 3px 6px rgba(15, 23, 42, 0.1)
     );
 }
 
 .donutBackground {
+  fill: none;
   stroke: #edf0f4;
 }
 
@@ -389,6 +266,7 @@
   pointer-events: none;
   fill: #ffffff;
   font-family:
+    'Figtree',
     'Segoe UI',
     'Segoe UI Web',
     Arial,
@@ -396,77 +274,110 @@
   font-size: 12px;
   font-weight: 700;
   paint-order: stroke;
-  stroke: rgba(0, 0, 0, 0.12);
+  stroke: rgba(0, 0, 0, 0.14);
   stroke-width: 1px;
   stroke-linejoin: round;
 }
 
+/* ==========================================================
+ * Doughnut legend
+ * Legend displayed below the chart
+ * ========================================================== */
+
 .legend {
   display: flex;
+  box-sizing: border-box;
+  width: 100%;
   min-width: 0;
   flex-direction: column;
-  gap: 11px;
+  gap: 7px;
 }
 
 .legendRow {
   display: grid;
+  box-sizing: border-box;
+  width: 100%;
   min-width: 0;
   grid-template-columns:
     10px
-    minmax(80px, 1fr)
-    30px
-    35px;
+    minmax(0, 1fr)
+    44px
+    50px;
   align-items: center;
   gap: 8px;
+  min-height: 30px;
+  padding: 5px 9px;
   color: #172033;
+  background: #fafbfc;
+  border: 1px solid transparent;
+  border-radius: 6px;
   font-size: 10px;
   line-height: 15px;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease;
+
+  &:nth-child(even) {
+    background: #f5f7fa;
+  }
+
+  &:hover {
+    background: #f0f5fa;
+    border-color: #e1e7ef;
+  }
 }
 
 .dot {
   display: inline-block;
   width: 9px;
   height: 9px;
+  flex: 0 0 9px;
   border-radius: 50%;
 }
 
 .legendLabel {
-  overflow: hidden;
+  min-width: 0;
   color: #172033;
+  font-size: 10px;
   font-weight: 600;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  line-height: 14px;
+  overflow-wrap: anywhere;
+  white-space: normal;
 }
 
 .legendValue {
   color: #172033;
   font-size: 10px;
   font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 15px;
   text-align: right;
-  font-variant-numeric:
-    tabular-nums;
+  white-space: nowrap;
 }
 
 .legendPercentage {
   color: #475569;
   font-size: 10px;
   font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: 15px;
   text-align: right;
-  font-variant-numeric:
-    tabular-nums;
+  white-space: nowrap;
 }
 
-.legendTotal {
+.legendTotal,
+.chartTotal {
   display: flex;
   box-sizing: border-box;
   width: 100%;
+  min-width: 0;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-top: 5px;
-  padding-top: 10px;
+  margin-top: 4px;
+  padding: 11px 9px 0;
   color: #172033;
-  border-top: 1px solid #e5eaf0;
+  border-top: 1px solid #dfe5ec;
   font-size: 10px;
   line-height: 15px;
 
@@ -477,98 +388,13 @@
   strong {
     font-size: 11px;
     font-weight: 700;
-    font-variant-numeric:
-      tabular-nums;
+    font-variant-numeric: tabular-nums;
   }
 }
 
-@media screen and (max-width: 1250px) {
-  .donutArea {
-    grid-template-columns:
-      150px
-      minmax(0, 1fr);
-    gap: 16px;
-  }
-
-  .donutChart,
-  .donutSvg {
-    width: 145px;
-    height: 145px;
-  }
-
-  .donutPercentage {
-    font-size: 11px;
-  }
-}
-
-@media screen and (max-width: 760px) {
-  .donutArea {
-    grid-template-columns:
-      minmax(0, 1fr);
-    justify-items: center;
-  }
-
-  .legend {
-    box-sizing: border-box;
-    width: 100%;
-  }
-
-  .legendRow {
-    grid-template-columns:
-      10px
-      minmax(100px, 1fr)
-      36px
-      40px;
-  }
-}
-
-@media screen and (max-width: 480px) {
-  .donutChart,
-  .donutSvg {
-    width: 135px;
-    height: 135px;
-  }
-
-  .donutPercentage {
-    font-size: 10px;
-  }
-
-  .legendRow {
-    gap: 6px;
-    font-size: 9px;
-  }
-}
-
-@media (forced-colors: active) {
-  .donutBackground {
-    stroke: CanvasText;
-  }
-
-  .donutSegment {
-    forced-color-adjust: none;
-    stroke: Canvas;
-  }
-
-  .donutCenterCircle {
-    fill: Canvas;
-    stroke: CanvasText;
-  }
-
-  .donutPercentage {
-    fill: CanvasText;
-    stroke: Canvas;
-  }
-
-  .dot {
-    forced-color-adjust: none;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .donutSegment {
-    transition: none;
-  }
-}
+/* ==========================================================
+ * Trend line chart
+ * ========================================================== */
 
 .trendChart {
   box-sizing: border-box;
@@ -600,6 +426,7 @@
 .axisLabel {
   fill: #64748b;
   font-family:
+    'Figtree',
     'Segoe UI',
     'Segoe UI Web',
     Arial,
@@ -634,6 +461,7 @@
   pointer-events: none;
   fill: #172033;
   font-family:
+    'Figtree',
     'Segoe UI',
     'Segoe UI Web',
     Arial,
@@ -702,58 +530,9 @@
   }
 }
 
-@media screen and (max-width: 700px) {
-  .lineChart {
-    min-width: 550px;
-  }
-
-  .trendChart {
-    overflow-x: auto;
-    overflow-y: hidden;
-    padding-bottom: 4px;
-  }
-
-  .labels {
-    min-width: 550px;
-  }
-}
-
-@media (forced-colors: active) {
-  .gridLine,
-  .axis {
-    stroke: CanvasText;
-  }
-
-  .line {
-    stroke: Highlight;
-  }
-
-  .point {
-    fill: Highlight;
-    stroke: Canvas;
-  }
-
-  .axisLabel,
-  .pointValue {
-    fill: CanvasText;
-  }
-
-  .trendLegendLine {
-    background: Highlight;
-
-    &::after {
-      background: Highlight;
-      border-color: Canvas;
-    }
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .line,
-  .point {
-    transition: none;
-  }
-}
+/* ==========================================================
+ * Horizontal bar chart
+ * ========================================================== */
 
 .bars {
   display: flex;
@@ -819,8 +598,7 @@
   min-width: 0;
   border-radius: 6px;
   box-shadow:
-    0 1px 3px
-    rgba(15, 23, 42, 0.12);
+    0 1px 3px rgba(15, 23, 42, 0.12);
   transition:
     width 300ms ease,
     opacity 120ms ease;
@@ -854,6 +632,7 @@
   display: flex;
   box-sizing: border-box;
   width: 100%;
+  min-width: 0;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
@@ -871,15 +650,19 @@
   strong {
     font-size: 11px;
     font-weight: 700;
-    font-variant-numeric:
-      tabular-nums;
+    font-variant-numeric: tabular-nums;
   }
 }
+
+/* ==========================================================
+ * Empty chart state
+ * ========================================================== */
 
 .chartEmptyState {
   display: flex;
   box-sizing: border-box;
   width: 100%;
+  min-width: 0;
   min-height: 115px;
   align-items: center;
   justify-content: center;
@@ -893,87 +676,10 @@
   text-align: center;
 }
 
-@media screen and (max-width: 1250px) {
-  .barRow {
-    grid-template-columns:
-      70px
-      minmax(70px, 1fr)
-      25px
-      32px;
-    gap: 7px;
-  }
+/* ==========================================================
+ * Vertical bar chart
+ * ========================================================== */
 
-  .barLabel {
-    font-size: 9px;
-  }
-}
-
-@media screen and (max-width: 600px) {
-  .bars {
-    gap: 10px;
-  }
-
-  .barRow {
-    grid-template-columns:
-      68px
-      minmax(85px, 1fr)
-      24px
-      30px;
-    gap: 6px;
-  }
-
-  .barTrack {
-    height: 10px;
-  }
-
-  .barPercentage {
-    font-size: 8px;
-  }
-}
-
-@media (forced-colors: active) {
-  .barLabel,
-  .barValue,
-  .barPercentage,
-  .barTotal {
-    color: CanvasText;
-  }
-
-  .barTrack {
-    background: Canvas;
-    border: 1px solid CanvasText;
-
-    &::after {
-      border-left-color: CanvasText;
-    }
-  }
-
-  .barFill {
-    background: Highlight !important;
-    box-shadow: none;
-  }
-
-  .chartEmptyState {
-    color: CanvasText;
-    background: Canvas;
-    border-color: CanvasText;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .barFill {
-    transition: none;
-  }
-}
-
-/*
- * Vertical bar chart.
- *
- * Structure:
- * vValue
- * vBarTrack containing vBar
- * vLabel
- */
 .vertical {
   display: flex;
   box-sizing: border-box;
@@ -1046,8 +752,7 @@
   min-height: 2px;
   border-radius: 4px 4px 0 0;
   box-shadow:
-    0 2px 6px
-    rgba(15, 23, 42, 0.12);
+    0 2px 6px rgba(15, 23, 42, 0.12);
   transition:
     height 300ms ease,
     opacity 120ms ease;
@@ -1070,10 +775,55 @@
   white-space: nowrap;
 }
 
-/*
- * Medium dashboard cards.
- */
+/* ==========================================================
+ * Medium-width dashboard cards
+ * ========================================================== */
+
 @media screen and (max-width: 1250px) {
+  .donutPanel {
+    min-height: 410px;
+  }
+
+  .donutArea {
+    gap: 15px;
+  }
+
+  .donutChart,
+  .donutSvg {
+    width: 150px;
+    height: 150px;
+  }
+
+  .donutChart {
+    flex-basis: 150px;
+  }
+
+  .donutPercentage {
+    font-size: 11px;
+  }
+
+  .legendRow {
+    grid-template-columns:
+      10px
+      minmax(0, 1fr)
+      40px
+      44px;
+    gap: 7px;
+  }
+
+  .barRow {
+    grid-template-columns:
+      70px
+      minmax(70px, 1fr)
+      25px
+      32px;
+    gap: 7px;
+  }
+
+  .barLabel {
+    font-size: 9px;
+  }
+
   .vertical {
     gap: 12px;
     padding-right: 8px;
@@ -1093,18 +843,39 @@
   }
 }
 
-/*
- * Tablet and mobile layout.
- */
+/* ==========================================================
+ * Tablet layout
+ * ========================================================== */
+
 @media screen and (max-width: 760px) {
+  .donutPanel {
+    min-height: 390px;
+  }
+
   .donutArea {
-    grid-template-columns:
-      minmax(0, 1fr);
-    justify-items: center;
+    gap: 14px;
+  }
+
+  .donutChart,
+  .donutSvg {
+    width: 145px;
+    height: 145px;
+  }
+
+  .donutChart {
+    flex-basis: 145px;
   }
 
   .legend {
     width: 100%;
+  }
+
+  .legendRow {
+    grid-template-columns:
+      10px
+      minmax(0, 1fr)
+      40px
+      44px;
   }
 
   .barRow {
@@ -1116,19 +887,68 @@
   }
 }
 
+/* ==========================================================
+ * Small screens
+ * ========================================================== */
+
+@media screen and (max-width: 700px) {
+  .trendChart {
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 4px;
+  }
+
+  .lineChart {
+    min-width: 550px;
+  }
+
+  .labels {
+    min-width: 550px;
+  }
+}
+
 @media screen and (max-width: 600px) {
   .header {
-    padding:
-      12px
-      12px
-      6px;
+    min-height: 54px;
+    padding: 12px 12px 6px;
   }
 
   .body {
-    padding:
-      10px
-      12px
-      14px;
+    padding: 10px 12px 14px;
+  }
+
+  .panelTitle {
+    font-size: 13px;
+  }
+
+  .panelSubtitle {
+    font-size: 9px;
+    line-height: 14px;
+  }
+
+  .view {
+    font-size: 9px;
+  }
+
+  .bars {
+    gap: 10px;
+  }
+
+  .barRow {
+    grid-template-columns:
+      68px
+      minmax(85px, 1fr)
+      24px
+      30px;
+    gap: 6px;
+  }
+
+  .barTrack {
+    height: 10px;
+  }
+
+  .barPercentage {
+    font-size: 8px;
   }
 
   .vertical {
@@ -1146,92 +966,75 @@
     min-width: 70px;
     flex: 0 0 70px;
   }
-
-  .labels {
-    min-width: 360px;
-  }
 }
 
-/*
- * Windows high-contrast and forced-colors support.
- */
-@media (forced-colors: active) {
-  .panel,
-  .vertical {
-    border-color: CanvasText;
+/* ==========================================================
+ * Mobile layout
+ * ========================================================== */
+
+@media screen and (max-width: 480px) {
+  .donutPanel {
+    min-height: 370px;
   }
 
-  .vValue,
-  .vLabel,
-  .legendRow,
-  .muted {
-    color: CanvasText;
+  .donutArea {
+    gap: 12px;
   }
 
-  .vBarTrack,
-  .barTrack {
-    background: Canvas;
-    border: 1px solid CanvasText;
+  .donutChart,
+  .donutSvg {
+    width: 135px;
+    height: 135px;
   }
 
-  .vBar,
-  .barFill {
-    background: Highlight !important;
-    box-shadow: none;
+  .donutChart {
+    flex-basis: 135px;
   }
 
-  .line {
-    stroke: Highlight;
+  .donutPercentage {
+    font-size: 10px;
   }
 
-  .point {
-    fill: Highlight;
-    stroke: Canvas;
+  .legend {
+    gap: 6px;
   }
 
-  .view {
-    color: LinkText;
-  }
-}
-
-/*
- * Reduced-motion accessibility.
- */
-@media (prefers-reduced-motion: reduce) {
-  .vBar {
-    transition: none;
-  }
-}
-
-@media screen and (max-width: 600px) {
-  .header {
-    min-height: 54px;
-    padding:
-      12px
-      12px
-      6px;
+  .legendRow {
+    grid-template-columns:
+      8px
+      minmax(0, 1fr)
+      34px
+      38px;
+    gap: 6px;
+    min-height: 28px;
+    padding: 4px 6px;
   }
 
-  .body {
-    padding:
-      10px
-      12px
-      14px;
+  .dot {
+    width: 8px;
+    height: 8px;
+    flex-basis: 8px;
   }
 
-  .panelTitle {
-    font-size: 13px;
-  }
-
-  .panelSubtitle {
-    font-size: 9px;
-    line-height: 14px;
-  }
-
-  .view {
+  .legendLabel,
+  .legendValue,
+  .legendPercentage {
     font-size: 9px;
   }
+
+  .legendLabel {
+    line-height: 13px;
+  }
+
+  .legendTotal {
+    padding-right: 6px;
+    padding-left: 6px;
+  }
 }
+
+/* ==========================================================
+ * Windows high-contrast and forced-color support
+ * ========================================================== */
 
 @media (forced-colors: active) {
   .panel,
@@ -1244,11 +1047,128 @@
 
   .panelTitle,
   .panelSubtitle,
-  .chartTotal {
+  .chartTotal,
+  .legendTotal,
+  .barTotal,
+  .vValue,
+  .vLabel,
+  .barLabel,
+  .barValue,
+  .barPercentage,
+  .muted {
     color: CanvasText;
   }
 
   .view {
     color: LinkText;
+  }
+
+  .donutBackground {
+    stroke: CanvasText;
+  }
+
+  .donutSegment {
+    forced-color-adjust: none;
+    stroke: Canvas;
+  }
+
+  .donutCenterCircle {
+    fill: Canvas;
+    stroke: CanvasText;
+  }
+
+  .donutPercentage {
+    fill: CanvasText;
+    stroke: Canvas;
+  }
+
+  .legendRow {
+    color: CanvasText;
+    background: Canvas;
+    border-color: CanvasText;
+
+    &:nth-child(even),
+    &:hover {
+      color: CanvasText;
+      background: Canvas;
+      border-color: CanvasText;
+    }
+  }
+
+  .legendLabel,
+  .legendValue,
+  .legendPercentage {
+    color: CanvasText;
+  }
+
+  .dot {
+    forced-color-adjust: none;
+  }
+
+  .gridLine,
+  .axis {
+    stroke: CanvasText;
+  }
+
+  .line {
+    stroke: Highlight;
+  }
+
+  .point {
+    fill: Highlight;
+    stroke: Canvas;
+  }
+
+  .axisLabel,
+  .pointValue {
+    fill: CanvasText;
+  }
+
+  .trendLegendLine {
+    background: Highlight;
+
+    &::after {
+      background: Highlight;
+      border-color: Canvas;
+    }
+  }
+
+  .barTrack,
+  .vBarTrack {
+    background: Canvas;
+    border: 1px solid CanvasText;
+  }
+
+  .barTrack {
+    &::after {
+      border-left-color: CanvasText;
+    }
+  }
+
+  .barFill,
+  .vBar {
+    background: Highlight !important;
+    box-shadow: none;
+  }
+
+  .chartEmptyState {
+    color: CanvasText;
+    background: Canvas;
+    border-color: CanvasText;
+  }
+}
+
+/* ==========================================================
+ * Reduced-motion accessibility
+ * ========================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .donutSegment,
+  .legendRow,
+  .line,
+  .point,
+  .barFill,
+  .vBar {
+    transition: none;
   }
 }
