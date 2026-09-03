@@ -3,7 +3,7 @@
   "solution": {
     "name": "supplier-sustainability-solution-client-side-solution",
     "id": "1c8b9c84-0c9f-4a74-8665-c51ad013b629",
-    "version": "1.0.10.0",
+    "version": "1.0.11.0",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": false,
     "isDomainIsolated": false,
@@ -30,7 +30,7 @@
         "title": "supplier-sustainability-solution Feature",
         "description": "Adds the supplier sustainability navigation to modern SharePoint pages.",
         "id": "c147f3ac-75df-4463-b2af-e1e834c58fac",
-        "version": "1.0.10.0",
+        "version": "1.0.11.0",
         "assets": {
           "elementManifests": [
             "elements.xml"
