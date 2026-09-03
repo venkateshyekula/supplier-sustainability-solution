@@ -89,20 +89,31 @@
 }
 
 .cardList {
+  display: grid;
   box-sizing: border-box;
   width: 100%;
   min-width: 0;
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 0;
 }
 
 .tierCard {
+  display: flex;
   box-sizing: border-box;
   width: 100%;
-  padding: 13px 16px;
+  min-width: 0;
+  min-height: 190px;
+  flex-direction: column;
+  padding: 16px;
+  overflow: hidden;
   background: #ffffff;
-  border-bottom: 1px solid #edebe9;
+  border-right: 1px solid #edebe9;
+  border-bottom: 0;
 
   &:last-child {
-    border-bottom: 0;
+    border-right: 0;
   }
 }
 
@@ -119,6 +130,7 @@
     font-size: 11px;
     font-weight: 600;
     text-decoration: none;
+    white-space: nowrap;
 
     &:hover {
       color: #c8187d;
@@ -168,31 +180,37 @@
 
 .stats {
   display: grid;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
   grid-template-columns:
     repeat(3, minmax(0, 1fr));
-  gap: 8px;
-  margin-top: 10px;
+  gap: 10px;
+  margin-top: 14px;
 }
 
 .statItem {
   box-sizing: border-box;
   min-width: 0;
+  padding: 8px;
+  background: #fafbfc;
+  border-radius: 6px;
   color: #323130;
 
   strong {
     display: block;
     overflow: hidden;
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 600;
-    line-height: 24px;
+    font-variant-numeric: tabular-nums;
+    line-height: 25px;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-variant-numeric:
-      tabular-nums;
   }
 
   small {
     display: block;
+    margin-top: 2px;
     overflow: hidden;
     color: #605e5c;
     font-size: 9px;
@@ -217,11 +235,13 @@
 
 .latest {
   display: flex;
+  box-sizing: border-box;
+  width: 100%;
   min-width: 0;
   align-items: center;
   gap: 8px;
-  margin-top: 10px;
-  padding-top: 9px;
+  margin-top: auto;
+  padding-top: 12px;
   border-top: 1px dashed #edebe9;
 }
 
@@ -356,5 +376,51 @@
 @media (prefers-reduced-motion: reduce) {
   .cardTop :global(.ms-Link) {
     transition: none;
+  }
+}
+
+@media screen and (max-width: 1100px) {
+  .cardList {
+    grid-template-columns:
+      repeat(3, minmax(280px, 1fr));
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .tierCard {
+    min-width: 280px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .cardList {
+    grid-template-columns:
+      repeat(3, minmax(260px, 1fr));
+  }
+
+  .tierCard {
+    min-width: 260px;
+    padding: 14px;
+  }
+}
+
+@media screen and (max-width: 640px) {
+  .cardList {
+    display: flex;
+    flex-direction: column;
+    overflow: visible;
+  }
+
+  .tierCard {
+    min-width: 0;
+    min-height: 0;
+    border-right: 0;
+    border-bottom: 1px solid #edebe9;
+
+    &:last-child {
+      border-bottom: 0;
+    }
   }
 }

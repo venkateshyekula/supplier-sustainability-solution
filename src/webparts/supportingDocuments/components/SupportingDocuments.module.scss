@@ -1,11 +1,22 @@
 @import '../../../common/styles/fonts.scss';
+
+/* ==========================================================
+ * Supporting Documents page
+ * ========================================================== */
+
 .page {
   box-sizing: border-box;
   width: 100%;
   min-width: 0;
   color: #242424;
   background: #ffffff;
-  font-family: 'Figtree', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  font-family:
+    'Figtree',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
 
   button,
   input,
@@ -60,6 +71,10 @@
   }
 }
 
+/* ==========================================================
+ * Page header
+ * ========================================================== */
+
 .pageHeader {
   display: flex;
   box-sizing: border-box;
@@ -88,6 +103,10 @@
   }
 }
 
+/* ==========================================================
+ * Filters and errors
+ * ========================================================== */
+
 .filters {
   box-sizing: border-box;
   width: 100%;
@@ -102,191 +121,11 @@
   margin-top: 14px;
 }
 
-/*
- * KPI cards on the left and Tier Attachment Overview
- * on the right.
- */
-.metricsGrid {
-  display: grid;
-  box-sizing: border-box;
-  width: 100%;
-  min-width: 0;
-  grid-template-columns:
-    minmax(0, 3fr)
-    minmax(300px, 1fr);
-  gap: 18px;
-  align-items: stretch;
-  margin-top: 20px;
-}
-
-.leftMetrics,
-.rightMetrics {
-  box-sizing: border-box;
-  width: 100%;
-  min-width: 0;
-}
-
-.leftMetrics {
-  display: flex;
-  flex-direction: column;
-}
-
-.rightMetrics {
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  background: #ffffff;
-  border: 1px solid #edebe9;
-  border-radius: 10px;
-  box-shadow:
-    0 1px 3px rgba(0, 0, 0, 0.04);
-}
-
-/*
- * Document tables on the left and alerts/actions
- * on the right.
- */
-.contentGrid {
-  display: grid;
-  box-sizing: border-box;
-  width: 100%;
-  min-width: 0;
-  grid-template-columns:
-    minmax(0, 3fr)
-    minmax(320px, 1fr);
-  align-items: stretch;
-  gap: 16px;
-  margin-top: 20px;
-}
-
-.tableSection,
-.sidePanel {
-  box-sizing: border-box;
-  width: 100%;
-  min-width: 0;
-  overflow: hidden;
-  background: #ffffff;
-  border: 1px solid #edebe9;
-  border-radius: 10px;
-  box-shadow:
-    0 1px 3px rgba(0, 0, 0, 0.04);
-}
-
-/*
- * Allow wide Fluent UI tables to scroll within their card,
- * without causing the entire page to scroll horizontally.
- */
-.tableSection {
-  overflow-x: auto;
-  overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
-}
-
-.tableSection :global(.ms-DetailsList) {
-  min-width: 850px;
-}
-
-.tableSection :global(.ms-DetailsHeader) {
-  padding-top: 0;
-  background: #faf9f8;
-}
-
-.tableSection :global(.ms-DetailsHeader-cell) {
-  color: #323130;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.tableSection :global(.ms-DetailsRow) {
-  border-bottom-color: #edebe9;
-  border-bottom: 1px solid #edebe9;
-}
-
-.tableSection :global(.ms-DetailsRow:hover) {
-  background: #faf9f8;
-}
-
-.tableSection :global(.ms-DetailsRow-cell) {
-  color: #323130;
-  font-size: 12px;
-}
-
-/*
- * Right-side panels, including Missing Attachments
- * and Supporting Document Quick Actions.
- */
-.sidePanel {
-  overflow-x: hidden;
-  overflow-y: visible;
-}
-
-.sidePanel :global(.ms-DetailsList) {
-  min-width: 100%;
-}
-
-.sidePanel :global(.ms-DetailsHeader) {
-  padding-top: 0;
-  background: #faf9f8;
-}
-
-.sidePanel :global(.ms-DetailsRow) {
-  border-bottom-color: #edebe9;
-}
-
-/*
- * Informational notice displayed at the bottom.
- */
-.notice {
-  display: flex;
-  box-sizing: border-box;
-  width: 100%;
-  min-width: 0;
-  align-items: flex-start;
-  gap: 12px;
-  margin-top: 20px;
-  padding: 14px 16px;
-  color: #323130;
-  background: #f3f9fd;
-  border: 1px solid #c7e0f4;
-  border-left: 4px solid #005dc7;
-  border-radius: 8px;
-  font-style: italic;
-
-  p {
-    min-width: 0;
-    margin: 0;
-    color: #323130;
-    font-size: 13px;
-    font-weight: 500;
-    line-height: 20px;
-  }
-
-  strong {
-    color: #172033;
-    font-weight: 700;
-  }
-}
-
-.noticeIcon {
-  display: inline-flex;
-  box-sizing: border-box;
-  width: 28px;
-  height: 28px;
-  flex: 0 0 28px;
-  align-items: center;
-  justify-content: center;
-  margin-top: 1px;
-  color: #005dc7;
-  border-radius: 50%;
-  font-size: 16px;
-  line-height: 16px;
-
-  :global(.ms-Icon) {
-    color: inherit;
-    font-size: 14px;
-    line-height: 14px;
-  }
-}
+/* ==========================================================
+ * KPI cards and Tier Attachment Overview
+ *
+ * Both components use the complete page width.
+ * ========================================================== */
 
 .metricsSection {
   display: flex;
@@ -310,29 +149,207 @@
   min-width: 0;
 }
 
-/*
- * Medium desktop and smaller laptop screens.
- */
-@media screen and (max-width: 1280px) {
-  .metricsGrid {
-    grid-template-columns:
-      minmax(0, 2fr)
-      minmax(290px, 1fr);
-    gap: 16px;
+/* ==========================================================
+ * Main document content
+ *
+ * Left:
+ * - Supplier folders
+ * - Recent documents
+ *
+ * Right:
+ * - Missing attachments
+ * - Quick actions
+ * ========================================================== */
+
+.contentGrid {
+  display: grid;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  grid-template-columns:
+    minmax(0, 3fr)
+    minmax(320px, 1fr);
+  align-items: start;
+  column-gap: 24px;
+  margin-top: 20px;
+}
+
+.mainColumn,
+.sideColumn {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.tableSection,
+.sidePanel {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid #edebe9;
+  border-radius: 10px;
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+/* ==========================================================
+ * Main Fluent UI tables
+ * ========================================================== */
+
+.tableSection {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color:
+    #c8c6c4 transparent;
+
+  &::-webkit-scrollbar {
+    height: 8px;
   }
 
-  .contentGrid {
-    grid-template-columns:
-      minmax(0, 2fr)
-      minmax(300px, 1fr);
-    gap: 16px;
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #c8c6c4;
+    border: 2px solid #ffffff;
+    border-radius: 8px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #a19f9d;
+  }
+
+  :global(.ms-DetailsList) {
+    min-width: 850px;
+  }
+
+  :global(.ms-DetailsHeader) {
+    padding-top: 0;
+    background: #faf9f8;
+  }
+
+  :global(.ms-DetailsHeader-cell) {
+    color: #323130;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  :global(.ms-DetailsRow) {
+    border-bottom: 1px solid #edebe9;
+  }
+
+  :global(.ms-DetailsRow:hover) {
+    background: #faf9f8;
+  }
+
+  :global(.ms-DetailsRow-cell) {
+    color: #323130;
+    font-size: 12px;
   }
 }
 
-/*
- * Stack the KPI overview below the KPI cards.
- * Keep the two right-side content panels side by side.
- */
+/* ==========================================================
+ * Right-side panels
+ * ========================================================== */
+
+.sidePanel {
+  overflow-x: hidden;
+  overflow-y: visible;
+
+  :global(.ms-DetailsList) {
+    min-width: 100%;
+  }
+
+  :global(.ms-DetailsHeader) {
+    padding-top: 0;
+    background: #faf9f8;
+  }
+
+  :global(.ms-DetailsRow) {
+    border-bottom: 1px solid #edebe9;
+  }
+}
+
+/* ==========================================================
+ * Informational notice
+ * ========================================================== */
+
+.notice {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 20px;
+  padding: 14px 16px;
+  color: #323130;
+  background: #f3f9fd;
+  border: 1px solid #c7e0f4;
+  border-left: 4px solid #005dc7;
+  border-radius: 8px;
+
+  p {
+    min-width: 0;
+    margin: 0;
+    color: #323130;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 20px;
+  }
+
+  strong {
+    color: #172033;
+    font-weight: 700;
+  }
+}
+
+.noticeIcon {
+  display: inline-flex;
+  box-sizing: border-box;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 28px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
+  color: #005dc7;
+  background: #e5f1fb;
+  border-radius: 50%;
+  font-size: 16px;
+  line-height: 16px;
+
+  :global(.ms-Icon) {
+    color: inherit;
+    font-size: 14px;
+    line-height: 14px;
+  }
+}
+
+/* ==========================================================
+ * Medium desktop
+ * ========================================================== */
+
+@media screen and (max-width: 1300px) {
+  .contentGrid {
+    grid-template-columns:
+      minmax(0, 2fr)
+      minmax(320px, 1fr);
+  }
+}
+
+/* ==========================================================
+ * Laptop and tablet
+ * ========================================================== */
+
 @media screen and (max-width: 1100px) {
   .page {
     padding: 20px;
@@ -342,10 +359,14 @@
     gap: 16px;
   }
 
-  .metricsGrid,
   .contentGrid {
     grid-template-columns:
       minmax(0, 1fr);
+  }
+
+  .tableSection,
+  .sidePanel {
+    border-radius: 8px;
   }
 
   .sideColumn {
@@ -354,17 +375,12 @@
       repeat(2, minmax(0, 1fr));
     align-items: start;
   }
-
-  .tableSection,
-  .sidePanel,
-  .rightMetrics {
-    border-radius: 8px;
-  }
 }
 
-/*
- * Tablet layout.
- */
+/* ==========================================================
+ * Tablet
+ * ========================================================== */
+
 @media screen and (max-width: 768px) {
   .page {
     padding: 16px;
@@ -379,94 +395,22 @@
       font-size: 21px;
       line-height: 29px;
     }
+
+    p {
+      font-size: 12px;
+      line-height: 18px;
+    }
   }
 
   .filters {
     margin-top: 16px;
   }
 
-  .metricsGrid,
+  .metricsSection,
   .contentGrid {
     gap: 16px;
     margin-top: 16px;
   }
-
-  .mainColumn,
-.sideColumn {
-  display: flex;
-  box-sizing: border-box;
-  width: 100%;
-  min-width: 0;
-  height: 100%;
-  flex-direction: column;
-  gap: 16px;
-}
-
-/*
- * The first component in each column occupies the same
- * grid-row height.
- */
-.mainColumn > :first-child,
-.sideColumn > :first-child {
-  display: flex;
-  box-sizing: border-box;
-  width: 100%;
-  min-width: 0;
-  height: 640px;
-  min-height: 640px;
-  max-height: 640px;
-  flex-direction: column;
-}
-
-/*
- * Quick Actions and Recent Documents retain their
- * natural content height.
- */
-.mainColumn > :not(:first-child),
-.sideColumn > :not(:first-child) {
-  box-sizing: border-box;
-  width: 100%;
-  min-width: 0;
-}
-
-@media screen and (max-width: 1300px) {
-  .contentGrid {
-    grid-template-columns:
-      minmax(0, 3fr)
-      minmax(340px, 2fr);
-  }
-}
-
-@media screen and (max-width: 1100px) {
-  .contentGrid {
-    grid-template-columns:
-      minmax(0, 1fr);
-  }
-
-  .mainColumn > :first-child,
-  .sideColumn > :first-child {
-    height: auto;
-    min-height: 480px;
-    max-height: none;
-  }
-}
-
-@media screen and (max-width: 640px) {
-  .contentGrid {
-    gap: 14px;
-    margin-top: 14px;
-  }
-
-  .mainColumn,
-  .sideColumn {
-    gap: 14px;
-  }
-
-  .mainColumn > :first-child,
-  .sideColumn > :first-child {
-    min-height: 420px;
-  }
-}
 
   .sideColumn {
     display: flex;
@@ -480,9 +424,10 @@
   }
 }
 
-/*
- * Mobile layout.
- */
+/* ==========================================================
+ * Mobile
+ * ========================================================== */
+
 @media screen and (max-width: 640px) {
   .page {
     padding: 12px;
@@ -506,20 +451,26 @@
     margin-top: 14px;
   }
 
-  .metricsGrid,
+  .metricsSection,
   .contentGrid {
     gap: 14px;
     margin-top: 14px;
   }
 
+  .mainColumn,
+  .sideColumn {
+    gap: 14px;
+  }
+
   .tableSection,
-  .sidePanel,
-  .rightMetrics {
+  .sidePanel {
     border-radius: 7px;
   }
 
-  .tableSection :global(.ms-DetailsList) {
-    min-width: 780px;
+  .tableSection {
+    :global(.ms-DetailsList) {
+      min-width: 780px;
+    }
   }
 
   .notice {
@@ -556,6 +507,45 @@
     padding: 10px;
   }
 }
+
+/* ==========================================================
+ * High-contrast support
+ * ========================================================== */
+
+@media (forced-colors: active) {
+  .page {
+    color: CanvasText;
+    background: Canvas;
+  }
+
+  .tableSection,
+  .sidePanel {
+    color: CanvasText;
+    background: Canvas;
+    border-color: CanvasText;
+  }
+
+  .notice {
+    color: CanvasText;
+    background: Canvas;
+    border-color: CanvasText;
+  }
+
+  .notice p,
+  .notice strong {
+    color: CanvasText;
+  }
+
+  .noticeIcon {
+    color: Highlight;
+    background: Canvas;
+    border: 1px solid CanvasText;
+  }
+}
+
+/* ==========================================================
+ * Reduced-motion accessibility
+ * ========================================================== */
 
 @media (prefers-reduced-motion: reduce) {
   .page *,
