@@ -31,7 +31,7 @@
     .ms-Button-icon,
     i[data-icon-name]::before,
     span[data-icon-name]::before {
-      font-family: 'Fluent MDL2 Hybrid Icons' !important;
+      font-family: inherit;
       font-style: normal;
       font-weight: normal;
     }
