@@ -18,34 +18,29 @@
   }
 
   /* Global font override for all elements and Fluent UI controls */
-  :global {
-
-    html,
-    body,
-    button,
-    input,
-    textarea,
-    select,
-    [class*="ms-"],
-    [class*="Fabric"],
-    .ms-DetailsList,
-    .ms-DetailsRow,
-    .ms-DetailsHeader,
-    .ms-Button {
-      font-family: 'Figtree', 'Segoe UI', sans-serif !important;
-    }
-
-    /* 2. Protect and force Fluent UI Icon font */
-    i,
-    .ms-Icon,
-    [class*="ms-Icon"],
-    [data-icon-name],
-    i[data-icon-name]::before {
-      font-family: 'Fluent MDL2 Hybrid Icons' !important;
-      font-style: normal;
-      font-weight: normal;
-    }
+:global {
+  html, body, button, input, textarea, select,
+  [class*="ms-"],
+  [class*="Fabric"],
+  .ms-DetailsList,
+  .ms-DetailsRow,
+  .ms-DetailsHeader,
+  .ms-Button {
+    font-family: 'Figtree', 'Segoe UI', sans-serif !important;
   }
+  
+  /* Protect and force Fluent UI Icon font */
+  i,
+  .ms-Icon,
+  [class*="ms-Icon"],
+  [data-icon-name],
+  :not(i),
+  i[data-icon-name]::before {
+    font-family: 'Fluent MDL2 Hybrid Icons' !important;
+    font-style: normal;
+    font-weight: normal;
+  }
+}
 
   /*
    * Error message rendered after the filter panel.
@@ -122,13 +117,14 @@
   border: 1px solid #c7e0f4;
   border-left: 4px solid #0078d4;
   border-radius: 8px;
+  font-style: italic;
 
   p {
     min-width: 0;
     margin: 0;
     color: #323130;
     font-size: 13px;
-    font-weight: 400;
+    font-weight: 500;
     line-height: 20px;
   }
 

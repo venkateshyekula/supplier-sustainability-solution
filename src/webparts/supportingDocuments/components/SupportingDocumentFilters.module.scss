@@ -11,6 +11,31 @@
   h2 { margin: 0 0 14px; font-size: 17px; font-weight: 700; }
 }
 
+/* Global font override for all elements and Fluent UI controls */
+:global {
+  html, body, button, input, textarea, select,
+  [class*="ms-"],
+  [class*="Fabric"],
+  .ms-DetailsList,
+  .ms-DetailsRow,
+  .ms-DetailsHeader,
+  .ms-Button {
+    font-family: 'Figtree', 'Segoe UI', sans-serif !important;
+  }
+  
+  /* Protect and force Fluent UI Icon font */
+  i,
+  .ms-Icon,
+  [class*="ms-Icon"],
+  [data-icon-name],
+  :not(i),
+  i[data-icon-name]::before {
+    font-family: 'Fluent MDL2 Hybrid Icons' !important;
+    font-style: normal;
+    font-weight: normal;
+  }
+}
+
 .grid {
   display: grid;
   grid-template-columns: minmax(260px, 2fr) 130px minmax(150px, 1fr) 140px 140px 100px 80px;

@@ -17,6 +17,31 @@
   }
 }
 
+/* Global font override for all elements and Fluent UI controls */
+:global {
+  html, body, button, input, textarea, select,
+  [class*="ms-"],
+  [class*="Fabric"],
+  .ms-DetailsList,
+  .ms-DetailsRow,
+  .ms-DetailsHeader,
+  .ms-Button {
+    font-family: 'Figtree', 'Segoe UI', sans-serif !important;
+  }
+  
+  /* Protect and force Fluent UI Icon font */
+  i,
+  .ms-Icon,
+  [class*="ms-Icon"],
+  [data-icon-name],
+  :not(i),
+  i[data-icon-name]::before {
+    font-family: 'Fluent MDL2 Hybrid Icons' !important;
+    font-style: normal;
+    font-weight: normal;
+  }
+}
+
 .header {
   display: flex;
   box-sizing: border-box;

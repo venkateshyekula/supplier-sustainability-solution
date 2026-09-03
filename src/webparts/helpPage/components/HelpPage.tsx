@@ -43,7 +43,7 @@ interface IHelpPageState {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const supportBanner: string = require('../assets/support-banner.png');
+const supportBanner: string = require('../assets/support-banner1.png');
 
 const GETTING_STARTED_CARDS: readonly IGettingStartedCard[] = [
   {

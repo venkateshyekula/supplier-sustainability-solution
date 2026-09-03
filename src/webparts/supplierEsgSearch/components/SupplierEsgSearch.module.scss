@@ -26,11 +26,12 @@
     font-family: 'Figtree', 'Segoe UI', sans-serif !important;
   }
   
-  /* 2. Protect and force Fluent UI Icon font */
+  /* Protect and force Fluent UI Icon font */
   i,
   .ms-Icon,
   [class*="ms-Icon"],
   [data-icon-name],
+  :not(i),
   i[data-icon-name]::before {
     font-family: 'Fluent MDL2 Hybrid Icons' !important;
     font-style: normal;
