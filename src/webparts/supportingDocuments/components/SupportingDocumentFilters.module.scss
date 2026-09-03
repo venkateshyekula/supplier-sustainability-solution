@@ -13,31 +13,32 @@
 
 /* Global font override for all elements and Fluent UI controls */
 :global {
-  /* 1. Apply Figtree to text elements, explicitly excluding Icon classes */
-  html, body, button, input, textarea, select,
-  div, span, p, a, h1, h2, h3, h4, h5, h6,
-  [class*="ms-"]:not([class*="Icon"]):not([data-icon-name]),
-  [class*="Fabric"]:not([class*="Icon"]),
+  /* 1. Apply Figtree safely to body and text containers without breaking icons */
+  body,
+  #spPageCanvasContent,
+  .sp-app-main,
+  #spCommandBar,
+  .ms-CommandBar,
+  .ms-Nav,
   .ms-DetailsList,
   .ms-DetailsRow,
-  .ms-DetailsHeader {
-    font-family: 'Figtree', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  .ms-DetailsHeader,
+  .ms-Dialog,
+  .ms-Panel,
+  .ms-Button-label,
+  .ms-ChoiceGroup,
+  .ms-TextField,
+  .ms-Dropdown {
+    font-family: 'Figtree', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif !important;
   }
 
-  /* 2. Target Fluent UI icon elements while protecting native O365 SuiteBar icons */
-  :not(#SuiteNavWrapper *):not(div[id^="O365_"] *) {
-    i,
-    .ms-Icon,
-    [class*="ms-Icon"],
-    [class*="Icon-"],
-    [data-icon-name],
-    .ms-Button-icon,
-    i[data-icon-name]::before,
-    span[data-icon-name]::before {
-      font-family: inherit;
-      font-style: normal;
-      font-weight: normal;
-    }
+  /* 2. Protect ALL icon elements across SharePoint from font overrides */
+  i,
+  .ms-Icon,
+  [class*="ms-Icon-"],
+  [class*="Icon-"],
+  [data-icon-name] {
+    font-family: inherit; /* Restores SharePoint's native icon font mappings */
   }
 }
 
