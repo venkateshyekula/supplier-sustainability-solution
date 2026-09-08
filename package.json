@@ -12,7 +12,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "build:ship": "gulp clean && gulp bundle --ship && gulp package-solution --ship",
+    "build:ship": "gulp clean && gulp trust-dev-cert && gulp bundle --ship && gulp package-solution --ship ",
     "package:patch": "npm version patch && npm run build:ship",
     "package:minor": "npm version minor && npm run build:ship",
     "package:major": "npm version major && npm run build:ship"
