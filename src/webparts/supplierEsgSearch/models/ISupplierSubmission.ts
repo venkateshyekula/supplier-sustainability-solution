@@ -15,7 +15,17 @@ export interface ISupplierSubmission {
   supplierName: string;
   email: string;
   submittedByName: string;
+
+  /**
+   * Sustainability percentage displayed in the UI.
+   */
   overallPercentage: number;
+
+  /**
+   * Weighted score used for qualification.
+   */
+  weightedScore: number;
+
   qualification: QualificationStatus;
   riskRating: RiskRating;
   recommendation: Recommendation;

@@ -25,6 +25,10 @@ import {
 
 import styles from "./SupplierEsgSearch.module.scss";
 import { getSP } from "../../../pnpConfig";
+import {
+  getQuestionnaireFields,
+  IQuestionnaireFieldMapping,
+} from "../../../common/config/questionnaireFieldConfig";
 import { ISupplierEsgSearchProps } from "./ISupplierEsgSearchProps";
 import {
   QualificationStatus,
@@ -631,6 +635,24 @@ export default class SupplierEsgSearch extends React.Component<
     });
 
     try {
+      const webAbsoluteUrl: string =
+        this.props.context.pageContext.web.absoluteUrl;
+
+      const tier1Fields: IQuestionnaireFieldMapping = getQuestionnaireFields(
+        webAbsoluteUrl,
+        "Tier 1",
+      );
+
+      const tier2Fields: IQuestionnaireFieldMapping = getQuestionnaireFields(
+        webAbsoluteUrl,
+        "Tier 2",
+      );
+
+      const tier3Fields: IQuestionnaireFieldMapping = getQuestionnaireFields(
+        webAbsoluteUrl,
+        "Tier 3",
+      );
+
       const listConfigurations: readonly IListConfiguration[] = [
         {
           listTitle: this.props.tier1ListTitle,
@@ -645,7 +667,10 @@ export default class SupplierEsgSearch extends React.Component<
 
           contactNameInternalName: "field_4",
 
-          overallPercentageInternalName: "OverallQuestionsPercentage",
+          overallPercentageInternalName:
+            tier1Fields.overallPercentageInternalName,
+
+          weightingInternalName: tier1Fields.weightingInternalName,
 
           qualifiedWeightedMinimum: 10,
 
@@ -664,7 +689,10 @@ export default class SupplierEsgSearch extends React.Component<
 
           contactNameInternalName: "Name",
 
-          overallPercentageInternalName: "OverallQuestionsPercentage",
+          overallPercentageInternalName:
+            tier2Fields.overallPercentageInternalName,
+
+          weightingInternalName: tier2Fields.weightingInternalName,
 
           qualifiedWeightedMinimum: 5,
 
@@ -683,7 +711,10 @@ export default class SupplierEsgSearch extends React.Component<
 
           contactNameInternalName: "Name",
 
-          overallPercentageInternalName: "OverallQuestionsPercentage",
+          overallPercentageInternalName:
+            tier3Fields.overallPercentageInternalName,
+
+          weightingInternalName: tier3Fields.weightingInternalName,
 
           qualifiedWeightedMinimum: 2,
 

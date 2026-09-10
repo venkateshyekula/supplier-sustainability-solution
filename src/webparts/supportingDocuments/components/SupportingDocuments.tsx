@@ -3,6 +3,11 @@ import * as React from "react";
 import { Icon, MessageBar, MessageBarType } from "@fluentui/react";
 
 import {
+  getQuestionnaireFields,
+  IQuestionnaireFieldMapping,
+} from "../../../common/config/questionnaireFieldConfig";
+
+import {
   IListConfiguration,
   SupplierTier,
 } from "../../supplierEsgSearch/models/IListConfiguration";
@@ -277,8 +282,11 @@ export default class SupportingDocuments extends React.Component<
           </span>
 
           <p>
-            <strong>Important:</strong> Please Upload All Supporting Documents for the Appropriate Tiers Questionnaries.
-            Ensure that all documents are uploaded to the correct tier document library and that they are properly named and organized. This will help us maintain accurate records and facilitate efficient review and approval processes.
+            <strong>Important:</strong> Please Upload All Supporting Documents
+            for the Appropriate Tiers Questionnaries. Ensure that all documents
+            are uploaded to the correct tier document library and that they are
+            properly named and organized. This will help us maintain accurate
+            records and facilitate efficient review and approval processes.
           </p>
         </footer>
       </section>
@@ -303,6 +311,24 @@ export default class SupportingDocuments extends React.Component<
   }
 
   private getQuestionnaireConfigurations(): readonly IListConfiguration[] {
+    const webAbsoluteUrl: string =
+      this.props.context.pageContext.web.absoluteUrl;
+
+    const tier1Fields: IQuestionnaireFieldMapping = getQuestionnaireFields(
+      webAbsoluteUrl,
+      "Tier 1",
+    );
+
+    const tier2Fields: IQuestionnaireFieldMapping = getQuestionnaireFields(
+      webAbsoluteUrl,
+      "Tier 2",
+    );
+
+    const tier3Fields: IQuestionnaireFieldMapping = getQuestionnaireFields(
+      webAbsoluteUrl,
+      "Tier 3",
+    );
+
     return [
       {
         listTitle: this.props.tier1QuestionnaireListTitle,
@@ -317,7 +343,10 @@ export default class SupportingDocuments extends React.Component<
 
         contactNameInternalName: "field_4",
 
-        overallPercentageInternalName: "OverallQuestionsPercentage",
+        overallPercentageInternalName:
+          tier1Fields.overallPercentageInternalName,
+
+        weightingInternalName: tier1Fields.weightingInternalName,
 
         qualifiedWeightedMinimum: 10,
 
@@ -336,7 +365,10 @@ export default class SupportingDocuments extends React.Component<
 
         contactNameInternalName: "Name",
 
-        overallPercentageInternalName: "OverallQuestionsPercentage",
+        overallPercentageInternalName:
+          tier2Fields.overallPercentageInternalName,
+
+        weightingInternalName: tier2Fields.weightingInternalName,
 
         qualifiedWeightedMinimum: 5,
 
@@ -355,7 +387,10 @@ export default class SupportingDocuments extends React.Component<
 
         contactNameInternalName: "Name",
 
-        overallPercentageInternalName: "OverallQuestionsPercentage",
+        overallPercentageInternalName:
+          tier3Fields.overallPercentageInternalName,
+
+        weightingInternalName: tier3Fields.weightingInternalName,
 
         qualifiedWeightedMinimum: 2,
 

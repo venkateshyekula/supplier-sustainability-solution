@@ -1,21 +1,25 @@
-import * as React from 'react';
-import { Icon, MessageBar, MessageBarType } from '@fluentui/react';
-import KpiMetricCards from '../../kpiMetricCards/components/KpiMetricCards';
-import { IListConfiguration } from '../../supplierEsgSearch/models/IListConfiguration';
-import { ISupplierSearchFilters } from '../../supplierEsgSearch/models/ISupplierSearchFilters';
-import { ISupplierSubmission } from '../../supplierEsgSearch/models/ISupplierSubmission';
-import { ISupplierSubmissionService } from '../../supplierEsgSearch/services/ISupplierSubmissionService';
-import { SupplierSubmissionService } from '../../supplierEsgSearch/services/SupplierSubmissionService';
-import { getSP } from '../../../pnpConfig';
-import { EsgReviewQueueService } from '../services/EsgReviewQueueService';
-import { IEsgReviewQueueService } from '../services/IEsgReviewQueueService';
-import { IReviewQueueItem } from '../models/IReviewQueueItem';
-import CompletedQuestionnaireFilters from './CompletedQuestionnaireFilters';
-import EsgReviewQueue from './EsgReviewQueue';
-import { ICompletedQuestionnairesTabProps } from './ICompletedQuestionnairesTabProps';
-import { ITierListUrls } from './IRecentSubmissionsTableProps';
-import RecentSubmissionsTable from './RecentSubmissionsTable';
-import styles from './CompletedQuestionnairesTab.module.scss';
+import * as React from "react";
+import { Icon, MessageBar, MessageBarType } from "@fluentui/react";
+import KpiMetricCards from "../../kpiMetricCards/components/KpiMetricCards";
+import { IListConfiguration } from "../../supplierEsgSearch/models/IListConfiguration";
+import { ISupplierSearchFilters } from "../../supplierEsgSearch/models/ISupplierSearchFilters";
+import { ISupplierSubmission } from "../../supplierEsgSearch/models/ISupplierSubmission";
+import { ISupplierSubmissionService } from "../../supplierEsgSearch/services/ISupplierSubmissionService";
+import { SupplierSubmissionService } from "../../supplierEsgSearch/services/SupplierSubmissionService";
+import { getSP } from "../../../pnpConfig";
+import { EsgReviewQueueService } from "../services/EsgReviewQueueService";
+import { IEsgReviewQueueService } from "../services/IEsgReviewQueueService";
+import { IReviewQueueItem } from "../models/IReviewQueueItem";
+import CompletedQuestionnaireFilters from "./CompletedQuestionnaireFilters";
+import EsgReviewQueue from "./EsgReviewQueue";
+import { ICompletedQuestionnairesTabProps } from "./ICompletedQuestionnairesTabProps";
+import { ITierListUrls } from "./IRecentSubmissionsTableProps";
+import RecentSubmissionsTable from "./RecentSubmissionsTable";
+import {
+  getQuestionnaireFields,
+  IQuestionnaireFieldMapping,
+} from "../../../common/config/questionnaireFieldConfig";
+import styles from "./CompletedQuestionnairesTab.module.scss";
 
 interface IState {
   allSubmissions: ISupplierSubmission[];
@@ -32,7 +36,10 @@ interface IListMetadata {
   RootFolder?: { ServerRelativeUrl?: string };
 }
 
-export default class CompletedQuestionnairesTab extends React.Component<ICompletedQuestionnairesTabProps, IState> {
+export default class CompletedQuestionnairesTab extends React.Component<
+  ICompletedQuestionnairesTabProps,
+  IState
+> {
   private readonly submissionService: ISupplierSubmissionService;
   private readonly queueService: IEsgReviewQueueService;
 
@@ -44,10 +51,10 @@ export default class CompletedQuestionnairesTab extends React.Component<IComplet
       allSubmissions: [],
       filteredSubmissions: [],
       reviewQueueItems: [],
-      filters: { searchText: '' },
+      filters: { searchText: "" },
       tierListUrls: {},
       recentItemsLimit: 10,
-      isLoading: true
+      isLoading: true,
     };
   }
 
@@ -69,7 +76,9 @@ export default class CompletedQuestionnairesTab extends React.Component<IComplet
         />
 
         {this.state.errorMessage && (
-          <MessageBar messageBarType={MessageBarType.error}>{this.state.errorMessage}</MessageBar>
+          <MessageBar messageBarType={MessageBarType.error}>
+            {this.state.errorMessage}
+          </MessageBar>
         )}
 
         <section className={styles.kpis} aria-label="Submission metrics">
@@ -94,53 +103,112 @@ export default class CompletedQuestionnairesTab extends React.Component<IComplet
             items={this.state.reviewQueueItems}
             isLoading={this.state.isLoading}
             errorMessage={this.state.errorMessage}
-            onOpenItem={(item: IReviewQueueItem): void => this.openUrl(item.sourceItemUrl)}
+            onOpenItem={(item: IReviewQueueItem): void =>
+              this.openUrl(item.sourceItemUrl)
+            }
           />
         </div>
 
         <footer className={styles.notice} role="note">
-          <span className={styles.noticeIcon} aria-hidden="true"><Icon iconName="Info" /></span>
-          <p><strong>Suppliers:</strong>{' '}Suppliers will receive direct links from Procurement to complete the appropriate Tier questionnaires. Please do not use this site to submit questionnaires.</p>
+          <span className={styles.noticeIcon} aria-hidden="true">
+            <Icon iconName="Info" />
+          </span>
+          <p>
+            <strong>Suppliers:</strong> Suppliers will receive direct links from
+            Procurement to complete the appropriate Tier questionnaires. Please
+            do not use this site to submit questionnaires.
+          </p>
         </footer>
       </section>
     );
   }
 
   private getConfigurations(): readonly IListConfiguration[] {
+    const webAbsoluteUrl: string =
+      this.props.context.pageContext.web.absoluteUrl;
+
+    const tier1Fields: IQuestionnaireFieldMapping = getQuestionnaireFields(
+      webAbsoluteUrl,
+      "Tier 1",
+    );
+
+    const tier2Fields: IQuestionnaireFieldMapping = getQuestionnaireFields(
+      webAbsoluteUrl,
+      "Tier 2",
+    );
+
+    const tier3Fields: IQuestionnaireFieldMapping = getQuestionnaireFields(
+      webAbsoluteUrl,
+      "Tier 3",
+    );
+
     return [
       {
         listTitle: this.props.tier1ListTitle,
-        tier: 'Tier 1',
-        supplierNameDisplayName: 'Supplier Name',
+
+        tier: "Tier 1",
+
+        supplierNameDisplayName: "Supplier Name",
+
         supplierNameInternalName: this.props.tier1SupplierNameField,
-        emailInternalName: 'field_3',
-        contactNameInternalName: 'field_4',
-        overallPercentageInternalName: 'OverallQuestionsPercentage',
+
+        emailInternalName: "field_3",
+
+        contactNameInternalName: "field_4",
+
+        overallPercentageInternalName:
+          tier1Fields.overallPercentageInternalName,
+
+        weightingInternalName: tier1Fields.weightingInternalName,
+
         qualifiedWeightedMinimum: 10,
-        conditionalWeightedMinimum: 9.99
+
+        conditionalWeightedMinimum: 9.99,
       },
       {
         listTitle: this.props.tier2ListTitle,
-        tier: 'Tier 2',
-        supplierNameDisplayName: 'Supplier Name',
+
+        tier: "Tier 2",
+
+        supplierNameDisplayName: "Supplier Name",
+
         supplierNameInternalName: this.props.tier2SupplierNameField,
-        emailInternalName: 'Email',
-        contactNameInternalName: 'Name',
-        overallPercentageInternalName: 'OverallQuestionsPercentage',
+
+        emailInternalName: "Email",
+
+        contactNameInternalName: "Name",
+
+        overallPercentageInternalName:
+          tier2Fields.overallPercentageInternalName,
+
+        weightingInternalName: tier2Fields.weightingInternalName,
+
         qualifiedWeightedMinimum: 5,
-        conditionalWeightedMinimum: 4.99
+
+        conditionalWeightedMinimum: 4.99,
       },
       {
         listTitle: this.props.tier3ListTitle,
-        tier: 'Tier 3',
-        supplierNameDisplayName: 'Supplier Name',
+
+        tier: "Tier 3",
+
+        supplierNameDisplayName: "Supplier Name",
+
         supplierNameInternalName: this.props.tier3SupplierNameField,
-        emailInternalName: 'Email',
-        contactNameInternalName: 'Name',
-        overallPercentageInternalName: 'OverallQuestionsPercentage',
+
+        emailInternalName: "Email",
+
+        contactNameInternalName: "Name",
+
+        overallPercentageInternalName:
+          tier3Fields.overallPercentageInternalName,
+
+        weightingInternalName: tier3Fields.weightingInternalName,
+
         qualifiedWeightedMinimum: 2,
-        conditionalWeightedMinimum: 1.99
-      }
+
+        conditionalWeightedMinimum: 1.99,
+      },
     ];
   }
 
@@ -148,7 +216,7 @@ export default class CompletedQuestionnairesTab extends React.Component<IComplet
     this.setState({ isLoading: true, errorMessage: undefined });
     const results: [ISupplierSubmission[], ITierListUrls] = await Promise.all([
       this.submissionService.getAllSubmissions(this.getConfigurations()),
-      this.loadTierListUrls()
+      this.loadTierListUrls(),
     ]);
     const submissions: ISupplierSubmission[] = results[0];
     this.setState({
@@ -156,7 +224,7 @@ export default class CompletedQuestionnairesTab extends React.Component<IComplet
       filteredSubmissions: submissions,
       reviewQueueItems: this.queueService.buildQueue(submissions),
       tierListUrls: results[1],
-      isLoading: false
+      isLoading: false,
     });
   };
 
@@ -167,48 +235,73 @@ export default class CompletedQuestionnairesTab extends React.Component<IComplet
   private applyFilters = (): void => {
     const f: ISupplierSearchFilters = this.state.filters;
     const term: string = f.searchText.trim().toLowerCase();
-    const start: number | undefined = f.startDate ? this.startOfDay(f.startDate).getTime() : undefined;
-    const end: number | undefined = f.endDate ? this.endOfDay(f.endDate).getTime() : undefined;
-    const filtered: ISupplierSubmission[] = this.state.allSubmissions.filter((item: ISupplierSubmission): boolean => {
-      const created: number = new Date(item.created).getTime();
-      return (
-        (!term || item.supplierName.toLowerCase().indexOf(term) >= 0 || item.email.toLowerCase().indexOf(term) >= 0 || item.submittedByName.toLowerCase().indexOf(term) >= 0) &&
-        (!f.tier || item.tier === f.tier) &&
-        (!f.qualification || item.qualification === f.qualification) &&
-        (start === undefined || created >= start) &&
-        (end === undefined || created <= end)
-      );
-    });
+    const start: number | undefined = f.startDate
+      ? this.startOfDay(f.startDate).getTime()
+      : undefined;
+    const end: number | undefined = f.endDate
+      ? this.endOfDay(f.endDate).getTime()
+      : undefined;
+    const filtered: ISupplierSubmission[] = this.state.allSubmissions.filter(
+      (item: ISupplierSubmission): boolean => {
+        const created: number = new Date(item.created).getTime();
+        return (
+          (!term ||
+            item.supplierName.toLowerCase().indexOf(term) >= 0 ||
+            item.email.toLowerCase().indexOf(term) >= 0 ||
+            item.submittedByName.toLowerCase().indexOf(term) >= 0) &&
+          (!f.tier || item.tier === f.tier) &&
+          (!f.qualification || item.qualification === f.qualification) &&
+          (start === undefined || created >= start) &&
+          (end === undefined || created <= end)
+        );
+      },
+    );
     this.setState({ filteredSubmissions: filtered });
   };
 
   private clearFilters = (): void => {
-    this.setState({ filters: { searchText: '' }, filteredSubmissions: this.state.allSubmissions });
+    this.setState({
+      filters: { searchText: "" },
+      filteredSubmissions: this.state.allSubmissions,
+    });
   };
 
   private async loadTierListUrls(): Promise<ITierListUrls> {
     const urls: Array<string | undefined> = await Promise.all([
       this.resolveListUrl(this.props.tier1ListTitle),
       this.resolveListUrl(this.props.tier2ListTitle),
-      this.resolveListUrl(this.props.tier3ListTitle)
+      this.resolveListUrl(this.props.tier3ListTitle),
     ]);
     return { tier1: urls[0], tier2: urls[1], tier3: urls[2] };
   }
 
   private async resolveListUrl(title: string): Promise<string | undefined> {
     try {
-      const metadata: IListMetadata = await getSP(this.props.context).web.lists
-        .getByTitle(title).select('RootFolder/ServerRelativeUrl').expand('RootFolder')() as IListMetadata;
-      const root: string = metadata.RootFolder?.ServerRelativeUrl || '';
-      return root ? `${root.replace(/\/$/, '')}/AllItems.aspx` : undefined;
+      const metadata: IListMetadata = (await getSP(this.props.context)
+        .web.lists.getByTitle(title)
+        .select("RootFolder/ServerRelativeUrl")
+        .expand("RootFolder")()) as IListMetadata;
+      const root: string = metadata.RootFolder?.ServerRelativeUrl || "";
+      return root ? `${root.replace(/\/$/, "")}/AllItems.aspx` : undefined;
     } catch (error: unknown) {
       console.error(`Unable to resolve list URL for "${title}".`, error);
       return undefined;
     }
   }
 
-  private openSubmission = (item: ISupplierSubmission): void => this.openUrl(item.sourceItemUrl);
-  private openUrl = (url?: string): void => { if (url) window.open(url, '_blank', 'noopener,noreferrer'); };
-  private startOfDay(date: Date): Date { const value: Date = new Date(date.getTime()); value.setHours(0, 0, 0, 0); return value; }
-  private endOfDay(date: Date): Date { const value: Date = new Date(date.getTime()); value.setHours(23, 59, 59, 999); return value; }
+  private openSubmission = (item: ISupplierSubmission): void =>
+    this.openUrl(item.sourceItemUrl);
+  private openUrl = (url?: string): void => {
+    if (url) window.open(url, "_blank", "noopener,noreferrer");
+  };
+  private startOfDay(date: Date): Date {
+    const value: Date = new Date(date.getTime());
+    value.setHours(0, 0, 0, 0);
+    return value;
+  }
+  private endOfDay(date: Date): Date {
+    const value: Date = new Date(date.getTime());
+    value.setHours(23, 59, 59, 999);
+    return value;
+  }
 }

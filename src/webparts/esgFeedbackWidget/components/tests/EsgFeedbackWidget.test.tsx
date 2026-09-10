@@ -22,18 +22,32 @@ interface IMockSubmission {
   Id?: number;
   Created?: string;
   Modified?: string;
+
   Author?: IMockSharePointUser;
   Editor?: IMockSharePointUser;
+
   Supplier_x0020_Name?: string;
+
   field_3?: string;
   field_4?: string;
+
   Email?: string;
   Name?: string;
+
   EnvironmentalQuestionsCount?: number;
   EnvQuestionsCount?: number;
   SocialQuestionsCount?: number;
   GovernanceQuestionsCount?: number;
+
   OverallQuestionsPercentage?: number | string;
+
+  Tier_x0020_2_x0020_Sustainabilit?: number | string;
+
+  Tier_x0020_2_x0020_Weighting?: number | string;
+
+  Tier_x0020_3_x0020_Sustainabilit?: number | string;
+
+  Tier_x0020_3_x0020_Weighting?: number | string;
 }
 
 interface IMockListItems {
@@ -160,44 +174,74 @@ const tier1Item: IMockSubmission = {
 
 const tier2Item: IMockSubmission = {
   Id: 22,
+
   Created: "2026-08-16T08:00:00Z",
+
   Modified: "2026-08-16T09:00:00Z",
+
   Author: {
     Title: "Tier Two Author",
+
     EMail: "tier2.author@contoso.com",
   },
+
   Editor: {
     Title: "Tier Two Editor",
+
     EMail: "tier2.editor@contoso.com",
   },
+
   Supplier_x0020_Name: "Tier Two Supplier",
+
   Email: "tier2.supplier@contoso.com",
+
   Name: "Tier Two Contact",
+
   EnvQuestionsCount: 10,
+
   SocialQuestionsCount: 9,
+
   GovernanceQuestionsCount: 8,
-  OverallQuestionsPercentage: 4,
+
+  Tier_x0020_2_x0020_Sustainabilit: 80,
+
+  Tier_x0020_2_x0020_Weighting: 4,
 };
 
 const tier3Item: IMockSubmission = {
   Id: 33,
+
   Created: "2026-08-17T08:00:00Z",
+
   Modified: "2026-08-17T09:00:00Z",
+
   Author: {
     Title: "Tier Three Author",
+
     EMail: "tier3.author@contoso.com",
   },
+
   Editor: {
     Title: "Tier Three Editor",
+
     EMail: "tier3.editor@contoso.com",
   },
+
   Supplier_x0020_Name: "Tier Three Supplier",
+
   Email: "tier3.supplier@contoso.com",
+
   Name: "Tier Three Contact",
+
   EnvQuestionsCount: 6,
+
   SocialQuestionsCount: 5,
+
   GovernanceQuestionsCount: 4,
-  OverallQuestionsPercentage: 1.3,
+
+  Tier_x0020_3_x0020_Sustainabilit: 65,
+
+  Tier_x0020_3_x0020_Weighting: 1.3,
 };
 
 describe("EsgFeedbackWidget", (): void => {
