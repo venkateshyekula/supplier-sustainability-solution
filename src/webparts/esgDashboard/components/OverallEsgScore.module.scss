@@ -1,65 +1,42 @@
 @import '../../../common/styles/fonts.scss';
+
+/* ==========================================================
+ * Overall ESG Score panel
+ * ========================================================== */
+
 .panel {
   display: flex;
   box-sizing: border-box;
   width: 100%;
   min-width: 0;
-  min-height: 250px;
+  height: 100%;
+  min-height: 390px;
   flex-direction: column;
   overflow: hidden;
   color: #172033;
   background: #ffffff;
   border: 1px solid #e1dfdd;
-  border-radius: 12px;
+  border-radius: 10px;
   box-shadow:
     0 2px 8px rgba(15, 23, 42, 0.05);
-  font-family: 'Figtree', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
-}
+  font-family:
+    'Figtree',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
 
-/* Global font override for all elements and Fluent UI controls */
-:global {
-  /* 1. Apply Figtree safely to body and text containers without breaking icons */
-  body,
-  #spPageCanvasContent,
-  .sp-app-main,
-  #spCommandBar,
-  .ms-CommandBar,
-  .ms-Nav,
-  .ms-DetailsList,
-  .ms-DetailsRow,
-  .ms-DetailsHeader,
-  .ms-DetailsHeader-cell,
-  .ms-DetailsHeader-cellName,
-  .ms-DetailsHeader-cellIsRowHeader,
-  .ms-ContextualMenu-list,
-  .ms-ContextualMenu-link,
-  .ms-ContextualMenu-listItem,
-  .ms-ContextualMenu-listItemText,
-  .ms-ContextualMenu-divider,
-  .ms-ContextualMenu-item,
-  .ms-ContextualMenu-Container,
-  .ms-ContextualMenu-linkContent,
-  .ms-Dialog,
-  .ms-Panel,
-  .ms-Button-label,
-  .ms-ChoiceGroup,
-  .ms-TextField,
-  .ms-SearchBox,
-  .ms-DatePicker,
-  .ms-Label,
-  .ms-Dropdown {
-    font-family: 'Figtree', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif !important;
-  }
-
-  /* 2. Protect ALL icon elements across SharePoint from font overrides */
-  i,
-  .ms-Icon,
-  [class*="ms-Icon-"],
-  [class*="Icon-"],
-  [data-icon-name] {
-    font-family: 'FabricMDL2Icons', 'Fluent MDL2 Hybrid Icons' !important; /* Restores SharePoint's native icon font mappings */
+  :global(.ms-Icon) {
+    font-family:
+      'FabricMDL2Icons',
+      'Fluent MDL2 Hybrid Icons' !important;
   }
 }
+
+/* ==========================================================
+ * Header
+ * ========================================================== */
 
 .header {
   display: flex;
@@ -101,6 +78,10 @@
   line-height: 16px;
 }
 
+/* ==========================================================
+ * Score content
+ * ========================================================== */
+
 .row {
   display: flex;
   box-sizing: border-box;
@@ -109,9 +90,13 @@
   flex: 1 1 auto;
   align-items: center;
   justify-content: center;
-  gap: 32px;
-  padding: 24px;
+  gap: 28px;
+  padding: 24px 20px;
 }
+
+/* ==========================================================
+ * Score ring
+ * ========================================================== */
 
 .ring {
   position: relative;
@@ -124,7 +109,7 @@
   justify-content: center;
   border-radius: 50%;
   box-shadow:
-    0 4px 14px rgba(54, 168, 82, 0.12);
+    0 4px 14px rgba(54, 118, 82, 0.12);
 
   &::after {
     position: absolute;
@@ -150,8 +135,8 @@
   color: #172033;
   font-size: 30px;
   font-weight: 700;
-  line-height: 36px;
   font-variant-numeric: tabular-nums;
+  line-height: 36px;
 }
 
 .scoreLabel {
@@ -162,9 +147,13 @@
   line-height: 15px;
 }
 
+/* ==========================================================
+ * Change and target details
+ * ========================================================== */
+
 .details {
   display: flex;
-  min-width: 180px;
+  min-width: 145px;
   flex-direction: column;
   justify-content: center;
   gap: 14px;
@@ -182,8 +171,8 @@
   gap: 5px;
   font-size: 20px;
   font-weight: 700;
-  line-height: 25px;
   font-variant-numeric: tabular-nums;
+  line-height: 25px;
 }
 
 .changeIcon {
@@ -203,7 +192,7 @@
 .changeDescription {
   margin-top: 2px;
   color: #64748b;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 400;
   line-height: 15px;
 }
@@ -224,7 +213,7 @@
   align-items: center;
   gap: 5px;
   color: #475569;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 600;
   line-height: 15px;
 }
@@ -240,15 +229,15 @@
   margin-top: 2px;
   color: #172033;
   font-size: 18px;
-  font-weight: 700;
-  line-height: 23px;
+  font-weight: 600;
   font-variant-numeric: tabular-nums;
+  line-height: 23px;
 }
 
 .targetAchieved,
 .targetBelow {
   margin-top: 2px;
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 600;
   line-height: 14px;
 }
@@ -259,6 +248,51 @@
 
 .targetBelow {
   color: #a15c00;
+}
+
+/* ==========================================================
+ * Smaller desktop
+ * ========================================================== */
+
+@media screen and (max-width: 1280px) {
+  .panel {
+    min-height: 370px;
+  }
+
+  .row {
+    gap: 18px;
+    padding: 20px 16px;
+  }
+
+  .ring {
+    width: 128px;
+    height: 128px;
+    flex-basis: 128px;
+
+    &::after {
+      inset: 11px;
+    }
+  }
+
+  .score {
+    font-size: 28px;
+    line-height: 32px;
+  }
+
+  .details {
+    min-width: 130px;
+  }
+}
+
+/* ==========================================================
+ * Tablet
+ * ========================================================== */
+
+@media screen and (max-width: 1000px) {
+  .panel {
+    height: auto;
+    min-height: 320px;
+  }
 }
 
 @media screen and (max-width: 700px) {
@@ -283,9 +317,13 @@
   }
 }
 
+/* ==========================================================
+ * Mobile
+ * ========================================================== */
+
 @media screen and (max-width: 480px) {
   .panel {
-    min-height: auto;
+    min-height: 0;
   }
 
   .header {
@@ -322,8 +360,17 @@
   }
 }
 
+/* ==========================================================
+ * High-contrast support
+ * ========================================================== */
+
 @media (forced-colors: active) {
-  .panel,
+  .panel {
+    color: CanvasText;
+    background: Canvas;
+    border-color: CanvasText;
+  }
+
   .averageLabel,
   .ringInner {
     color: CanvasText;
@@ -332,8 +379,22 @@
   }
 
   .ring {
-    border: 2px solid CanvasText;
     background: Canvas !important;
+    border: 2px solid CanvasText;
+
+    &::after {
+      background: Canvas;
+      box-shadow:
+        inset 0 0 0 1px CanvasText;
+    }
+  }
+
+  .score,
+  .scoreLabel,
+  .changeDescription,
+  .targetHeading,
+  .targetValue {
+    color: CanvasText;
   }
 
   .up,
@@ -342,7 +403,15 @@
   .targetBelow {
     color: CanvasText;
   }
+
+  .divider {
+    background: CanvasText;
+  }
 }
+
+/* ==========================================================
+ * Reduced-motion accessibility
+ * ========================================================== */
 
 @media (prefers-reduced-motion: reduce) {
   .panel *,

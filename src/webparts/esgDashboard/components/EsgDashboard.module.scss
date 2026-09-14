@@ -1,16 +1,30 @@
 @import '../../../common/styles/fonts.scss';
+
 .dashboard {
   box-sizing: border-box;
   width: 100%;
   min-width: 0;
   color: #172033;
   background: #ffffff;
-  font-family: 'Figtree', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  font-family:
+    'Figtree',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    sans-serif !important;
 }
 
-/* Global font override for all elements and Fluent UI controls */
+/* ==========================================================
+ * Global font override for SharePoint and Fluent UI controls
+ * ========================================================== */
+
 :global {
-  /* 1. Apply Figtree safely to body and text containers without breaking icons */
+
+  /*
+   * Apply Figtree to SharePoint and Fluent UI text controls
+   * without overriding icon font mappings.
+   */
   body,
   #spPageCanvasContent,
   .sp-app-main,
@@ -40,18 +54,33 @@
   .ms-DatePicker,
   .ms-Label,
   .ms-Dropdown {
-    font-family: 'Figtree', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif !important;
+    font-family:
+      'Figtree',
+      'Segoe UI',
+      -apple-system,
+      BlinkMacSystemFont,
+      Roboto,
+      sans-serif !important;
   }
 
-  /* 2. Protect ALL icon elements across SharePoint from font overrides */
+  /*
+   * Protect SharePoint and Fluent UI icon elements from
+   * the global Figtree font override.
+   */
   i,
   .ms-Icon,
-  [class*="ms-Icon-"],
-  [class*="Icon-"],
+  [class*='ms-Icon-'],
+  [class*='Icon-'],
   [data-icon-name] {
-    font-family: 'FabricMDL2Icons', 'Fluent MDL2 Hybrid Icons' !important; /* Restores SharePoint's native icon font mappings */
+    font-family:
+      'FabricMDL2Icons',
+      'Fluent MDL2 Hybrid Icons' !important;
   }
 }
+
+/* ==========================================================
+ * Loading area
+ * ========================================================== */
 
 .loadingContainer {
   display: flex;
@@ -63,25 +92,73 @@
   margin-top: 16px;
 }
 
+/* ==========================================================
+ * KPI summary area
+ *
+ * Left:
+ * Three KPI cards in the first row
+ * Two KPI cards in the second row
+ *
+ * Right:
+ * Overall ESG Score
+ * ========================================================== */
+
 .kpiRow {
   display: grid;
   box-sizing: border-box;
   width: 100%;
   min-width: 0;
   grid-template-columns:
-    minmax(0, 3fr)
-    minmax(280px, 1fr);
+    minmax(0, 2fr) minmax(340px, 1fr);
   align-items: stretch;
-  gap: 16px;
+  gap: 18px;
   margin-top: 20px;
 }
 
 .kpiCards,
 .overallScore {
+  display: flex;
   box-sizing: border-box;
   width: 100%;
   min-width: 0;
+  height: 100%;
+  min-height: 390px;
+  flex-direction: column;
+
+  >* {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    height: 100%;
+    flex: 1 1 auto;
+  }
 }
+
+.kpiCards {
+  overflow: visible;
+
+  >* {
+    width: 100%;
+    min-width: 0;
+    height: 100%;
+    flex: 1 1 auto;
+  }
+}
+
+.overallScore {
+  overflow: hidden;
+
+  >* {
+    width: 100%;
+    min-width: 0;
+    height: 100%;
+    flex: 1 1 auto;
+  }
+}
+
+/* ==========================================================
+ * Analytics row
+ * ========================================================== */
 
 .analyticsRow {
   display: grid;
@@ -94,11 +171,15 @@
   gap: 16px;
   margin-top: 20px;
 
-  > * {
+  >* {
     min-width: 0;
     height: 100%;
   }
 }
+
+/* ==========================================================
+ * Analysis row
+ * ========================================================== */
 
 .analysisRow {
   display: grid;
@@ -111,11 +192,15 @@
   gap: 16px;
   margin-top: 20px;
 
-  > * {
+  >* {
     min-width: 0;
     height: 100%;
   }
 }
+
+/* ==========================================================
+ * Bottom dashboard row
+ * ========================================================== */
 
 .bottomRow {
   display: grid;
@@ -123,35 +208,195 @@
   width: 100%;
   min-width: 0;
   grid-template-columns:
-    minmax(0, 2fr)
-    minmax(300px, 1fr);
+    minmax(0, 2fr) minmax(300px, 1fr);
   align-items: stretch;
   gap: 16px;
   margin-top: 20px;
 
-  > * {
+  >* {
     min-width: 0;
     height: 100%;
   }
 }
 
+/* ==========================================================
+ * Dashboard information notice
+ * ========================================================== */
+
+.informationNotice {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 20px;
+  padding: 14px 16px;
+  color: #323130;
+  background: #f3f9fd;
+  border: 1px solid #c7e0f4;
+  border-left: 4px solid #005dc7;
+  border-radius: 8px;
+}
+
+.informationNoticeIcon {
+  display: inline-flex;
+  box-sizing: border-box;
+  width: 30px;
+  height: 30px;
+  flex: 0 0 30px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
+  color: #005dc7;
+  background: #e5f1fb;
+  border-radius: 50%;
+
+  :global(.ms-Icon) {
+    color: inherit;
+    font-size: 15px;
+    line-height: 15px;
+  }
+}
+
+.informationNoticeContent {
+  min-width: 0;
+  flex: 1 1 auto;
+  display: block;
+  margin: 0 0 3px;
+  color: #172033;
+  font-size: 13px;
+  line-height: 18px;
+  font-style: italic;
+
+  strong {
+    font-weight: 500;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .informationNotice {
+    gap: 10px;
+    margin-top: 14px;
+    padding: 12px 14px;
+  }
+
+  .informationNoticeContent {
+    strong {
+      font-size: 11px;
+      line-height: 17px;
+    }
+
+    p {
+      font-size: 10px;
+      line-height: 17px;
+    }
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .informationNotice {
+    gap: 9px;
+    padding: 11px 12px;
+    border-left-width: 3px;
+  }
+
+  .informationNoticeIcon {
+    width: 27px;
+    height: 27px;
+    flex-basis: 27px;
+
+    :global(.ms-Icon) {
+      font-size: 13px;
+      line-height: 13px;
+    }
+  }
+
+  .informationNoticeContent {
+    strong {
+      margin-bottom: 2px;
+      font-size: 10px;
+      line-height: 16px;
+    }
+
+    p {
+      font-size: 10px;
+      line-height: 16px;
+    }
+  }
+}
+
+@media (forced-colors: active) {
+  .informationNotice {
+    color: CanvasText;
+    background: Canvas;
+    border-color: CanvasText;
+  }
+
+  .informationNoticeIcon {
+    color: Highlight;
+    background: Canvas;
+    border: 1px solid CanvasText;
+  }
+
+  .informationNoticeContent {
+
+    strong,
+    p {
+      color: CanvasText;
+    }
+  }
+}
+
+/* ==========================================================
+ * Responsive layout: medium desktop
+ * ========================================================== */
+
 @media screen and (max-width: 1280px) {
   .kpiRow {
     grid-template-columns:
-      minmax(0, 2fr)
-      minmax(270px, 1fr);
+      minmax(0, 2fr) minmax(320px, 1fr);
+    gap: 16px;
   }
 
-  .analysisRow {
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
+  .kpiCards,
+  .overallScore {
+    min-height: 370px;
   }
 }
+
+/* ==========================================================
+ * Responsive layout: tablet
+ * ========================================================== */
 
 @media screen and (max-width: 1000px) {
   .kpiRow {
     grid-template-columns:
       minmax(0, 1fr);
+  }
+
+  .kpiCards,
+  .overallScore {
+    height: auto;
+    min-height: 0;
+  }
+
+  .cardsGrid {
+    height: auto;
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+    grid-template-rows: auto;
+  }
+
+  .card:nth-child(1),
+  .card:nth-child(2),
+  .card:nth-child(3),
+  .card:nth-child(4) {
+    grid-column: span 1;
+  }
+
+  .card:nth-child(5) {
+    grid-column: 1 / -1;
   }
 
   .analyticsRow {
@@ -165,7 +410,12 @@
   }
 }
 
+/* ==========================================================
+ * Responsive layout: small tablet
+ * ========================================================== */
+
 @media screen and (max-width: 700px) {
+
   .analyticsRow,
   .analysisRow {
     grid-template-columns:
@@ -178,5 +428,29 @@
   .bottomRow {
     gap: 14px;
     margin-top: 14px;
+  }
+}
+
+/* ==========================================================
+ * Responsive layout: mobile
+ * ========================================================== */
+
+@media screen and (max-width: 640px) {
+  .cardsGrid {
+    grid-template-columns:
+      minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .card:nth-child(1),
+  .card:nth-child(2),
+  .card:nth-child(3),
+  .card:nth-child(4),
+  .card:nth-child(5) {
+    grid-column: 1;
+  }
+
+  .card {
+    min-height: 112px;
   }
 }

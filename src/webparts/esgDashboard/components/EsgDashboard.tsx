@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import {
+  Icon,
   MessageBar,
   MessageBarType,
   Spinner,
@@ -179,6 +180,23 @@ export default class EsgDashboard extends React.Component<
           />
 
           <QuickInsights items={metrics.insights} />
+        </div>
+        <div
+          className={styles.informationNotice}
+          role="note"
+          aria-label="Information for dashboard results"
+        >
+          <span className={styles.informationNoticeIcon} aria-hidden="true">
+            <Icon iconName="Info" />
+          </span>
+
+          <p className={styles.informationNoticeContent}>
+            <strong>Information:</strong> Dashboard results are based on the
+            latest Supplier Sustainability questionnaire submissions available
+            in SharePoint. Qualification, risk rating, recommendations, and ESG
+            metrics are calculated using the configured tier-specific
+            Sustainability and Weighting values.
+          </p>
         </div>
       </section>
     );
