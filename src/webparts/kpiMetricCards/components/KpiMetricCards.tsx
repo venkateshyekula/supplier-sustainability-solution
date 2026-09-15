@@ -589,9 +589,9 @@ const cardStyle: React.CSSProperties = {
 
   alignItems: "center",
 
-  gap: "14px",
+  gap: "10px",
 
-  padding: "18px 16px",
+  padding: "10px 10px",
 
   borderStyle: "solid",
 
@@ -605,11 +605,11 @@ const cardStyle: React.CSSProperties = {
 const iconContainerStyle: React.CSSProperties = {
   display: "inline-flex",
 
-  width: "52px",
+  width: "45px",
 
-  height: "52px",
+  height: "45px",
 
-  flex: "0 0 52px",
+  flex: "0 0 45px",
 
   alignItems: "center",
 
@@ -649,7 +649,7 @@ const titleStyle: React.CSSProperties = {
 
   color: "#201f1e",
 
-  fontSize: "18px",
+  fontSize: "16px",
 
   fontWeight: 600,
 };
@@ -870,8 +870,7 @@ export function KpiMetricCards(
                   ...iconContainerStyle,
 
                   color: card.color,
-
-                  backgroundColor: card.iconBackgroundColor,
+                  
                 }}
                 aria-hidden="true"
               >

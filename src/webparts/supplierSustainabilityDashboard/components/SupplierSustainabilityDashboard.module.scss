@@ -1,244 +1,854 @@
 @import '../../../common/styles/fonts.scss';
 
+/* ==========================================================
+ * Supplier Sustainability dashboard
+ * ========================================================== */
+
 .dashboard {
   box-sizing: border-box;
   width: 100%;
   min-width: 0;
-  color: #242424;
-  font-family: 'Figtree', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
-}
+  padding: 0 0 24px;
+  color: #172033;
+  background: #ffffff;
+  font-family:
+    'Figtree',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
 
-/* Global font override for all elements and Fluent UI controls */
-:global {
-  /* 1. Apply Figtree safely to body and text containers without breaking icons */
-  body,
-  #spPageCanvasContent,
-  .sp-app-main,
-  #spCommandBar,
-  .ms-CommandBar,
-  .ms-Nav,
-  .ms-DetailsList,
-  .ms-DetailsRow,
-  .ms-DetailsHeader,
-  .ms-DetailsHeader-cell,
-  .ms-DetailsHeader-cellName,
-  .ms-DetailsHeader-cellIsRowHeader,
-  .ms-ContextualMenu-list,
-  .ms-ContextualMenu-link,
-  .ms-ContextualMenu-listItem,
-  .ms-ContextualMenu-listItemText,
-  .ms-ContextualMenu-divider,
-  .ms-ContextualMenu-item,
-  .ms-ContextualMenu-Container,
-  .ms-ContextualMenu-linkContent,
-  .ms-Dialog,
-  .ms-Panel,
-  .ms-Button-label,
-  .ms-ChoiceGroup,
-  .ms-TextField,
-  .ms-SearchBox,
-  .ms-DatePicker,
-  .ms-Label,
-  .ms-Dropdown {
-    font-family: 'Figtree', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif !important;
+  button,
+  input,
+  select,
+  textarea {
+    font-family: inherit;
   }
 
-  /* 2. Protect ALL icon elements across SharePoint from font overrides */
-  i,
-  .ms-Icon,
-  [class*="ms-Icon-"],
-  [class*="Icon-"],
-  [data-icon-name] {
-    font-family: 'FabricMDL2Icons', 'Fluent MDL2 Hybrid Icons' !important; /* Restores SharePoint's native icon font mappings */
+  :global(.ms-Icon) {
+    font-family:
+      'FabricMDL2Icons',
+      'Fluent MDL2 Hybrid Icons' !important;
   }
 }
 
-.hero {
+/* ==========================================================
+ * Welcome banner
+ * ========================================================== */
+
+.welcomeHero {
+  position: relative;
   display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 12px;
-  padding: 20px 22px;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 250px;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 28px;
+  padding:
+    34px
+    42px
+    106px;
+  overflow: hidden;
   color: #ffffff;
-  background: linear-gradient(135deg, #273c88 0%, #c8187d 100%);
-  border-radius: 12px;
-  box-shadow: 0 3px 12px rgba(0, 69, 120, 0.18);
+  background:
+  linear-gradient(
+    135deg,
+    #273c88,
+    #c8187d
+  );
+  border-radius: 18px;
+  box-shadow:
+    0 8px 24px
+    rgba(37, 55, 126, 0.18);
 }
 
-.heroIcon {
-  display: inline-flex;
-  width: 48px;
-  height: 48px;
-  flex: 0 0 48px;
+.welcomeContent {
+  position: relative;
+  z-index: 3;
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 720px;
+  flex: 1 1 auto;
+}
+
+.welcomeTitle {
+  display: flex;
+  margin: 0;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px;
+  color: #ffffff;
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 38px;
+}
+
+.welcomePrefix {
+  color: #ffffff;
+}
+
+.welcomeName {
+  color: #fff;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.welcomeDescription {
+  max-width: 650px;
+  margin: 10px 0 0;
+  color:
+    rgba(
+      255,
+      255,
+      255,
+      0.9
+    );
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 22px;
+}
+
+/* ==========================================================
+ * Welcome banner decorations
+ * ========================================================== */
+
+.heroDecorationOne {
+  position: absolute;
+  top: -100px;
+  right: 170px;
+  width: 265px;
+  height: 265px;
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.06
+    );
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.heroDecorationTwo {
+  position: absolute;
+  right: -90px;
+  bottom: -150px;
+  width: 340px;
+  height: 340px;
+  background:
+    rgba(
+      212,
+      173,
+      255,
+      0.12
+    );
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.heroDecorationThree {
+  position: absolute;
+  top: 28px;
+  right: 285px;
+  width: 68px;
+  height: 68px;
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.08
+    );
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* ==========================================================
+ * Welcome banner decorative visual
+ * ========================================================== */
+
+.heroVisual {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  box-sizing: border-box;
+  width: 190px;
+  height: 100px;
+  flex: 0 0 190px;
   align-items: center;
   justify-content: center;
-  font-size: 28px;
-  background: rgba(255, 255, 255, 0.16);
-  border: 1px solid rgba(255, 255, 255, 0.28);
+}
+
+.heroVisualIcon,
+.heroVisualIconSecondary,
+.heroVisualIconSmall {
+  position: absolute;
+  display: inline-flex;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.14
+    );
+  border:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.2
+    );
+  border-radius: 16px;
+  box-shadow:
+    0 8px 20px
+    rgba(17, 24, 39, 0.14);
+  backdrop-filter: blur(6px);
+}
+
+.heroVisualIcon {
+  bottom: 4px;
+  left: 20px;
+  width: 76px;
+  height: 76px;
+  font-size: 33px;
+  transform: rotate(-5deg);
+
+  :global(.ms-Icon) {
+    color: inherit;
+    font-size: inherit;
+    line-height: 1;
+  }
+}
+
+.heroVisualIconSecondary {
+  top: 0;
+  right: 15px;
+  width: 62px;
+  height: 62px;
+  color: #f7dcff;
+  font-size: 27px;
+  transform: rotate(6deg);
+
+  :global(.ms-Icon) {
+    color: inherit;
+    font-size: inherit;
+    line-height: 1;
+  }
+}
+
+.heroVisualIconSmall {
+  right: 61px;
+  bottom: -2px;
+  width: 38px;
+  height: 38px;
+  color: #dff8e9;
   border-radius: 50%;
+  font-size: 17px;
+
+  :global(.ms-Icon) {
+    color: inherit;
+    font-size: inherit;
+    line-height: 1;
+  }
 }
 
-.heroContent {
+/* ==========================================================
+ * Overlapping KPI section
+ * ========================================================== */
+
+.overlappingKpiSection {
+  position: relative;
+  z-index: 5;
+  box-sizing: border-box;
+  width:
+    calc(
+      100% - 48px
+    );
   min-width: 0;
+  margin:
+    -78px
+    24px
+    0;
+  padding:
+    18px
+    18px
+    16px;
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.98
+    );
+  border:
+    1px solid
+    rgba(
+      225,
+      231,
+      239,
+      0.95
+    );
+  border-radius: 14px;
+  box-shadow:
+    0 10px 28px
+    rgba(15, 23, 42, 0.13);
+  backdrop-filter: blur(8px);
 }
 
-.heroTitle {
-  margin: 0 0 4px;
-  font-size: 24px;
-  font-weight: 700;
-  line-height: 32px;
+.kpiSectionHeader {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 13px;
 }
 
-.heroDescription {
-  max-width: 920px;
+/* ==========================================================
+ * Shared section headings
+ * ========================================================== */
+
+.sectionHeadingRow {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 13px;
+}
+
+.sectionTitle {
   margin: 0;
-  color: rgba(255, 255, 255, 0.92);
-  font-size: 13px;
-  line-height: 20px;
+  color: #172033;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 23px;
 }
+
+.sectionDescription {
+  max-width: 760px;
+  margin: 3px 0 0;
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 17px;
+}
+
+/* ==========================================================
+ * General dashboard sections
+ * ========================================================== */
 
 .dashboardSection {
   box-sizing: border-box;
   width: 100%;
   min-width: 0;
-  margin-bottom: 12px;
+  margin-top: 22px;
 }
 
-.sectionHeadingRow {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 12px;
-}
-
-.sectionTitle {
-  margin: 0;
-  color: #201f1e;
-  font-size: 18px;
-  font-weight: 700;
-  line-height: 24px;
-}
-
-.sectionDescription {
-  margin: 3px 0 0;
-  color: #605e5c;
-  font-size: 12px;
-  line-height: 18px;
-}
+/* ==========================================================
+ * Questionnaire links and ESG feedback
+ * ========================================================== */
 
 .insightGrid {
   display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(320px, 1fr);
-  gap: 12px;
+  box-sizing: border-box;
   width: 100%;
   min-width: 0;
-  margin-bottom: 12px;
-  align-items: start;
+  grid-template-columns:
+    minmax(0, 2fr)
+    minmax(300px, 1fr);
+  align-items: stretch;
+  gap: 18px;
+  margin-top: 22px;
 }
 
 .quickLinksColumn,
 .feedbackColumn {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
   min-width: 0;
+  flex-direction: column;
 }
 
-.feedbackColumn>* {
-  max-width: none !important;
+.quickLinksColumn > *,
+.feedbackColumn > * {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  height: 100%;
 }
 
-@media screen and (max-width: 1180px) {
-  .insightGrid {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media screen and (max-width: 760px) {
-  .hero {
-    align-items: flex-start;
-    padding: 18px;
-  }
-
-  .heroTitle {
-    font-size: 20px;
-    line-height: 28px;
-  }
-
-  .heroIcon {
-    width: 42px;
-    height: 42px;
-    flex-basis: 42px;
-    font-size: 24px;
-  }
-}
-
-@media screen and (max-width: 520px) {
-  .hero {
-    gap: 12px;
-    padding: 15px;
-    border-radius: 9px;
-  }
-
-  .heroDescription {
-    font-size: 12px;
-    line-height: 18px;
-  }
-
-  .sectionTitle {
-    font-size: 16px;
-    line-height: 22px;
-  }
-}
+/* ==========================================================
+ * Supplier information notice
+ * ========================================================== */
 
 .supplierInformation {
   display: flex;
   box-sizing: border-box;
   width: 100%;
+  min-width: 0;
   align-items: flex-start;
-  gap: 10px;
-  margin: 0 0 20px;
-  padding: 12px 14px;
+  gap: 12px;
+  margin-top: 22px;
+  padding: 14px 16px;
   color: #323130;
   background: #f3f9fd;
   border: 1px solid #c7e0f4;
-  border-left: 4px solid #0078d4;
-  border-radius: 8px;
+  border-left: 4px solid #005dc7;
+  border-radius: 9px;
 }
 
 .supplierInformationIcon {
   display: inline-flex;
-  width: 20px;
-  height: 20px;
-  flex: 0 0 20px;
+  box-sizing: border-box;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 28px;
   align-items: center;
   justify-content: center;
   margin-top: 1px;
-  color: #0078d4;
-  font-size: 16px;
-  line-height: 20px;
+  color: #005dc7;
+  background: #e3f1fc;
+  border-radius: 50%;
+  font-size: 15px;
+  line-height: 15px;
+
+  :global(.ms-Icon) {
+    color: inherit;
+    font-size: 14px;
+    line-height: 14px;
+  }
 }
 
 .supplierInformationText {
+  min-width: 0;
   margin: 0;
   color: #323130;
   font-size: 13px;
-  font-weight: 500;
-  font-style: italic !important;
-  line-height: 20px;
+  font-weight: 400;
+  font-style: italic;
+  line-height: 19px;
 
   strong {
+    color: #172033;
     font-weight: 600;
   }
 }
 
-@media screen and (max-width: 520px) {
+/* ==========================================================
+ * Medium desktop
+ * ========================================================== */
+
+@media screen and (max-width: 1200px) {
+  .welcomeHero {
+    min-height: 240px;
+    padding:
+      30px
+      32px
+      100px;
+  }
+
+  .heroVisual {
+    width: 160px;
+    flex-basis: 160px;
+  }
+
+  .overlappingKpiSection {
+    width:
+      calc(
+        100% - 36px
+      );
+    margin:
+      -74px
+      18px
+      0;
+  }
+
+  .insightGrid {
+    grid-template-columns:
+      minmax(0, 3fr)
+      minmax(280px, 2fr);
+    gap: 16px;
+  }
+}
+
+/* ==========================================================
+ * Small desktop and tablet
+ * ========================================================== */
+
+@media screen and (max-width: 900px) {
+  .welcomeHero {
+    min-height: 225px;
+    padding:
+      28px
+      26px
+      94px;
+  }
+
+  .welcomeTitle {
+    font-size: 26px;
+    line-height: 34px;
+  }
+
+  .welcomeDescription {
+    font-size: 13px;
+    line-height: 20px;
+  }
+
+  .heroVisual {
+    width: 130px;
+    flex-basis: 130px;
+  }
+
+  .heroVisualIcon {
+    left: 8px;
+    width: 64px;
+    height: 64px;
+    font-size: 28px;
+  }
+
+  .heroVisualIconSecondary {
+    right: 6px;
+    width: 52px;
+    height: 52px;
+    font-size: 23px;
+  }
+
+  .heroVisualIconSmall {
+    right: 42px;
+    width: 34px;
+    height: 34px;
+    font-size: 15px;
+  }
+
+  .heroDecorationOne {
+    right: 95px;
+  }
+
+  .heroDecorationThree {
+    right: 205px;
+  }
+
+  .overlappingKpiSection {
+    margin-top: -68px;
+  }
+
+  .insightGrid {
+    grid-template-columns:
+      minmax(0, 1fr);
+  }
+
+  .quickLinksColumn > *,
+  .feedbackColumn > * {
+    height: auto;
+  }
+}
+
+/* ==========================================================
+ * Tablet
+ * ========================================================== */
+
+@media screen and (max-width: 768px) {
+  .welcomeHero {
+    padding:
+      26px
+      22px
+      90px;
+    border-radius: 15px;
+  }
+
+  .overlappingKpiSection {
+    width:
+      calc(
+        100% - 28px
+      );
+    margin:
+      -64px
+      14px
+      0;
+    padding:
+      16px
+      14px;
+  }
+
+  .dashboardSection,
+  .insightGrid,
   .supplierInformation {
-    gap: 8px;
-    margin-bottom: 16px;
-    padding: 10px 12px;
+    margin-top: 18px;
+  }
+}
+
+/* ==========================================================
+ * Mobile
+ * ========================================================== */
+
+@media screen and (max-width: 640px) {
+  .dashboard {
+    padding-bottom: 18px;
+  }
+
+  .welcomeHero {
+    min-height: 215px;
+    padding:
+      24px
+      20px
+      84px;
+    border-radius: 14px;
+  }
+
+  .welcomeContent {
+    max-width: 100%;
+  }
+
+  .welcomeTitle {
+    font-size: 23px;
+    line-height: 30px;
+  }
+
+  .welcomeDescription {
+    max-width: 92%;
+    margin-top: 8px;
+    font-size: 12px;
+    line-height: 19px;
+  }
+
+  .heroVisual {
+    display: none;
+  }
+
+  .heroDecorationOne {
+    top: -90px;
+    right: -30px;
+    width: 210px;
+    height: 210px;
+  }
+
+  .heroDecorationTwo {
+    right: -125px;
+    bottom: -155px;
+    width: 300px;
+    height: 300px;
+  }
+
+  .heroDecorationThree {
+    top: 95px;
+    right: 40px;
+    width: 50px;
+    height: 50px;
+  }
+
+  .overlappingKpiSection {
+    width:
+      calc(
+        100% - 20px
+      );
+    margin:
+      -58px
+      10px
+      0;
+    padding:
+      14px
+      12px;
+    border-radius: 12px;
+  }
+
+  .kpiSectionHeader,
+  .sectionHeadingRow {
+    margin-bottom: 10px;
+  }
+
+  .sectionTitle {
+    font-size: 14px;
+    line-height: 21px;
+  }
+
+  .sectionDescription {
+    font-size: 10px;
+    line-height: 16px;
+  }
+
+  .dashboardSection,
+  .insightGrid,
+  .supplierInformation {
+    margin-top: 16px;
+  }
+
+  .insightGrid {
+    gap: 14px;
+  }
+
+  .supplierInformation {
+    gap: 10px;
+    padding: 12px;
+    border-left-width: 3px;
+    border-radius: 8px;
+  }
+
+  .supplierInformationIcon {
+    width: 26px;
+    height: 26px;
+    flex-basis: 26px;
+
+    :global(.ms-Icon) {
+      font-size: 13px;
+      line-height: 13px;
+    }
   }
 
   .supplierInformationText {
-    font-size: 12px;
+    font-size: 11px;
     line-height: 18px;
+  }
+}
+
+/* ==========================================================
+ * Extra-small mobile
+ * ========================================================== */
+
+@media screen and (max-width: 420px) {
+  .welcomeHero {
+    min-height: 205px;
+    padding:
+      21px
+      16px
+      78px;
+    border-radius: 12px;
+  }
+
+  .welcomeTitle {
+    display: block;
+    font-size: 21px;
+    line-height: 28px;
+  }
+
+  .welcomeName {
+    margin-left: 5px;
+  }
+
+  .welcomeDescription {
+    max-width: 100%;
+    font-size: 11px;
+    line-height: 18px;
+  }
+
+  .overlappingKpiSection {
+    width:
+      calc(
+        100% - 12px
+      );
+    margin:
+      -52px
+      6px
+      0;
+    padding:
+      12px
+      10px;
+  }
+
+  .supplierInformation {
+    padding: 10px;
+  }
+}
+
+/* ==========================================================
+ * Windows high-contrast and forced-colors support
+ * ========================================================== */
+
+@media (forced-colors: active) {
+  .dashboard {
+    color: CanvasText;
+    background: Canvas;
+  }
+
+  .welcomeHero {
+    color: CanvasText;
+    background: Canvas;
+    border: 1px solid CanvasText;
+    box-shadow: none;
+  }
+
+  .welcomeTitle,
+  .welcomePrefix,
+  .welcomeName,
+  .welcomeDescription {
+    color: CanvasText;
+  }
+
+  .heroDecorationOne,
+  .heroDecorationTwo,
+  .heroDecorationThree {
+    display: none;
+  }
+
+  .heroVisualIcon,
+  .heroVisualIconSecondary,
+  .heroVisualIconSmall {
+    color: CanvasText;
+    background: Canvas;
+    border-color: CanvasText;
+    box-shadow: none;
+  }
+
+  .overlappingKpiSection {
+    color: CanvasText;
+    background: Canvas;
+    border-color: CanvasText;
+    box-shadow: none;
+  }
+
+  .sectionTitle,
+  .sectionDescription {
+    color: CanvasText;
+  }
+
+  .supplierInformation {
+    color: CanvasText;
+    background: Canvas;
+    border-color: CanvasText;
+  }
+
+  .supplierInformationIcon {
+    color: Highlight;
+    background: Canvas;
+    border: 1px solid CanvasText;
+  }
+
+  .supplierInformationText,
+  .supplierInformationText strong {
+    color: CanvasText;
+  }
+}
+
+/* ==========================================================
+ * Reduced-motion accessibility
+ * ========================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .dashboard *,
+  .dashboard *::before,
+  .dashboard *::after {
+    scroll-behavior: auto;
+    transition-duration: 0.01ms;
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+  }
+
+  .heroVisualIcon,
+  .heroVisualIconSecondary,
+  .heroVisualIconSmall {
+    transform: none;
   }
 }

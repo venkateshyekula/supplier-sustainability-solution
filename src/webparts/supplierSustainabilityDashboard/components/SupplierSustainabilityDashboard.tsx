@@ -3,42 +3,89 @@ import * as React from "react";
 import { Icon } from "@fluentui/react";
 
 import { KpiMetricCards } from "../../kpiMetricCards/components/KpiMetricCards";
+
 import EsgFeedbackWidget from "../../esgFeedbackWidget/components/EsgFeedbackWidget";
+
 import QuestionnaireQuickLinks from "../../questionnaireQuickLinks/components/QuestionnaireQuickLinks";
+
 import SupplierEsgSearch from "../../supplierEsgSearch/components/SupplierEsgSearch";
 
 import { ISupplierSustainabilityDashboardProps } from "./ISupplierSustainabilityDashboardProps";
+
 import styles from "./SupplierSustainabilityDashboard.module.scss";
 
 export function SupplierSustainabilityDashboard(
   props: ISupplierSustainabilityDashboardProps,
 ): React.ReactElement {
+  const userDisplayName: string =
+    props.context.pageContext.user.displayName?.trim() || "User";
+
+  /*const userDisplayName: string =
+  props.context.pageContext.user.displayName || "User";
+
+  const firstName: string =
+  getFirstName(userDisplayName);*/
+
   return (
     <section
       className={styles.dashboard}
-      aria-label="Supplier sustainability dashboard"
+      aria-label="Supplier Sustainability dashboard"
     >
-      <header className={styles.hero}>
-        <div className={styles.heroIcon} aria-hidden="true">
-          <Icon iconName="Globe" />
+      <header className={styles.welcomeHero}>
+        <div className={styles.heroDecorationOne} aria-hidden="true" />
+
+        <div className={styles.heroDecorationTwo} aria-hidden="true" />
+
+        <div className={styles.heroDecorationThree} aria-hidden="true" />
+
+        <div className={styles.welcomeContent}>
+          <h1 className={styles.welcomeTitle}>
+            <span className={styles.welcomePrefix}>Welcome,</span>
+
+            <span className={styles.welcomeName}>{userDisplayName}!</span>
+          </h1>
+
+          <p className={styles.welcomeDescription}>
+            Access Supplier Sustainability applications, questionnaires,
+            supporting documents, analytics, and help resources.
+          </p>
         </div>
 
-        <div className={styles.heroContent}>
-          <h1 className={styles.heroTitle}>
-            Supplier Sustainability Dashboard
-          </h1>
-          <p className={styles.heroDescription}>
-            Monitor supplier ESG submissions, qualification outcomes, supporting
-            documents, and recent assessment activity across all configured
-            questionnaire tiers.
-          </p>
+        <div className={styles.heroVisual} aria-hidden="true">
+          <span className={styles.heroVisualIcon}>
+            <Icon iconName="BarChartVertical" />
+          </span>
+
+          <span className={styles.heroVisualIconSecondary}>
+            <Icon iconName="ComplianceAudit" />
+          </span>
+
+          <span className={styles.heroVisualIconSmall}>
+            <Icon iconName="CompletedSolid" />
+          </span>
         </div>
       </header>
 
       <section
-        className={styles.dashboardSection}
+        className={styles.overlappingKpiSection}
         aria-labelledby="supplier-esg-overview-title"
       >
+        <div className={styles.kpiSectionHeader}>
+          <div>
+            <h2
+              id="supplier-esg-overview-title"
+              className={styles.sectionTitle}
+            >
+              Supplier ESG Overview
+            </h2>
+
+            <p className={styles.sectionDescription}>
+              Review current submission, qualification, and assessment metrics
+              across all configured questionnaire tiers.
+            </p>
+          </div>
+        </div>
+
         <KpiMetricCards
           context={props.context}
           tier1ListTitle={props.tier1ListTitle}
@@ -50,7 +97,7 @@ export function SupplierSustainabilityDashboard(
       <div className={styles.insightGrid}>
         <section
           className={styles.quickLinksColumn}
-          aria-label="Questionnaire and supporting document links"
+          aria-label={"Questionnaire and supporting document links"}
         >
           <QuestionnaireQuickLinks
             context={props.context}
@@ -90,6 +137,7 @@ export function SupplierSustainabilityDashboard(
           tier3SupplierNameField={props.tier3SupplierNameField}
         />
       </section>
+
       <div
         className={styles.supplierInformation}
         role="note"
@@ -108,5 +156,27 @@ export function SupplierSustainabilityDashboard(
     </section>
   );
 }
+
+/*function getFirstName(displayName: string): string {
+  const normalizedDisplayName: string = displayName.trim().replace(/\s+/g, " ");
+
+  if (!normalizedDisplayName) {
+    return "User";
+  }
+
+  const commaIndex: number = normalizedDisplayName.indexOf(",");
+
+  if (commaIndex >= 0) {
+    const nameAfterComma: string = normalizedDisplayName
+      .substring(commaIndex + 1)
+      .trim();
+
+    if (nameAfterComma) {
+      return nameAfterComma.split(" ")[0] || "User";
+    }
+  }
+
+  return normalizedDisplayName.split(" ")[0] || "User";
+}*/
 
 export default SupplierSustainabilityDashboard;
