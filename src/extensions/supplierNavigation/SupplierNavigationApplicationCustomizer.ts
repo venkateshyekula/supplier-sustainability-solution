@@ -72,6 +72,11 @@ export default class SupplierNavigationApplicationCustomizer
       return Promise.resolve();
     }
 
+    // Hide global SharePoint header search box
+    this.injectHideGlobalSearchStyle();
+
+    console.log("SupplierNavigationApplicationCustomizer initialized!");
+
     this.context
       .placeholderProvider
       .changedEvent
@@ -91,6 +96,43 @@ export default class SupplierNavigationApplicationCustomizer
     this.renderPlaceholders();
 
     return Promise.resolve();
+  }
+
+  /**
+   * Re-renders the navigation and keeps search hidden across client-side page navigation.
+   */
+  private handlePageNavigation = (): void => {
+    this.injectHideGlobalSearchStyle();
+    this.renderPlaceholders();
+  };
+
+  /**
+   * Injects CSS into the head to strictly hide the SharePoint SuiteBar search box
+   * without affecting custom search inputs on the page.
+   */
+  private injectHideGlobalSearchStyle(): void {
+    const styleId = 'spfx-hide-global-search';
+    if (!document.getElementById(styleId)) {
+      const styleElement: HTMLStyleElement = document.createElement('style');
+      styleElement.id = styleId;
+      styleElement.type = 'text/css';
+      styleElement.innerHTML = `
+        /* Scope strictly to Office 365 top header search container */
+        #O365_SearchBoxContainer_container,
+        #centerRegion #O365_SearchBoxContainer_container,
+        #sbcId {
+          display: none !important;
+          visibility: hidden !important;
+          width: 0 !important;
+          height: 0 !important;
+          min-width: 0 !important;
+          margin: 0 !important;
+          padding: 0 !important;
+          overflow: hidden !important;
+        }
+      `;
+      document.head.appendChild(styleElement);
+    }
   }
 
   /**
@@ -198,15 +240,6 @@ export default class SupplierNavigationApplicationCustomizer
       )
       .toLowerCase();
   }
-
-  /**
-   * Re-renders the navigation after modern SharePoint
-   * client-side page navigation.
-   */
-  private handlePageNavigation =
-    (): void => {
-      this.renderPlaceholders();
-    };
 
   /**
    * Renders both the Top navigation and Bottom footer.

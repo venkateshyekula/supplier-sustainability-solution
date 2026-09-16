@@ -9,6 +9,7 @@
   width: 100%;
   min-width: 0;
   padding: 0 0 24px;
+  overflow: visible;
   color: #172033;
   background: #ffffff;
   font-family:
@@ -25,11 +26,53 @@
   textarea {
     font-family: inherit;
   }
+}
 
-  :global(.ms-Icon) {
-    font-family:
-      'FabricMDL2Icons',
-      'Fluent MDL2 Hybrid Icons' !important;
+/* Global font override for all elements and Fluent UI controls */
+:global {
+  /* 1. Apply Figtree safely to body and text containers without breaking icons */
+  body,
+  #spPageCanvasContent,
+  .sp-app-main,
+  #spCommandBar,
+  .ms-CommandBar,
+  .ms-Nav,
+  .ms-DetailsList,
+  .ms-DetailsRow,
+  .ms-DetailsHeader,
+  .ms-DetailsHeader-cell,
+  .ms-DetailsHeader-cellName,
+  .ms-DetailsHeader-cellIsRowHeader,
+  .ms-ContextualMenu-list,
+  .ms-ContextualMenu-link,
+  .ms-ContextualMenu-listItem,
+  .ms-ContextualMenu-listItemText,
+  .ms-ContextualMenu-divider,
+  .ms-ContextualMenu-item,
+  .ms-ContextualMenu-Container,
+  .ms-ContextualMenu-linkContent,
+  .ms-Dialog,
+  .ms-Panel,
+  .ms-Button-label,
+  .ms-ChoiceGroup,
+  .ms-TextField,
+  .ms-SearchBox,
+  .ms-DatePicker,
+  .ms-readOnlyTextField,
+  .ms-TextField-field,
+  .ms-TextFiled-fieldGroup,
+  .ms-Label,
+  .ms-Dropdown {
+    font-family: 'Figtree', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif !important;
+  }
+
+  /* 2. Protect ALL icon elements across SharePoint from font overrides */
+  i,
+  .ms-Icon,
+  [class*="ms-Icon-"],
+  [class*="Icon-"],
+  [data-icon-name] {
+    font-family: 'FabricMDL2Icons', 'Fluent MDL2 Hybrid Icons' !important; /* Restores SharePoint's native icon font mappings */
   }
 }
 
@@ -39,51 +82,50 @@
 
 .welcomeHero {
   position: relative;
+  z-index: auto;
   display: flex;
   box-sizing: border-box;
   width: 100%;
   min-width: 0;
-  min-height: 250px;
-  align-items: flex-start;
-  justify-content: space-between;
+  min-height: 330px;
+  align-items: center;
+  text-align: center;
+  flex-direction: column;
   gap: 28px;
-  padding:
-    34px
-    42px
-    106px;
-  overflow: hidden;
+  padding: 3rem 2rem;
+  overflow: visible;
   color: #ffffff;
   background:
-  linear-gradient(
-    135deg,
-    #273c88,
-    #c8187d
-  );
-  border-radius: 18px;
+    linear-gradient(135deg,
+      #273c88,
+      #c8187d);
+  border-radius: 8px;
   box-shadow:
-    0 8px 24px
-    rgba(37, 55, 126, 0.18);
+    0 8px 24px rgba(37, 55, 126, 0.18);
+}
+
+.welcomeHero::before {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  content: '';
+  pointer-events: none;
 }
 
 .welcomeContent {
-  position: relative;
-  z-index: 3;
-  box-sizing: border-box;
-  min-width: 0;
-  max-width: 720px;
-  flex: 1 1 auto;
+  width: 100%;
+  max-width: 780px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.welcomeTitle {
-  display: flex;
-  margin: 0;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 6px;
-  color: #ffffff;
-  font-size: 30px;
-  font-weight: 600;
-  line-height: 38px;
+.welcomeTitle,
+.welcomeDescription {
+  text-align: center;
 }
 
 .welcomePrefix {
@@ -96,19 +138,879 @@
   overflow-wrap: anywhere;
 }
 
-.welcomeDescription {
-  max-width: 650px;
-  margin: 10px 0 0;
-  color:
-    rgba(
-      255,
-      255,
-      255,
-      0.9
-    );
+/* ==========================================================
+ * Supplier Sustainability search
+ * ========================================================== */
+
+.searchShell {
+  position: relative;
+  z-index: 100;
+  max-width: 680px;
+  width: 100%;
+  margin: 1.75rem auto 0 auto;
+}
+
+.applicationSearch {
+  display: flex;
+  position: relative;
+  align-items: center;
+  z-index: 2;
+  display: grid;
+  width: 100%;
+  min-width: 0;
+
+  /* Reduced from approximately 76px */
+  height: 48px;
+  min-height: 48px;
+
+  grid-template-columns:
+    150px 1px minmax(0, 1fr);
+
+  overflow: visible !important;
+  background: #ffffff;
+  border: 1px solid transparent;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
+  transition:
+    border-color 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.applicationSearch:hover {
+  border-color: #fff;
+  box-shadow:
+    0 4px 14px rgba(15, 23, 42, 0.1);
+}
+
+.applicationSearchFocused {
+  border-color: #273c88;
+  box-shadow:
+    0 0 0 2px rgba(39, 60, 136, 0.14),
+    0 6px 18px rgba(15, 23, 42, 0.12);
+}
+
+.applicationSearchOpen {
+  border-bottom-right-radius: 0 !important;
+  border-bottom-left-radius: 8px !important;
+}
+
+/* ==========================================================
+ * Search category
+ * ========================================================== */
+
+/* 1. Ensure left curved border aligns seamlessly with search container */
+.searchCategory {
+  position: relative;
+  display: flex;
+  align-items: stretch; /* Stretches button vertically to match search bar height */
+  align-self: stretch;
+  z-index: 1001;
+  margin: 0;
+  padding: 0;
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+  background-color: #fff;
+}
+
+.customDropdownToggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  margin: 0;
+  padding: 0 16px; /* Pads whole region up to the vertical divider */
   font-size: 14px;
+  font-weight: 600;
+  color: #1f2937;
+  cursor: pointer;
+  white-space: nowrap;
+  border-top-left-radius: inherit; /* Matches parent search bar left curves */
+  border-bottom-left-radius: inherit;
+  transition: background-color 0.15s ease;
+
+  /* Highlights the entire box (label + arrow) when hovering */
+  &:hover {
+    background-color: #fff;
+  }
+}
+
+.categoryChevron {
+  font-size: 12px;
+  color: #4b5563;
+  display: flex;
+  align-items: center;
+}
+
+.customDropdownMenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 150px;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  list-style: none;
+  margin: 0;
+  padding: 6px 0;
+  z-index: 1000;
+}
+
+.customDropdownItem {
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  transition: background-color 0.15s ease, color 0.15s ease;
+
+  &:hover {
+    background-color: #fce3f1;
+    color: #111827;
+  }
+}
+
+.customDropdownItemActive {
+  background-color: #273c88;
+  color: #ffffff;
+  font-weight: 600;
+
+  &:hover {
+    background-color: #273c88;
+    color: #ffffff;
+  }
+}
+
+.searchCategorySelect {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  background: transparent;
+  padding: 12px 32px 12px 18px;
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1e293b;
+  cursor: pointer;
+
+  &:focus,
+  &:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  option {
+    background-color: #ffffff;
+    color: #1e293b;
+    padding: 10px 14px;
+  }
+}
+
+/* 4. Position custom chevron arrow cleanly */
+.categoryChevron {
+  position: absolute;
+  right: 12px;
+  pointer-events: none;
+  color: #64748b;
+  font-size: 15px;
+}
+
+.searchDivider {
+  display: block;
+  width: 1px;
+  min-width: 1px;
+  flex: 0 0 1px;
+  align-self: stretch;
+  margin: 0;
+  background: #c0c0c0;
+}
+
+/* ==========================================================
+ * Search input
+ * ========================================================== */
+
+.searchInput {
+  flex: 1;
+  border: none !important;
+  outline: none !important;
+  background: transparent;
+  /* Allows parent background to show through */
+  padding: 12px 24px 12px 4px;
+  font-size: 14px;
+  color: #1e293b;
+  border-top-right-radius: inherit; /* Prevents background overflow */
+  border-bottom-right-radius: inherit;
+  /* Matches right-side pill curve */
+
+
+  &:focus,
+  &:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  &::placeholder {
+    color: #78849a;
+    opacity: 1;
+  }
+
+  &::-webkit-search-cancel-button,
+  &::-webkit-search-decoration {
+    appearance: none;
+  }
+
+  &:disabled {
+    color: #8a94a6;
+    cursor: default;
+  }
+}
+
+.searchInputContainer {
+  position: relative !important;
+  display: flex;
+  box-sizing: border-box;
+  min-width: 0;
+  flex: 1;
+  align-items: center;
+  background: #ffffff;
+  border-top-right-radius: inherit; /* Inherits rounded right corner from parent */
+  border-bottom-right-radius: inherit;
+  height: 100%;
+}
+
+/* 2. Anchor searchResults strictly to searchInputContainer */
+.searchInputContainer .searchResults {
+  position: absolute !important;
+  top: 100% !important;
+  left: 0 !important;       /* Aligns to the left of searchInputContainer (after divider) */
+  right: 0 !important;      /* Constrains width to searchInputContainer */
+  width: 100% !important;   /* Prevents stretching across outer form */
+  z-index: 10000 !important;
+  max-height: 150px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  color: #172033;
+  background: #ffffff;
+  border-top-color: #fff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
+  scrollbar-width: thin;
+  scrollbar-color:
+    #b8c0ce transparent;
+  -webkit-overflow-scrolling: touch;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #b8c0ce;
+    border: 2px solid #ffffff;
+    border-radius: 8px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #8f9aad;
+  }
+}
+
+.searchResults {
+  text-decoration: none !important;
+}
+
+.searchButton {
+  display: inline-flex;
+  box-sizing: border-box;
+  width: 44px;
+  height: 46px;
+  min-width: 44px;
+  flex: 0 0 44px;
+  font-size: 20px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  color: #273c88;
+  background: transparent;
+  border: 0;
+  outline: 0;
+  cursor: pointer;
+
+  :global(.ms-Icon) {
+    color: inherit;
+    font-size: 16px;
+    line-height: 16px;
+  }
+
+  &:hover {
+    color: #c8187d;
+    background: #f5f6fa;
+  }
+
+  &:focus-visible {
+    color: #273c88;
+    outline: 2px solid #273c88;
+    outline-offset: -3px;
+  }
+}
+
+.clearSearchButton {
+  position: absolute;
+  top: 50%;
+  right: 7px;
+  display: inline-flex;
+  box-sizing: border-box;
+  width: 31px;
+  height: 31px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  color: #64748b;
+  background: transparent;
+  border: 0;
+  border-radius: 50%;
+  outline: 0;
+  cursor: pointer;
+  transform: translateY(-50%);
+
+  :global(.ms-Icon) {
+    color: inherit;
+    font-size: 12px;
+    line-height: 12px;
+  }
+
+  &:hover {
+    color: #a4262c;
+    background: #f5f6f8;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #273c88;
+    outline-offset: 1px;
+  }
+}
+
+/* ==========================================================
+ * Search results container
+ * ========================================================== */
+
+/*.searchResults {
+  position: absolute;
+  z-index: 10000;
+  top: 100%;
+  right: 0;
+  left: 0;
+  width: 100%;
+  max-height: 270px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  color: #172033;
+  background: #ffffff;
+  border-top-color: #fff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
+  scrollbar-width: thin;
+  scrollbar-color:
+    #b8c0ce transparent;
+  -webkit-overflow-scrolling: touch;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #b8c0ce;
+    border: 2px solid #ffffff;
+    border-radius: 8px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #8f9aad;
+  }
+}*/
+
+/* ==========================================================
+ * Search loading, error and empty states
+ * ========================================================== */
+
+.searchStatus {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 58px;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 15px;
+  color: #475569;
+  background: #ffffff;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 17px;
+
+  span {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  :global(.ms-Spinner) {
+    flex: 0 0 auto;
+  }
+
+  :global(.ms-Spinner-circle) {
+    border-top-color: #273c88;
+    border-right-color: #cdd5e3;
+    border-bottom-color: #cdd5e3;
+    border-left-color: #cdd5e3;
+  }
+}
+
+.searchResultsIcon {
+  display: inline-flex;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 28px;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  background: #f1f4f8;
+  border-radius: 50%;
+  font-size: 14px;
+  line-height: 14px;
+}
+
+/* ==========================================================
+ * Individual search result
+ * ========================================================== */
+
+.searchResult {
+  display: grid;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  grid-template-columns:
+    34px minmax(0, 1fr) 20px;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  color: #172033;
+  background: #fff;
+  text-decoration: none !important;
+  border: 0;
+  border-bottom: 1px solid #e1dfdd !important;
+  outline: 0;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  transition:
+    background-color 100ms ease,
+    color 100ms ease;
+
+  &:last-child {
+    border-bottom: 0;
+  }
+
+  &:hover {
+    background: #f5f8fc;
+  }
+
+  &:focus-visible {
+    position: relative;
+    z-index: 1;
+    outline: 2px solid #273c88;
+    outline-offset: -2px;
+  }
+}
+
+.searchResultActive {
+  color: #172033;
+  background: #eef3fb;
+  box-shadow:
+    inset 3px 0 0 #273c88;
+
+  &:hover {
+    background: #e8effa;
+  }
+}
+
+.searchResultIcon {
+  display: inline-flex;
+  box-sizing: border-box;
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+  align-items: center;
+  justify-content: center;
+  color: #273c88;
+  background: #edf2fb;
+  border-radius: 8px;
+
+  :global(.ms-Icon) {
+    color: inherit;
+    font-size: 15px;
+    line-height: 15px;
+  }
+}
+
+.searchResultContent {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.searchResultTitle {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  color: #172033;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 17px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.searchResultSummary {
+  display: -webkit-box;
+  min-width: 0;
+  margin-top: 1px;
+  overflow: hidden;
+  color: #526079;
+  font-size: 13px;
   font-weight: 400;
-  line-height: 22px;
+  line-height: 15px;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+.searchResultPath {
+  display: block;
+  min-width: 0;
+  margin-top: 2px;
+  overflow: hidden;
+  color: #68778f;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 14px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-decoration: none !important;
+}
+
+.searchResultChevron {
+  justify-self: end;
+  color: #7a8699;
+  font-size: 13px;
+  line-height: 11px;
+  text-decoration: none !important;
+}
+
+.searchResult:hover,
+.searchResultActive {
+  .searchResultIcon {
+    color: #ffffff;
+    background: #273c88;
+  }
+
+  .searchResultChevron {
+    color: #273c88;
+  }
+}
+
+/* ==========================================================
+ * Screen-reader-only content
+ * ========================================================== */
+
+.visuallyHidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: -1px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+  clip: rect(0 0 0 0) !important;
+  clip-path: inset(50%) !important;
+}
+
+/* ==========================================================
+ * Responsive search layout
+ * ========================================================== */
+
+@media screen and (max-width: 900px) {
+  .searchShell {
+    max-width: 100%;
+  }
+
+  .searchCategory {
+    width: 140px;
+    min-width: 140px;
+    flex-basis: 140px;
+  }
+
+  .searchCategorySelect {
+    padding-right: 30px;
+    padding-left: 12px;
+    font-size: 10px;
+  }
+
+  .categoryChevron {
+    right: 10px;
+  }
+
+  .searchInput {
+    font-size: 11px;
+  }
+}
+
+@media screen and (max-width: 650px) {
+  .searchShell {
+    margin-top: 16px;
+  }
+
+  .applicationSearch {
+    min-height: 44px;
+  }
+
+  .searchCategory {
+    width: 125px;
+    min-width: 125px;
+    flex-basis: 125px;
+  }
+
+  .searchCategorySelect,
+  .searchInput,
+  .searchButton {
+    height: 44px;
+    min-height: 44px;
+  }
+
+  .searchCategorySelect {
+    padding-right: 27px;
+    padding-left: 9px;
+    font-size: 9px;
+  }
+
+  .categoryChevron {
+    right: 8px;
+    font-size: 9px;
+  }
+
+  .searchButton {
+    width: 39px;
+    min-width: 39px;
+    flex-basis: 39px;
+  }
+
+  .searchInput {
+    padding-right: 38px;
+    font-size: 10px;
+  }
+
+  .clearSearchButton {
+    right: 5px;
+    width: 28px;
+    height: 28px;
+  }
+
+  .searchResults {
+    max-height: 330px;
+  }
+
+  .searchResult {
+    grid-template-columns:
+      30px minmax(0, 1fr) 16px;
+    gap: 8px;
+    padding: 9px 11px;
+  }
+
+  .searchResultIcon {
+    width: 29px;
+    height: 29px;
+    flex-basis: 29px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .applicationSearch {
+    flex-wrap: wrap;
+    overflow: visible;
+  }
+
+  .applicationSearchOpen {
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  .searchCategory {
+    width: 100%;
+    min-width: 0;
+    flex: 0 0 100%;
+    border-bottom: 1px solid #e1e7ef;
+    border-radius: 10px 10px 0 0;
+  }
+
+  .searchCategorySelect {
+    width: 100%;
+    height: 40px;
+    min-height: 40px;
+    padding-right: 34px;
+    padding-left: 12px;
+    font-size: 10px;
+  }
+
+  .categoryChevron {
+    right: 12px;
+  }
+
+  .searchDivider {
+    display: none;
+  }
+
+  .searchInputContainer {
+    width: 100%;
+    flex: 0 0 100%;
+    border-radius: 0 0 10px 10px;
+  }
+
+  .searchButton,
+  .searchInput {
+    height: 44px;
+  }
+
+  .searchResults {
+    top: calc(100% - 1px);
+  }
+
+  .searchStatus {
+    min-height: 54px;
+    padding: 11px 12px;
+    font-size: 10px;
+    line-height: 16px;
+  }
+
+  .searchResult {
+    grid-template-columns:
+      30px minmax(0, 1fr) 14px;
+    padding: 9px 10px;
+  }
+
+  .searchResultTitle {
+    font-size: 10px;
+    line-height: 16px;
+  }
+
+  .searchResultSummary {
+    font-size: 9px;
+    line-height: 14px;
+  }
+
+  .searchResultPath {
+    font-size: 8px;
+    line-height: 13px;
+  }
+}
+
+/* ==========================================================
+ * High-contrast support
+ * ========================================================== */
+
+@media (forced-colors: active) {
+
+  .applicationSearch,
+  .applicationSearchFocused,
+  .searchResults {
+    color: CanvasText;
+    background: Canvas;
+    border-color: CanvasText;
+    box-shadow: none;
+  }
+
+  .searchCategory,
+  .searchInputContainer {
+    color: CanvasText;
+    background: Canvas;
+  }
+
+  .searchCategorySelect,
+  .searchInput,
+  .searchButton,
+  .clearSearchButton {
+    color: CanvasText;
+    background: Canvas;
+  }
+
+  .searchDivider {
+    background: CanvasText;
+  }
+
+  .categoryChevron,
+  .searchResultsIcon,
+  .searchResultChevron {
+    color: CanvasText;
+  }
+
+  .searchStatus,
+  .searchResult,
+  .searchResultActive {
+    color: CanvasText;
+    background: Canvas;
+    border-color: CanvasText;
+    box-shadow: none;
+  }
+
+  .searchResult:hover,
+  .searchResult:focus-visible,
+  .searchResultActive {
+    color: HighlightText;
+    background: Highlight;
+  }
+
+  .searchResultIcon {
+    color: CanvasText;
+    background: Canvas;
+    border: 1px solid CanvasText;
+  }
+
+  .searchResult:hover .searchResultIcon,
+  .searchResultActive .searchResultIcon {
+    color: HighlightText;
+    background: Highlight;
+    border-color: HighlightText;
+  }
+
+  .searchResultTitle,
+  .searchResultSummary,
+  .searchResultPath {
+    color: inherit;
+  }
+}
+
+/* ==========================================================
+ * Reduced-motion accessibility
+ * ========================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .applicationSearch,
+  .searchResult {
+    transition: none;
+  }
 }
 
 /* ==========================================================
@@ -122,12 +1024,10 @@
   width: 265px;
   height: 265px;
   background:
-    rgba(
+    rgba(255,
       255,
       255,
-      255,
-      0.06
-    );
+      0.06);
   border-radius: 50%;
   pointer-events: none;
 }
@@ -139,12 +1039,10 @@
   width: 340px;
   height: 340px;
   background:
-    rgba(
-      212,
+    rgba(212,
       173,
       255,
-      0.12
-    );
+      0.12);
   border-radius: 50%;
   pointer-events: none;
 }
@@ -156,12 +1054,10 @@
   width: 68px;
   height: 68px;
   background:
-    rgba(
+    rgba(255,
       255,
       255,
-      255,
-      0.08
-    );
+      0.08);
   border-radius: 50%;
   pointer-events: none;
 }
@@ -171,15 +1067,12 @@
  * ========================================================== */
 
 .heroVisual {
-  position: relative;
-  z-index: 3;
-  display: flex;
-  box-sizing: border-box;
-  width: 190px;
-  height: 100px;
-  flex: 0 0 190px;
-  align-items: center;
-  justify-content: center;
+  position: absolute;
+  right: 3rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  opacity: 0.4;
 }
 
 .heroVisualIcon,
@@ -192,24 +1085,18 @@
   justify-content: center;
   color: #ffffff;
   background:
-    rgba(
+    rgba(255,
       255,
       255,
-      255,
-      0.14
-    );
+      0.14);
   border:
-    1px solid
-    rgba(
+    1px solid rgba(255,
       255,
       255,
-      255,
-      0.2
-    );
+      0.2);
   border-radius: 16px;
   box-shadow:
-    0 8px 20px
-    rgba(17, 24, 39, 0.14);
+    0 8px 20px rgba(17, 24, 39, 0.14);
   backdrop-filter: blur(6px);
 }
 
@@ -266,41 +1153,19 @@
 
 .overlappingKpiSection {
   position: relative;
-  z-index: 5;
+  z-index: 2;
   box-sizing: border-box;
   width:
-    calc(
-      100% - 48px
-    );
+    calc(100% - 64px);
   min-width: 0;
-  margin:
-    -78px
-    24px
-    0;
+  margin: -3rem auto 0 auto;
   padding:
-    18px
-    18px
-    16px;
-  background:
-    rgba(
-      255,
-      255,
-      255,
-      0.98
-    );
-  border:
-    1px solid
-    rgba(
-      225,
-      231,
-      239,
-      0.95
-    );
+    17px 16px 16px;
+  background: #ffffff;
+  border: 1px solid #e1e7ef;
   border-radius: 14px;
   box-shadow:
-    0 10px 28px
-    rgba(15, 23, 42, 0.13);
-  backdrop-filter: blur(8px);
+    0 12px 30px rgba(15, 23, 42, 0.16);
 }
 
 .kpiSectionHeader {
@@ -311,7 +1176,7 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: 16px;
-  margin-bottom: 13px;
+  margin-bottom: 12px;
 }
 
 /* ==========================================================
@@ -367,8 +1232,7 @@
   width: 100%;
   min-width: 0;
   grid-template-columns:
-    minmax(0, 2fr)
-    minmax(300px, 1fr);
+    minmax(0, 2fr) minmax(300px, 1fr);
   align-items: stretch;
   gap: 18px;
   margin-top: 22px;
@@ -383,8 +1247,8 @@
   flex-direction: column;
 }
 
-.quickLinksColumn > *,
-.feedbackColumn > * {
+.quickLinksColumn>*,
+.feedbackColumn>* {
   box-sizing: border-box;
   width: 100%;
   min-width: 0;
@@ -456,9 +1320,7 @@
   .welcomeHero {
     min-height: 240px;
     padding:
-      30px
-      32px
-      100px;
+      30px 32px 100px;
   }
 
   .heroVisual {
@@ -468,19 +1330,14 @@
 
   .overlappingKpiSection {
     width:
-      calc(
-        100% - 36px
-      );
+      calc(100% - 36px);
     margin:
-      -74px
-      18px
-      0;
+      -74px 18px 0;
   }
 
   .insightGrid {
     grid-template-columns:
-      minmax(0, 3fr)
-      minmax(280px, 2fr);
+      minmax(0, 3fr) minmax(280px, 2fr);
     gap: 16px;
   }
 }
@@ -493,9 +1350,7 @@
   .welcomeHero {
     min-height: 225px;
     padding:
-      28px
-      26px
-      94px;
+      28px 26px 94px;
   }
 
   .welcomeTitle {
@@ -551,8 +1406,8 @@
       minmax(0, 1fr);
   }
 
-  .quickLinksColumn > *,
-  .feedbackColumn > * {
+  .quickLinksColumn>*,
+  .feedbackColumn>* {
     height: auto;
   }
 }
@@ -564,24 +1419,17 @@
 @media screen and (max-width: 768px) {
   .welcomeHero {
     padding:
-      26px
-      22px
-      90px;
+      26px 22px 90px;
     border-radius: 15px;
   }
 
   .overlappingKpiSection {
     width:
-      calc(
-        100% - 28px
-      );
+      calc(100% - 28px);
     margin:
-      -64px
-      14px
-      0;
+      -64px 14px 0;
     padding:
-      16px
-      14px;
+      16px 14px;
   }
 
   .dashboardSection,
@@ -603,9 +1451,7 @@
   .welcomeHero {
     min-height: 215px;
     padding:
-      24px
-      20px
-      84px;
+      24px 20px 84px;
     border-radius: 14px;
   }
 
@@ -652,16 +1498,11 @@
 
   .overlappingKpiSection {
     width:
-      calc(
-        100% - 20px
-      );
+      calc(100% - 20px);
     margin:
-      -58px
-      10px
-      0;
+      -58px 10px 0;
     padding:
-      14px
-      12px;
+      14px 12px;
     border-radius: 12px;
   }
 
@@ -712,6 +1553,90 @@
     font-size: 11px;
     line-height: 18px;
   }
+
+  .siteSearchWrapper {
+    width: 100%;
+    margin-top: 16px;
+  }
+
+  .siteSearch {
+    min-height: 54px;
+    grid-template-columns:
+      minmax(118px, 140px) 1px minmax(0, 1fr);
+    border-radius: 10px;
+  }
+
+  .searchScopeSelect {
+    min-height: 50px;
+    padding: 0 32px 0 11px;
+    font-size: 11px;
+    line-height: 17px;
+  }
+
+  .searchScopeChevron {
+    right: 10px;
+    font-size: 11px;
+  }
+
+  .searchButton {
+    width: 45px;
+    min-height: 50px;
+    font-size: 20px;
+  }
+
+  .searchInput {
+    min-height: 50px;
+    padding-right: 6px;
+    font-size: 11px;
+    line-height: 17px;
+  }
+
+  .clearSearchButton {
+    width: 34px;
+    height: 34px;
+    margin-right: 4px;
+    font-size: 11px;
+  }
+
+  .searchSuggestions {
+    right: 0;
+    left: 0;
+    width: 100%;
+    max-height: 340px;
+    border-radius: 0 0 10px 10px;
+  }
+
+  .searchResult {
+    grid-template-columns:
+      34px minmax(0, 1fr) 14px;
+    gap: 9px;
+    padding: 9px 10px;
+  }
+
+  .searchResultIcon {
+    width: 32px;
+    height: 32px;
+    flex-basis: 32px;
+
+    :global(.ms-Icon) {
+      font-size: 15px;
+    }
+  }
+
+  .searchResultTitle {
+    font-size: 11px;
+    line-height: 16px;
+  }
+
+  .searchResultSummary {
+    font-size: 9px;
+    line-height: 14px;
+  }
+
+  .searchResultPath {
+    font-size: 8px;
+    line-height: 13px;
+  }
 }
 
 /* ==========================================================
@@ -722,9 +1647,7 @@
   .welcomeHero {
     min-height: 205px;
     padding:
-      21px
-      16px
-      78px;
+      21px 16px 78px;
     border-radius: 12px;
   }
 
@@ -746,20 +1669,45 @@
 
   .overlappingKpiSection {
     width:
-      calc(
-        100% - 12px
-      );
+      calc(100% - 12px);
     margin:
-      -52px
-      6px
-      0;
+      -52px 6px 0;
     padding:
-      12px
-      10px;
+      12px 10px;
   }
 
   .supplierInformation {
     padding: 10px;
+  }
+
+  .siteSearch {
+    grid-template-columns:
+      106px 1px minmax(0, 1fr);
+  }
+
+  .searchScopeSelect {
+    padding-right: 27px;
+    padding-left: 9px;
+    font-size: 10px;
+  }
+
+  .searchScopeChevron {
+    right: 8px;
+    font-size: 10px;
+  }
+
+  .searchButton {
+    width: 40px;
+    font-size: 18px;
+  }
+
+  .searchInput {
+    font-size: 10px;
+  }
+
+  .clearSearchButton {
+    width: 30px;
+    height: 30px;
   }
 }
 
@@ -791,6 +1739,7 @@
   .heroDecorationTwo,
   .heroDecorationThree {
     display: none;
+    pointer-events: none;
   }
 
   .heroVisualIcon,
@@ -830,6 +1779,56 @@
   .supplierInformationText strong {
     color: CanvasText;
   }
+
+  .siteSearch,
+  .searchSuggestions,
+  .searchResult {
+    color: CanvasText;
+    background: Canvas;
+    border-color: CanvasText;
+    box-shadow: none;
+  }
+
+  .searchScopeSelect,
+  .searchInput {
+    color: CanvasText;
+    background: Canvas;
+  }
+
+  .searchDivider {
+    background: CanvasText;
+  }
+
+  .searchButton,
+  .clearSearchButton,
+  .searchScopeChevron,
+  .searchResultChevron {
+    color: LinkText;
+  }
+
+  .searchResultActive,
+  .searchResult:hover {
+    color: CanvasText;
+    background: Canvas;
+    outline: 1px solid Highlight;
+    outline-offset: -1px;
+  }
+
+  .searchResultIcon {
+    color: Highlight;
+    background: Canvas;
+    border-color: CanvasText;
+  }
+
+  .searchResultTitle,
+  .searchResultSummary,
+  .searchResultPath,
+  .searchLoading,
+  .searchEmpty,
+  .searchError {
+    color: CanvasText;
+    background: Canvas;
+  }
 }
 
 /* ==========================================================
@@ -837,6 +1836,7 @@
  * ========================================================== */
 
 @media (prefers-reduced-motion: reduce) {
+
   .dashboard *,
   .dashboard *::before,
   .dashboard *::after {
@@ -850,5 +1850,213 @@
   .heroVisualIconSecondary,
   .heroVisualIconSmall {
     transform: none;
+  }
+
+  .siteSearch,
+  .searchButton,
+  .clearSearchButton,
+  .searchResult {
+    transition: none;
+  }
+
+  .siteSearchFocused {
+    transform: none;
+  }
+}
+
+@media screen and (max-width: 1100px) {
+  .welcomeHero {
+    min-height: 300px;
+    padding:
+      23px 26px 68px;
+  }
+
+  .searchShell {
+    width:
+      min(920px,
+        calc(100% - 24px));
+    margin-top: 28px;
+  }
+
+  .applicationSearch {
+    min-height: 68px;
+    grid-template-columns:
+      150px 1px minmax(0, 1fr);
+    border-radius: 17px;
+  }
+
+  .applicationSearchOpen {
+    border-bottom-right-radius: 0;
+  }
+
+  .searchCategorySelect {
+    min-height: 66px;
+    padding-right: 48px;
+    padding-left: 24px;
+    font-size: 15px;
+  }
+
+  .categoryChevron {
+    right: 22px;
+  }
+
+  .searchButton {
+    width: 64px;
+    height: 66px;
+    flex-basis: 64px;
+
+    :global(.ms-Icon) {
+      font-size: 26px;
+    }
+  }
+
+  .searchInput {
+    height: 66px;
+    font-size: 15px;
+  }
+
+  .searchResults {
+    width:
+      calc(100% - 251px);
+    min-height: 68px;
+    margin-left: 251px;
+    padding:
+      16px 24px;
+  }
+
+  .overlappingKpiSection {
+    width:
+      calc(100% - 40px);
+    margin:
+      -44px 20px 0;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .welcomeHero {
+    min-height: 285px;
+    padding:
+      20px 16px 60px;
+    border-radius: 14px;
+  }
+
+  .welcomeTitle {
+    font-size: 23px;
+    line-height: 30px;
+  }
+
+  .welcomeDescription {
+    font-size: 12px;
+    line-height: 19px;
+  }
+
+  .searchShell {
+    width: 100%;
+    margin-top: 23px;
+  }
+
+  .applicationSearch {
+    min-height: 62px;
+    grid-template-columns:
+      145px 1px minmax(0, 1fr);
+    border-radius: 14px;
+  }
+
+  .applicationSearchOpen {
+    border-bottom-right-radius: 0;
+  }
+
+  .searchCategorySelect {
+    min-height: 60px;
+    padding:
+      0 35px 0 16px;
+    font-size: 13px;
+  }
+
+  .categoryChevron {
+    right: 14px;
+    font-size: 12px;
+  }
+
+  .searchButton {
+    width: 50px;
+    height: 60px;
+    flex-basis: 50px;
+
+    :global(.ms-Icon) {
+      font-size: 23px;
+    }
+  }
+
+  .searchInput {
+    height: 60px;
+    padding-right: 44px;
+    font-size: 13px;
+  }
+
+  .clearSearchButton {
+    right: 9px;
+    width: 30px;
+    height: 30px;
+  }
+
+  .searchResults {
+    width:
+      calc(100% - 146px);
+    min-height: 64px;
+    margin-left: 146px;
+    padding:
+      14px 16px;
+    border-radius:
+      0 0 14px 14px;
+    font-size: 12px;
+    line-height: 18px;
+  }
+
+  .overlappingKpiSection {
+    width:
+      calc(100% - 20px);
+    margin:
+      -38px 10px 0;
+    padding:
+      14px 12px;
+    border-radius: 12px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .welcomeHero {
+    min-height: 275px;
+  }
+
+  .applicationSearch {
+    grid-template-columns:
+      118px 1px minmax(0, 1fr);
+  }
+
+  .searchCategorySelect {
+    padding-left: 12px;
+    font-size: 12px;
+  }
+
+  .searchButton {
+    width: 42px;
+    flex-basis: 42px;
+
+    :global(.ms-Icon) {
+      font-size: 20px;
+    }
+  }
+
+  .searchInput {
+    font-size: 12px;
+  }
+
+  .searchResults {
+    width:
+      calc(100% - 119px);
+    margin-left: 119px;
+    padding:
+      12px 13px;
   }
 }
